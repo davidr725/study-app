@@ -342,3 +342,9 @@ export const CATEGORY_COLORS = {
   Architecture: "#b294bb",
   "Web Fundamentals": "#8abeb7",
 };
+
+export const MODULE_GROUPS = [
+  { id: 1, name: "Foundations", subtitle: "HTTP, DNS, Request Lifecycle", modules: [1, 2], color: "#f0c674" },
+  { id: 2, name: "Intermediate", subtitle: "REST, GraphQL, Auth, CORS", modules: [3], color: "#81a2be" },
+  { id: 3, name: "Advanced", subtitle: "Caching, Databases, Infrastructure", modules: [4, 5], color: "#b294bb" },
+];
