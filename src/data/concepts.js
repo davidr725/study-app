@@ -332,6 +332,138 @@ export const CONCEPTS = [
     category: "Web Fundamentals",
     module: 5,
   },
+
+  // ═══ NEW CONCEPTS ═══
+
+  // Module 1 additions
+  {
+    id: "urlstructure",
+    term: "URL Structure",
+    definition:
+      "A URL is composed of: protocol (https://), domain (example.com), path (/api/users), query parameters (?id=5&sort=name), and fragment (#section2). Each part serves a different purpose in locating and requesting a resource.",
+    analogy:
+      "A full mailing address: the protocol is the delivery service (FedEx vs USPS), the domain is the city, the path is the street address, query params are special delivery instructions, and the fragment is 'Attention: Room 2B.'",
+    category: "Web Fundamentals",
+    module: 1,
+  },
+
+  // Module 2 additions
+  {
+    id: "status2xx",
+    term: "2xx Status Codes",
+    definition:
+      "Success codes: 200 OK (request succeeded), 201 Created (new resource created), 204 No Content (success but no response body). All indicate the request was received, understood, and processed successfully.",
+    analogy:
+      "200 is a thumbs up. 201 is 'your new mailbox has been installed.' 204 is 'done, but I have nothing to hand you back.'",
+    category: "API Basics",
+    module: 2,
+  },
+  {
+    id: "status4xx",
+    term: "4xx Status Codes",
+    definition:
+      "Client error codes: 400 Bad Request (malformed request), 401 Unauthorized (not authenticated), 403 Forbidden (authenticated but not allowed), 404 Not Found, 409 Conflict, 429 Too Many Requests. The problem is on the client's side.",
+    analogy:
+      "400: 'Your letter is unreadable.' 401: 'Who are you?' 403: 'I know who you are, but no.' 404: 'That address doesn't exist.' 429: 'You're sending too many letters, slow down.'",
+    category: "API Basics",
+    module: 2,
+  },
+  {
+    id: "status5xx",
+    term: "5xx Status Codes",
+    definition:
+      "Server error codes: 500 Internal Server Error (generic failure), 502 Bad Gateway (upstream server sent an invalid response), 503 Service Unavailable (server overloaded or in maintenance), 504 Gateway Timeout (upstream server didn't respond in time).",
+    analogy:
+      "500: 'The post office caught fire.' 502: 'The warehouse sent back gibberish.' 503: 'We're closed for the day, try later.' 504: 'The warehouse took too long to respond.'",
+    category: "API Basics",
+    module: 2,
+  },
+  {
+    id: "headers",
+    term: "HTTP Headers",
+    definition:
+      "Key-value metadata sent with HTTP requests and responses. Request headers include info like Accept (what format the client wants), Authorization (credentials), and Content-Type (format of sent data). Response headers include Cache-Control, Set-Cookie, and CORS headers.",
+    analogy:
+      "The label on a package — it tells the carrier what's inside, how to handle it, where it came from, and any special instructions, without opening the box itself.",
+    category: "API Basics",
+    module: 2,
+  },
+
+  // Module 3 additions
+  {
+    id: "jwt",
+    term: "JWT (JSON Web Token)",
+    definition:
+      "A compact, self-contained token format for securely transmitting information between parties. Contains a header, payload (claims like user ID, roles, expiration), and a cryptographic signature. The server can verify the token without a database lookup.",
+    analogy:
+      "A tamper-proof wristband at a concert. It contains your ticket info (name, seat, VIP status) and a holographic seal. Any staff member can verify it by checking the seal — they don't need to call the box office every time.",
+    category: "Daily Engineering",
+    module: 3,
+  },
+  {
+    id: "websockets",
+    term: "WebSockets",
+    definition:
+      "A protocol that provides full-duplex (two-way) communication between client and server over a single persistent connection. Unlike HTTP's request-response model, either side can send messages at any time without waiting for the other.",
+    analogy:
+      "A phone call vs sending letters. HTTP is sending a letter and waiting for a reply. WebSockets is picking up the phone — once connected, either person can talk at any time without hanging up and calling back.",
+    category: "Daily Engineering",
+    module: 3,
+  },
+
+  // Module 4 additions
+  {
+    id: "cdn",
+    term: "CDN",
+    definition:
+      "Content Delivery Network — a geographically distributed network of servers that caches and serves content from locations physically close to users, reducing latency and load on the origin server.",
+    analogy:
+      "Instead of one central library that everyone in the country drives to, a CDN puts copies of the most popular books in local branches in every city. You go to the nearest one instead of driving across the country.",
+    category: "Architecture",
+    module: 4,
+  },
+  {
+    id: "pagination",
+    term: "Pagination",
+    definition:
+      "A technique for splitting large data sets into smaller chunks (pages) returned one at a time. Common approaches: offset-based (?page=2&limit=20), cursor-based (using a pointer to the last item), or keyset-based. Prevents loading thousands of records at once.",
+    analogy:
+      "Google search results showing 10 at a time with 'Next' and page numbers, instead of dumping all 2 million results on one page. You only load what you need to see right now.",
+    category: "Daily Engineering",
+    module: 4,
+  },
+
+  // Module 5 additions
+  {
+    id: "containers",
+    term: "Docker / Containers",
+    definition:
+      "A container packages an application with all its dependencies (code, runtime, libraries, config) into a standardized unit that runs the same everywhere. Docker is the most popular container platform. Containers are lighter than full virtual machines.",
+    analogy:
+      "A shipping container. No matter what's inside — furniture, electronics, food — it fits on any ship, any truck, any crane. The container standardizes the packaging so the transport system doesn't care what's inside.",
+    category: "Architecture",
+    module: 5,
+  },
+  {
+    id: "gitbranching",
+    term: "Git Branching",
+    definition:
+      "Creating a separate line of development from the main codebase. Developers work on features or fixes in branches without affecting the main code. Branches are merged back via pull requests after review. Common patterns: feature branches, release branches, hotfix branches.",
+    analogy:
+      "Making a photocopy of a document to edit. You mark up your copy, someone reviews your changes, and if approved, your edits get applied to the original. Meanwhile, others can make their own photocopies for different edits without stepping on your work.",
+    category: "Daily Engineering",
+    module: 5,
+  },
+  {
+    id: "rollback",
+    term: "Rollback / Revert",
+    definition:
+      "Reverting a deployed application to a previous known-good version when a new deployment causes problems. Rollback strategies include blue-green deployment (switching traffic back to the old version), canary releases (gradual rollout), and version pinning.",
+    analogy:
+      "An 'undo' button for your entire website. If the new version breaks things, you flip the switch back to yesterday's version while you figure out what went wrong.",
+    category: "Daily Engineering",
+    module: 5,
+  },
 ];
 
 export const CATEGORIES = [...new Set(CONCEPTS.map((c) => c.category))];
