@@ -5,6 +5,9 @@ import { QUESTIONS } from "./data/questions.js";
 const FACES = ["term", "definition", "analogy"];
 const FACE_LABELS = { term: "Term", definition: "Definition", analogy: "Analogy" };
 
+// ─── MASTERY CONSTANTS ───
+const MASTERY_THRESHOLD = 5;
+
 // ─── UTILITIES ───
 
 function shuffle(arr) {
@@ -20,11 +23,20 @@ function pickRandom(arr, n) {
   return shuffle(arr).slice(0, n);
 }
 
-function getWeightedRandom(concepts, weights) {
-  const totalWeight = concepts.reduce((sum, c) => sum + (weights[c.id] || 1), 0);
+function getWeightFromProgress(progress, conceptId) {
+  const p = progress[conceptId];
+  if (!p || !p.seen) return 3.0;
+  if (p.streak === 0) return 2.5;
+  if (p.streak >= MASTERY_THRESHOLD) return 0.3;
+  // Learning: scale from 1.5 down to 0.5 as streak approaches threshold
+  return 1.5 - ((p.streak - 1) / (MASTERY_THRESHOLD - 1)) * 1.0;
+}
+
+function getWeightedRandom(concepts, progress) {
+  const totalWeight = concepts.reduce((sum, c) => sum + getWeightFromProgress(progress, c.id), 0);
   let r = Math.random() * totalWeight;
   for (const c of concepts) {
-    r -= weights[c.id] || 1;
+    r -= getWeightFromProgress(progress, c.id);
     if (r <= 0) return c;
   }
   return concepts[concepts.length - 1];
@@ -38,14 +50,13 @@ function getQuestionsForGroup(group) {
   return QUESTIONS.filter((q) => group.modules.includes(q.module));
 }
 
-// Build a test of N questions from a question pool, weighted by concept difficulty
-function buildTest(questions, concepts, weights, count = 20) {
+// Build a test of N questions from a question pool, weighted by concept mastery
+function buildTest(questions, concepts, progress, count = 20) {
   if (questions.length <= count) return shuffle(questions);
 
-  // Weight questions by their concept's weight
   const weighted = questions.map((q) => ({
     question: q,
-    weight: weights[q.conceptId] || 1,
+    weight: getWeightFromProgress(progress, q.conceptId),
   }));
 
   const selected = [];
@@ -113,13 +124,11 @@ function BackButton({ onClick, label = "Back" }) {
 
 // ─── PROGRESS BAR (reused) ───
 
-function ProgressBar({ weights, concepts }) {
-  const mastered = concepts.filter((c) => (weights[c.id] || 1) < 0.6).length;
-  const learning = concepts.filter((c) => {
-    const w = weights[c.id] || 1;
-    return w >= 0.6 && w <= 1.2;
-  }).length;
-  const struggling = concepts.filter((c) => (weights[c.id] || 1) > 1.2).length;
+function ProgressBar({ progress, concepts }) {
+  const mastered = concepts.filter((c) => { const p = progress[c.id]; return p && p.seen && p.streak >= MASTERY_THRESHOLD; }).length;
+  const learning = concepts.filter((c) => { const p = progress[c.id]; return p && p.seen && p.streak >= 1 && p.streak < MASTERY_THRESHOLD; }).length;
+  const struggling = concepts.filter((c) => { const p = progress[c.id]; return p && p.seen && p.streak === 0; }).length;
+  const unseen = concepts.filter((c) => { const p = progress[c.id]; return !p || !p.seen; }).length;
   const total = concepts.length;
   if (total === 0) return null;
 
@@ -129,12 +138,14 @@ function ProgressBar({ weights, concepts }) {
         {mastered > 0 && <div style={{ width: `${(mastered / total) * 100}%`, background: S.green, transition: "width 0.4s" }} />}
         {learning > 0 && <div style={{ width: `${(learning / total) * 100}%`, background: S.yellow, transition: "width 0.4s" }} />}
         {struggling > 0 && <div style={{ width: `${(struggling / total) * 100}%`, background: S.red, transition: "width 0.4s" }} />}
+        {unseen > 0 && <div style={{ width: `${(unseen / total) * 100}%`, background: "rgba(255,255,255,0.08)", transition: "width 0.4s" }} />}
       </div>
       <div style={{ display: "flex", gap: 16, marginTop: 6 }}>
         {[
           { label: "Mastered", count: mastered, color: S.green },
           { label: "Learning", count: learning, color: S.yellow },
-          { label: "Needs work", count: struggling, color: S.red },
+          { label: "Struggling", count: struggling, color: S.red },
+          { label: "New", count: unseen, color: S.dim },
         ].map((s) => (
           <span key={s.label} style={{ fontFamily: S.mono, fontSize: 10, color: s.color, opacity: s.count > 0 ? 1 : 0.3 }}>
             {s.count} {s.label}
@@ -163,7 +174,7 @@ function TestProgressBar({ answers, total }) {
 
 // ─── HOME SCREEN ───
 
-function HomeScreen({ weights, bestScores, flaggedCount, onSelectModule, onStartMarathon, onOpenMissed }) {
+function HomeScreen({ progress, bestScores, flaggedCount, onSelectModule, onStartMarathon, onOpenMissed }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
       <div>
@@ -175,13 +186,13 @@ function HomeScreen({ weights, bestScores, flaggedCount, onSelectModule, onStart
         </p>
       </div>
 
-      <ProgressBar weights={weights} concepts={CONCEPTS} />
+      <ProgressBar progress={progress} concepts={CONCEPTS} />
 
       <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 4 }}>
         {MODULE_GROUPS.map((group) => {
           const concepts = getConceptsForGroup(group);
           const questions = getQuestionsForGroup(group);
-          const mastered = concepts.filter((c) => (weights[c.id] || 1) < 0.6).length;
+          const mastered = concepts.filter((c) => { const p = progress[c.id]; return p && p.seen && p.streak >= MASTERY_THRESHOLD; }).length;
           const best = bestScores[group.id];
 
           return (
@@ -287,7 +298,7 @@ function HomeScreen({ weights, bestScores, flaggedCount, onSelectModule, onStart
 
 // ─── MODULE DETAIL ───
 
-function ModuleDetail({ group, weights, bestScores, onBack, onStartTest, onStartFlashcards }) {
+function ModuleDetail({ group, progress, bestScores, onBack, onStartTest, onStartFlashcards }) {
   const concepts = getConceptsForGroup(group);
   const questions = getQuestionsForGroup(group);
   const best = bestScores[group.id];
@@ -305,7 +316,7 @@ function ModuleDetail({ group, weights, bestScores, onBack, onStartTest, onStart
         </p>
       </div>
 
-      <ProgressBar weights={weights} concepts={concepts} />
+      <ProgressBar progress={progress} concepts={concepts} />
 
       {best && (
         <div style={{ fontFamily: S.mono, fontSize: 12, color: S.dim }}>
@@ -365,11 +376,15 @@ function ModuleDetail({ group, weights, bestScores, onBack, onStartTest, onStart
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
           {concepts.map((c) => {
-            const w = weights[c.id] || 1;
-            let status = S.yellow;
-            let label = "Learning";
-            if (w < 0.6) { status = S.green; label = "Mastered"; }
-            else if (w > 1.2) { status = S.red; label = "Needs work"; }
+            const p = progress[c.id];
+            let statusColor = S.dim;
+            let label = "New";
+            if (p && p.seen) {
+              if (p.streak >= MASTERY_THRESHOLD) { statusColor = S.green; label = "Mastered"; }
+              else if (p.streak >= 1) { statusColor = S.yellow; label = "Learning"; }
+              else { statusColor = S.red; label = "Struggling"; }
+            }
+            const streak = (p && p.seen) ? p.streak : 0;
 
             return (
               <div
@@ -385,7 +400,14 @@ function ModuleDetail({ group, weights, bestScores, onBack, onStartTest, onStart
                 }}
               >
                 <span style={{ fontFamily: S.serif, fontSize: 13, color: S.text }}>{c.term}</span>
-                <span style={{ fontFamily: S.mono, fontSize: 9, color: status, textTransform: "uppercase" }}>{label}</span>
+                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <div style={{ display: "flex", gap: 3 }}>
+                    {Array.from({ length: MASTERY_THRESHOLD }, (_, i) => (
+                      <div key={i} style={{ width: 6, height: 6, borderRadius: "50%", background: i < streak ? statusColor : "rgba(255,255,255,0.1)", transition: "background 0.3s" }} />
+                    ))}
+                  </div>
+                  <span style={{ fontFamily: S.mono, fontSize: 9, color: statusColor, textTransform: "uppercase", minWidth: 52, textAlign: "right" }}>{label}</span>
+                </div>
               </div>
             );
           })}
@@ -397,7 +419,7 @@ function ModuleDetail({ group, weights, bestScores, onBack, onStartTest, onStart
 
 // ─── PRACTICE TEST ───
 
-function PracticeTest({ questions: testQuestions, weights, setWeights, flagged, setFlagged, onFinish, onBack, title }) {
+function PracticeTest({ questions: testQuestions, progress, setProgress, flagged, setFlagged, onFinish, onBack, title }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selected, setSelected] = useState(null);
   const [answers, setAnswers] = useState([]); // true/false per question
@@ -420,16 +442,17 @@ function PracticeTest({ questions: testQuestions, weights, setWeights, flagged, 
     setAnswers((prev) => [...prev, correct]);
     if (correct) setScore((s) => s + 1);
 
-    // Update spaced rep weights
+    // Update streak-based progress
     if (concept) {
-      setWeights((prev) => {
-        const w = { ...prev };
+      setProgress((prev) => {
+        const p = { ...prev };
+        const current = p[concept.id] || { streak: 0, seen: false };
         if (correct) {
-          w[concept.id] = Math.max(0.3, (w[concept.id] || 1) * 0.6);
+          p[concept.id] = { streak: current.streak + 1, seen: true };
         } else {
-          w[concept.id] = Math.min(5, (w[concept.id] || 1) * 1.8);
+          p[concept.id] = { streak: 0, seen: true };
         }
-        return w;
+        return p;
       });
     }
   };
@@ -730,8 +753,8 @@ function TestResults({ result, questions, onRetryMissed, onBack }) {
 
 // ─── FLASHCARD MODE (scoped to concepts) ───
 
-function FlashcardMode({ weights, setWeights, concepts, onBack, title }) {
-  const [current, setCurrent] = useState(() => getWeightedRandom(concepts, weights));
+function FlashcardMode({ progress, setProgress, concepts, onBack, title }) {
+  const [current, setCurrent] = useState(() => getWeightedRandom(concepts, progress));
   const [faceIndex, setFaceIndex] = useState(0);
   const [flipping, setFlipping] = useState(false);
   const [selfScore, setSelfScore] = useState(null);
@@ -747,21 +770,22 @@ function FlashcardMode({ weights, setWeights, concepts, onBack, title }) {
 
   const handleScore = (knew) => {
     setSelfScore(knew);
-    setWeights((prev) => {
-      const w = { ...prev };
+    setProgress((prev) => {
+      const p = { ...prev };
+      const cur = p[current.id] || { streak: 0, seen: false };
       if (knew) {
-        w[current.id] = Math.max(0.3, (w[current.id] || 1) * 0.6);
+        p[current.id] = { streak: cur.streak + 1, seen: true };
       } else {
-        w[current.id] = Math.min(5, (w[current.id] || 1) * 1.8);
+        p[current.id] = { streak: 0, seen: true };
       }
-      return w;
+      return p;
     });
     setTimeout(() => {
       setSelfScore(null);
       setFaceIndex(0);
       setFlipping(true);
       setTimeout(() => {
-        setCurrent(getWeightedRandom(concepts, weights));
+        setCurrent(getWeightedRandom(concepts, progress));
         setFlipping(false);
       }, 250);
     }, 400);
@@ -890,7 +914,7 @@ function FlashcardMode({ weights, setWeights, concepts, onBack, title }) {
         </div>
       </div>
 
-      <ProgressBar weights={weights} concepts={concepts} />
+      <ProgressBar progress={progress} concepts={concepts} />
     </div>
   );
 }
@@ -904,27 +928,41 @@ export default function App() {
   const [testResult, setTestResult] = useState(null);
   const [testTitle, setTestTitle] = useState("");
 
-  // localStorage: weights
-  const [weights, setWeights] = useState(() => {
+  // localStorage: streak-based progress
+  const [progress, setProgress] = useState(() => {
     try {
-      const saved = localStorage.getItem("study-weights");
+      // Try new format first
+      const saved = localStorage.getItem("study-progress");
       if (saved) {
         const parsed = JSON.parse(saved);
-        const w = { ...parsed };
+        const p = { ...parsed };
+        CONCEPTS.forEach((c) => { if (!(c.id in p)) p[c.id] = { streak: 0, seen: false }; });
+        return p;
+      }
+      // Migrate from old weight-based system
+      const oldSaved = localStorage.getItem("study-weights");
+      if (oldSaved) {
+        const oldWeights = JSON.parse(oldSaved);
+        const p = {};
         CONCEPTS.forEach((c) => {
-          if (!(c.id in w)) w[c.id] = 1;
+          const w = oldWeights[c.id];
+          if (w === undefined || w === 1) p[c.id] = { streak: 0, seen: false };
+          else if (w < 0.6) p[c.id] = { streak: MASTERY_THRESHOLD, seen: true };
+          else if (w > 1.2) p[c.id] = { streak: 0, seen: true };
+          else p[c.id] = { streak: 1, seen: true };
         });
-        return w;
+        localStorage.removeItem("study-weights");
+        return p;
       }
     } catch {}
-    const w = {};
-    CONCEPTS.forEach((c) => (w[c.id] = 1));
-    return w;
+    const p = {};
+    CONCEPTS.forEach((c) => (p[c.id] = { streak: 0, seen: false }));
+    return p;
   });
 
   useEffect(() => {
-    localStorage.setItem("study-weights", JSON.stringify(weights));
-  }, [weights]);
+    localStorage.setItem("study-progress", JSON.stringify(progress));
+  }, [progress]);
 
   // localStorage: flagged questions
   const [flagged, setFlagged] = useState(() => {
@@ -966,7 +1004,7 @@ export default function App() {
   };
 
   const startTest = (questions, title, moduleId) => {
-    const test = buildTest(questions, CONCEPTS, weights, Math.min(20, questions.length));
+    const test = buildTest(questions, CONCEPTS, progress, Math.min(20, questions.length));
     setTestQuestions(test);
     setTestTitle(title);
     setScreen("test");
@@ -1036,7 +1074,7 @@ export default function App() {
       <div style={{ width: "100%", maxWidth: 560 }}>
         {screen === "home" && (
           <HomeScreen
-            weights={weights}
+            progress={progress}
             bestScores={bestScores}
             flaggedCount={flagged.size}
             onSelectModule={selectModule}
@@ -1048,7 +1086,7 @@ export default function App() {
         {screen === "module" && activeModule && (
           <ModuleDetail
             group={activeModule}
-            weights={weights}
+            progress={progress}
             bestScores={bestScores}
             onBack={goHome}
             onStartTest={startModuleTest}
@@ -1059,8 +1097,8 @@ export default function App() {
         {screen === "test" && (
           <PracticeTest
             questions={testQuestions}
-            weights={weights}
-            setWeights={setWeights}
+            progress={progress}
+            setProgress={setProgress}
             flagged={flagged}
             setFlagged={setFlagged}
             onFinish={finishTest}
@@ -1080,8 +1118,8 @@ export default function App() {
 
         {screen === "flashcards" && activeModule && (
           <FlashcardMode
-            weights={weights}
-            setWeights={setWeights}
+            progress={progress}
+            setProgress={setProgress}
             concepts={getConceptsForGroup(activeModule)}
             onBack={() => setScreen("module")}
             title={activeModule.name + " Flashcards"}
