@@ -4,6 +4,148 @@
 // To add concepts: just add objects to this array
 
 export const CONCEPTS = [
+  // ═══ Module 0: Getting Started (Beginner) ═══
+  {
+    id: "internet",
+    term: "How the Internet Works",
+    definition:
+      "A global network of interconnected computers that communicate by sending data in small packets through cables, wireless signals, and satellites.",
+    analogy:
+      "A postal system for computers — letters (data packets) get routed through sorting centers (routers) to reach the right mailbox.",
+    category: "Getting Started",
+    module: 0,
+  },
+  {
+    id: "ipaddress",
+    term: "IP Addresses & Ports",
+    definition:
+      "A unique numerical label (like 192.168.1.1) assigned to every device on a network, used to identify where data should be sent, with a port number specifying which application receives it.",
+    analogy:
+      "A street address + apartment number — the IP finds the building, the port finds the right door.",
+    category: "Getting Started",
+    module: 0,
+  },
+  {
+    id: "protocols",
+    term: "Protocols (HTTP/HTTPS)",
+    definition:
+      "Standardized rules that define how data is formatted and transmitted between computers. HTTP is the protocol for web pages; HTTPS adds encryption for security.",
+    analogy:
+      "Languages with grammar rules — both sides must speak the same protocol or they can't understand each other.",
+    category: "Getting Started",
+    module: 0,
+  },
+  {
+    id: "domainnames",
+    term: "Domain Names",
+    definition:
+      "Human-readable names (like google.com) that map to IP addresses, so people don't have to memorize numbers to visit websites.",
+    analogy:
+      "A contact name in your phone — you tap 'Mom' instead of dialing 555-0123.",
+    category: "Getting Started",
+    module: 0,
+  },
+  {
+    id: "browsers",
+    term: "What Browsers Do",
+    definition:
+      "Software (Chrome, Firefox, Safari) that sends HTTP requests to web servers, receives HTML/CSS/JavaScript back, and renders it into the visual web pages you see and interact with.",
+    analogy:
+      "A translator that takes raw code from the internet and turns it into the colorful, clickable pages you see on screen.",
+    category: "Getting Started",
+    module: 0,
+  },
+  {
+    id: "clientserver",
+    term: "Client vs Server",
+    definition:
+      "The client (your browser or phone app) makes requests; the server (a remote computer) processes them and sends back responses. Most of the internet follows this request-response pattern.",
+    analogy:
+      "A restaurant: you (client) order food, the kitchen (server) prepares it and sends it to your table.",
+    category: "Getting Started",
+    module: 0,
+  },
+  {
+    id: "whatscode",
+    term: "What is Code",
+    definition:
+      "A set of precise text instructions written in a programming language that tells a computer exactly what to do, step by step. Code is written by humans and executed by machines.",
+    analogy:
+      "A recipe — step-by-step instructions that, if followed exactly, produce a predictable result every time.",
+    category: "Getting Started",
+    module: 0,
+  },
+  {
+    id: "datatypes",
+    term: "Data Types",
+    definition:
+      "Categories that define what kind of value a piece of data is: text (strings), whole numbers (integers), decimal numbers (floats), or true/false values (booleans). The type determines what operations you can perform on the data.",
+    analogy:
+      "Food categories at a grocery store — you can't blend a steak like a smoothie, just like you can't do math on a text string.",
+    category: "Getting Started",
+    module: 0,
+  },
+  {
+    id: "variables",
+    term: "Variables",
+    definition:
+      "Named containers that store a value in a program's memory, letting you reuse and update that value throughout your code instead of retyping it.",
+    analogy:
+      "Labeled jars in a kitchen — the label says 'sugar' and you can swap what's inside, but the label stays the same.",
+    category: "Getting Started",
+    module: 0,
+  },
+  {
+    id: "databases",
+    term: "What is a Database",
+    definition:
+      "Organized, persistent storage systems that save data so it survives after the program closes or the server restarts. Data is structured in tables (SQL) or documents (NoSQL) for efficient retrieval.",
+    analogy:
+      "A filing cabinet with labeled folders — organized so you can quickly find any document without searching through everything.",
+    category: "Getting Started",
+    module: 0,
+  },
+  {
+    id: "whatisanapi",
+    term: "What is an API",
+    definition:
+      "A defined interface that lets two pieces of software communicate with each other, specifying what requests you can make and what responses you'll get back.",
+    analogy:
+      "A waiter in a restaurant — you tell the waiter (API) what you want, they relay it to the kitchen (server), and bring back your food (response).",
+    category: "Getting Started",
+    module: 0,
+  },
+  {
+    id: "frontendbackend",
+    term: "Frontend vs Backend",
+    definition:
+      "Frontend is everything the user sees and interacts with (HTML, CSS, JavaScript in the browser). Backend is the server-side logic, databases, and processing that happens behind the scenes.",
+    analogy:
+      "A restaurant's dining room (frontend — what customers see) vs. the kitchen (backend — where the real work happens out of sight).",
+    category: "Getting Started",
+    module: 0,
+  },
+  {
+    id: "json",
+    term: "What is JSON",
+    definition:
+      "JavaScript Object Notation — a lightweight text format for structuring data as key-value pairs, used universally for sending data between servers and apps because it's both human-readable and machine-parseable.",
+    analogy:
+      "A standardized shipping label — everyone uses the same format so any system can read it, regardless of what's inside the box.",
+    category: "Getting Started",
+    module: 0,
+  },
+  {
+    id: "cloudbasics",
+    term: "What is The Cloud",
+    definition:
+      "Remote servers owned by companies like AWS, Google, or Azure that you rent instead of buying your own hardware. 'The cloud' just means someone else's computer that you access over the internet.",
+    analogy:
+      "Renting a storage unit instead of building a shed — you pay for what you use, someone else maintains the building, and you can get a bigger unit anytime.",
+    category: "Getting Started",
+    module: 0,
+  },
+
   // ═══ Module 1: How the Web Talks (Foundations) ═══
   {
     id: "endpoint",
@@ -559,6 +701,7 @@ export const CONCEPTS = [
 export const CATEGORIES = [...new Set(CONCEPTS.map((c) => c.category))];
 
 export const CATEGORY_COLORS = {
+  "Getting Started": "#cc6666",
   "API Basics": "#f0c674",
   "Daily Engineering": "#81a2be",
   Architecture: "#b294bb",
@@ -566,6 +709,7 @@ export const CATEGORY_COLORS = {
 };
 
 export const MODULE_GROUPS = [
+  { id: 4, name: "Beginner", subtitle: "Internet, Code, & Computing Basics", modules: [0], color: "#cc6666" },
   { id: 1, name: "Foundations", subtitle: "HTTP, DNS, Request Lifecycle", modules: [1, 2], color: "#f0c674" },
   { id: 2, name: "Intermediate", subtitle: "REST, GraphQL, Auth, CORS", modules: [3], color: "#81a2be" },
   { id: 3, name: "Advanced", subtitle: "Caching, Databases, Infrastructure", modules: [4, 5], color: "#b294bb" },

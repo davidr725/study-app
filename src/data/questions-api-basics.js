@@ -9,18 +9,18 @@ export const QUESTIONS_API_BASICS = [
     id: "q_endpoint_t2d_1",
     conceptId: "endpoint",
     module: 1,
-    type: "term_to_def",
+    type: "scenario",
     prompt:
-      "What is an API Endpoint?",
+      "A developer asks 'Where do I send the request to get user data?' They need a specific URL for the user resource. What concept are they asking about?",
     options: [
-      "A specific URL where an API can be accessed to perform an operation on a resource",
-      "A protocol that encrypts data sent between client and server",
-      "A numeric code returned by a server indicating the result of a request",
-      "A restriction on how many requests a client can make within a time window",
+      "API Endpoint",
+      "HTTP Header",
+      "API Gateway",
+      "DNS Record",
     ],
     correctIndex: 0,
     explanation:
-      "An API Endpoint is a specific URL where an API can be accessed to perform an operation on a resource — like a mailbox address where things get sent and picked up.",
+      "An API Endpoint is the specific URL where you send requests to interact with a resource — like a mailbox address where things get sent and picked up.",
   },
   {
     id: "q_endpoint_d2t_1",
@@ -105,14 +105,14 @@ export const QUESTIONS_API_BASICS = [
     id: "q_methods_t2d_1",
     conceptId: "methods",
     module: 1,
-    type: "term_to_def",
+    type: "scenario",
     prompt:
-      "What are HTTP Methods?",
+      "When building a CRUD API, you need verbs to distinguish between creating, reading, updating, and deleting resources. What concept provides these verbs?",
     options: [
-      "Verbs (GET, POST, PUT, DELETE) that specify what operation to perform on the resource at an endpoint",
-      "Standardized numeric codes returned by a server indicating the result of a request",
-      "The data serialization standard that client and server agree to use",
-      "The full sequence of steps when a browser requests a page",
+      "HTTP Methods",
+      "HTTP Status Codes",
+      "API Endpoints",
+      "Request Headers",
     ],
     correctIndex: 0,
     explanation:
@@ -191,10 +191,10 @@ export const QUESTIONS_API_BASICS = [
     prompt:
       "True or False: A PUT request replaces the entire resource, while PATCH only updates specific fields.",
     options: [
-      "True — PUT replaces the whole resource; PATCH modifies only the specified fields",
-      "False — PUT and PATCH do the same thing",
-      "False — PATCH replaces the whole resource; PUT updates specific fields",
-      "False — Neither PUT nor PATCH modifies existing resources",
+      "True — PUT replaces the full resource; PATCH modifies only specified fields",
+      "False — PUT and PATCH both perform partial updates; the difference is in encoding format",
+      "False — PATCH replaces the full resource; PUT modifies only specified fields",
+      "False — PUT and PATCH are interchangeable aliases defined in the HTTP/2 spec",
     ],
     correctIndex: 0,
     explanation:
@@ -208,10 +208,10 @@ export const QUESTIONS_API_BASICS = [
     prompt:
       "Your team debates whether to use GET or POST for a search feature with complex filters. What's the key tradeoff?",
     options: [
-      "GET puts params in the URL (bookmarkable, cacheable, length-limited). POST puts them in the body (no length limit, not cacheable, not bookmarkable).",
-      "GET is faster than POST because it uses less bandwidth",
-      "POST is more secure because it encrypts the data",
-      "GET can only return JSON while POST can return any format",
+      "GET puts params in the URL (bookmarkable, cacheable, length-limited); POST puts them in the body (no length limit, not cacheable)",
+      "GET is faster than POST because it skips the request body parsing step on the server side",
+      "POST is more secure because it encrypts the request data, while GET sends data in plaintext",
+      "GET requests are always idempotent while POST requests always modify the server's state",
     ],
     correctIndex: 0,
     explanation:
@@ -225,14 +225,14 @@ export const QUESTIONS_API_BASICS = [
     id: "q_format_t2d_1",
     conceptId: "format",
     module: 1,
-    type: "term_to_def",
+    type: "scenario",
     prompt:
-      "What is a Request/Response Format?",
+      "A frontend and backend team need to agree on how data will be structured in API calls — whether to use JSON, XML, or something else. What concept are they deciding on?",
     options: [
-      "The data serialization standard (JSON, XML, etc.) that both client and server agree to use for communication",
-      "The specific URL where an API can be accessed",
-      "Verbs that specify what operation to perform on a resource",
-      "A maximum duration a client will wait for a response",
+      "Request/Response Format",
+      "HTTP Methods",
+      "API Endpoint",
+      "Content Encoding",
     ],
     correctIndex: 0,
     explanation:
@@ -282,10 +282,10 @@ export const QUESTIONS_API_BASICS = [
     prompt:
       "True or False: JSON is more verbose than XML, which is why XML is preferred for modern APIs.",
     options: [
-      "False — JSON is actually less verbose than XML, which is why JSON is preferred",
-      "True — XML is more compact and faster to parse",
-      "True — JSON requires more characters to express the same data",
-      "False — JSON and XML are identical in size",
+      "False — JSON is less verbose than XML, using simpler key-value syntax instead of tags",
+      "True — XML uses compact closing tags while JSON requires extra braces and quotes",
+      "True — JSON needs more characters to express the same data structures as XML",
+      "False — JSON and XML produce identical payload sizes for the same data content",
     ],
     correctIndex: 0,
     explanation:
@@ -300,9 +300,9 @@ export const QUESTIONS_API_BASICS = [
       "Your API returns data but the frontend shows 'undefined' for every field. The API works fine in Postman. What's likely wrong?",
     options: [
       "The response format doesn't match what the frontend expects — check Content-Type header and parsing logic",
-      "The API endpoint is incorrect",
-      "The server is rate-limiting the frontend",
-      "DNS is resolving to the wrong server",
+      "The API endpoint is incorrect and returning a different resource's data entirely",
+      "The server is rate-limiting the frontend and returning empty placeholder data",
+      "The CORS policy is stripping response fields before they reach the browser",
     ],
     correctIndex: 0,
     explanation:
@@ -326,14 +326,14 @@ export const QUESTIONS_API_BASICS = [
     id: "q_status_t2d_1",
     conceptId: "status",
     module: 2,
-    type: "term_to_def",
+    type: "scenario",
     prompt:
-      "What are HTTP Status Codes?",
+      "After your server processes a request, it needs a standardized way to tell the client whether it succeeded, failed due to a client error, or failed due to a server problem. What provides this?",
     options: [
-      "Standardized numeric codes returned by a server indicating the result of a request (e.g., 200 OK, 404 Not Found)",
-      "Verbs that specify what operation to perform on a resource",
-      "Configuration values stored outside the codebase",
-      "The data serialization standard that client and server agree to use",
+      "HTTP Status Codes",
+      "HTTP Methods",
+      "HTTP Headers",
+      "Request Body",
     ],
     correctIndex: 0,
     explanation:
@@ -382,10 +382,10 @@ export const QUESTIONS_API_BASICS = [
     type: "which_is_not",
     prompt:
       "Which of the following is NOT a real HTTP status code?",
-    options: ["422 Unprocessable","200 OK","404 Not Found","503 Service Unavailable"],
+    options: ["499 Client Timeout","200 OK","404 Not Found","503 Service Unavailable"],
     correctIndex: 0,
     explanation:
-      "While 422 exists in WebDAV, the standard code is '422 Unprocessable Entity' (not just 'Unprocessable'). 200, 404, and 503 are all standard HTTP status codes. Note: the actual trick here is that all the others are exact standard names.",
+      "499 is not a standard HTTP status code (though some servers like nginx use it internally). 200, 404, and 503 are all standard HTTP status codes.",
   },
   {
     id: "q_status_tf_1",
@@ -396,9 +396,9 @@ export const QUESTIONS_API_BASICS = [
       "True or False: A 3xx status code means the resource has moved and the client should follow a redirect.",
     options: [
       "True — 3xx codes indicate redirection; the client should follow the new URL",
-      "False — 3xx codes indicate a server error",
-      "False — 3xx codes mean the request was successful",
-      "True — but only 301; other 3xx codes indicate errors",
+      "False — 3xx codes indicate a server error that requires the client to retry",
+      "False — 3xx codes mean the request was successful and no further action needed",
+      "True — but only 301 is a redirect; 302 and 304 indicate client-side errors",
     ],
     correctIndex: 0,
     explanation:
@@ -413,9 +413,9 @@ export const QUESTIONS_API_BASICS = [
       "Users report the app is broken. Logs show a spike in 503s. Is this a bug in your code or an infrastructure problem?",
     options: [
       "Infrastructure — 503 means the server is temporarily unable to handle requests, usually overloaded or in maintenance",
-      "Code bug — 503 means there's a syntax error in the server code",
-      "Client-side issue — 503 means the browser sent a bad request",
-      "Database problem — 503 specifically indicates a database connection failure",
+      "Code bug — 503 means an unhandled exception crashed the request handler",
+      "Client-side issue — users are sending malformed requests that the server rejects",
+      "Database problem — 503 specifically indicates a failed database query or connection",
     ],
     correctIndex: 0,
     explanation:
@@ -429,14 +429,14 @@ export const QUESTIONS_API_BASICS = [
     id: "q_auth_t2d_1",
     conceptId: "auth",
     module: 2,
-    type: "term_to_def",
+    type: "scenario",
     prompt:
-      "What is an API Key / Auth Token?",
+      "A third-party service requires you to include a secret string in every request header so it can verify your identity before returning data. What concept is this?",
     options: [
-      "A credential included with requests to verify the identity and permissions of the caller",
-      "A restriction on how many requests can be made within a time window",
-      "A standardized numeric code indicating the result of a request",
-      "A maximum duration a client will wait for a response",
+      "API Key / Auth Token",
+      "Rate Limiting",
+      "HTTP Status Code",
+      "Request Timeout",
     ],
     correctIndex: 0,
     explanation:
@@ -474,10 +474,10 @@ export const QUESTIONS_API_BASICS = [
     prompt:
       "True or False: An API key and an auth token serve the same basic purpose — verifying who is making the request.",
     options: [
-      "True — both are credentials that identify and authenticate the caller",
-      "False — API keys identify the app, but auth tokens are for encryption",
-      "False — API keys are for rate limiting, not authentication",
-      "True — but API keys are more secure than auth tokens",
+      "True — both are credentials that identify and authenticate the caller making requests",
+      "False — API keys identify the application, but auth tokens handle data encryption only",
+      "False — API keys enforce rate limits per client; they don't verify caller identity",
+      "True — but API keys are significantly more secure than auth tokens in all cases",
     ],
     correctIndex: 0,
     explanation:
@@ -491,10 +491,10 @@ export const QUESTIONS_API_BASICS = [
     prompt:
       "You get a 401 from an API. Your teammate says 'we're not authorized.' What's technically wrong with that statement?",
     options: [
-      "401 means unauthenticated (identity not verified), not unauthorized. 403 is unauthorized (identity verified but lacks permission).",
-      "Nothing — 401 and 'unauthorized' mean the same thing",
-      "401 means the server is down, not that there's an auth problem",
-      "401 only applies to OAuth, not API keys",
+      "401 means unauthenticated (identity not verified), not unauthorized — 403 means unauthorized",
+      "Nothing is wrong — 401 and 'unauthorized' mean the same thing in HTTP terminology",
+      "401 means the request was malformed or had invalid syntax, not an authentication problem",
+      "401 only applies to OAuth-based flows and doesn't apply to API key authentication",
     ],
     correctIndex: 0,
     explanation:
@@ -523,9 +523,9 @@ export const QUESTIONS_API_BASICS = [
       "Your teammate accidentally commits an API key to a public GitHub repo. What should they do?",
     options: [
       "Immediately revoke the key and generate a new one — the old key is compromised",
-      "Delete the commit — that removes the key from history",
-      "Nothing — API keys in code aren't a security risk",
-      "Change the repo to private — that hides the key",
+      "Delete the commit — removing it from the branch erases it from git history",
+      "Rotate the key's permissions to read-only so it can't be misused by others",
+      "Change the repo to private — that prevents anyone from seeing the key",
     ],
     correctIndex: 0,
     explanation:
@@ -537,14 +537,14 @@ export const QUESTIONS_API_BASICS = [
     id: "q_ratelimit_t2d_1",
     conceptId: "ratelimit",
     module: 2,
-    type: "term_to_def",
+    type: "scenario",
     prompt:
-      "What is Rate Limiting?",
+      "An API needs to prevent any single client from overwhelming the server with too many requests per minute. What mechanism handles this?",
     options: [
-      "A restriction on how many requests a client can make to an API within a given time window",
-      "A maximum duration a client will wait for a response",
-      "A credential included with requests to verify identity",
-      "The process of determining when cached data is stale",
+      "Rate Limiting",
+      "Load Balancing",
+      "Request Timeout",
+      "Authentication",
     ],
     correctIndex: 0,
     explanation:
@@ -594,10 +594,10 @@ export const QUESTIONS_API_BASICS = [
     prompt:
       "True or False: Rate limiting only protects against malicious attackers.",
     options: [
-      "False — it also protects against bugs, traffic spikes, and accidental infinite loops from legitimate clients",
-      "True — legitimate users never hit rate limits",
-      "True — rate limiting is a security feature, not a performance feature",
-      "False — rate limiting is only for performance, not security",
+      "False — it also protects against bugs, traffic spikes, and accidental loops from legitimate clients",
+      "True — legitimate users are whitelisted and never hit rate limits set by the server",
+      "True — rate limiting is purely a security feature designed to block malicious traffic",
+      "False — rate limiting only improves performance; it has no effect on security threats",
     ],
     correctIndex: 0,
     explanation:
@@ -612,9 +612,9 @@ export const QUESTIONS_API_BASICS = [
       "An API returns 429. What should your app do?",
     options: [
       "Back off and retry after a delay. Check the Retry-After header if present.",
-      "Immediately retry the request — 429 is a temporary glitch",
-      "Switch to a different API endpoint",
-      "Report it as a server bug to the API provider",
+      "Immediately retry the request — 429 is a temporary server glitch that resolves on its own",
+      "Switch to a different API endpoint to route around the rate-limited one",
+      "Cache the failed request on the client and skip it entirely to avoid future 429s",
     ],
     correctIndex: 0,
     explanation:
@@ -628,14 +628,14 @@ export const QUESTIONS_API_BASICS = [
     id: "q_timeout_t2d_1",
     conceptId: "timeout",
     module: 2,
-    type: "term_to_def",
+    type: "scenario",
     prompt:
-      "What is a Timeout?",
+      "Your HTTP client waits 30 seconds for a server response and then gives up, treating the request as failed. What concept defines this maximum wait duration?",
     options: [
-      "A maximum duration a client will wait for a response before treating the request as failed",
-      "A restriction on how many requests a client can make",
-      "A credential included with requests to verify identity",
-      "A standardized numeric code indicating the result of a request",
+      "Timeout",
+      "Rate Limit",
+      "TTL (Time to Live)",
+      "Retry Policy",
     ],
     correctIndex: 0,
     explanation:
@@ -685,10 +685,10 @@ export const QUESTIONS_API_BASICS = [
     prompt:
       "True or False: Setting a very long timeout (like 5 minutes) is always better because it gives the server more time to respond.",
     options: [
-      "False — long timeouts tie up client resources and give users a terrible experience; it's better to fail fast and retry",
-      "True — longer timeouts always improve reliability",
-      "True — the server needs as much time as possible",
-      "False — timeouts should always be exactly 30 seconds",
+      "False — long timeouts tie up client resources and frustrate users; it's better to fail fast and retry",
+      "True — longer timeouts always improve reliability by giving the server enough time to respond",
+      "True — the server needs as much time as possible, and users will wait if the data matters",
+      "False — timeouts should always be set to exactly 30 seconds regardless of the use case",
     ],
     correctIndex: 0,
     explanation:
@@ -702,10 +702,10 @@ export const QUESTIONS_API_BASICS = [
     prompt:
       "Your app hangs for 60 seconds before showing an error. Users think it's frozen. What's the fix?",
     options: [
-      "Reduce the timeout to a reasonable value (e.g., 10 seconds) and show a loading indicator with a clear error message on failure",
-      "Remove the timeout entirely so the request never fails",
-      "Increase the timeout to 120 seconds to give the server more time",
-      "Switch from POST to GET requests",
+      "Reduce the timeout to a shorter value (e.g., 10s) and show a loading indicator with a clear error on failure",
+      "Remove the timeout entirely so the request always waits as long as needed for a server response",
+      "Increase the timeout to 120 seconds to give the server more time to process the request fully",
+      "Add a retry loop that automatically resends the request every 5 seconds until the server responds",
     ],
     correctIndex: 0,
     explanation:
@@ -729,14 +729,14 @@ export const QUESTIONS_API_BASICS = [
     id: "q_status2xx_t2d_1",
     conceptId: "status2xx",
     module: 2,
-    type: "term_to_def",
+    type: "scenario",
     prompt:
-      "What do 2xx status codes indicate?",
+      "Your API successfully creates a user and returns a 201 code. Your GET request returns 200, and a successful DELETE returns 204. What category do all these codes belong to?",
     options: [
-      "Success — the request was received, understood, and processed successfully",
-      "Redirection — the client should look elsewhere for the resource",
-      "Client error — the request was malformed or unauthorized",
-      "Server error — the server failed to process a valid request",
+      "2xx Success Codes",
+      "3xx Redirect Codes",
+      "4xx Client Error Codes",
+      "1xx Informational Codes",
     ],
     correctIndex: 0,
     explanation:
@@ -762,10 +762,10 @@ export const QUESTIONS_API_BASICS = [
     prompt:
       "Your DELETE endpoint returns 200 with an empty body. A teammate suggests 204 instead. Why?",
     options: [
-      "204 No Content explicitly communicates 'success, and there's nothing to return' — it's more semantically correct for deletions",
-      "204 is faster because it skips the response step",
-      "200 is only for GET requests",
-      "204 is required by REST standards for all deletions",
+      "204 explicitly communicates 'success, nothing to return' — more semantically correct for deletions",
+      "204 is faster because the server skips serializing and sending an empty response body",
+      "200 is reserved for GET requests only and should not be used for DELETE operations",
+      "204 is required by REST standards for all DELETE operations that remove a resource",
     ],
     correctIndex: 0,
     explanation:
@@ -779,10 +779,10 @@ export const QUESTIONS_API_BASICS = [
     prompt:
       "True or False: A 200 OK response always includes data in the response body.",
     options: [
-      "False — a 200 can have an empty body; 204 is more appropriate when there's no content to return",
-      "True — 200 always has a response body",
-      "True — if there's no body, the server returns a 404",
-      "False — 200 never includes a body",
+      "False — a 200 can have an empty body; 204 is more appropriate when there's no content",
+      "True — the HTTP spec requires every 200 response to include a non-empty response body",
+      "True — if there's no body to return, the server must return a 404 Not Found instead",
+      "False — 200 responses never include a body; the data is always sent via headers only",
     ],
     correctIndex: 0,
     explanation:
@@ -818,14 +818,14 @@ export const QUESTIONS_API_BASICS = [
     id: "q_status4xx_t2d_1",
     conceptId: "status4xx",
     module: 2,
-    type: "term_to_def",
+    type: "scenario",
     prompt:
-      "What do 4xx status codes indicate?",
+      "A user sends a malformed request and gets a 400, tries accessing a page without logging in and gets a 401, then requests a resource that doesn't exist and gets a 404. What category are these codes?",
     options: [
-      "Client error — the problem is with the request the client sent",
-      "Server error — the server failed to process a valid request",
-      "Success — the request was processed successfully",
-      "Redirection — the resource has moved to a new location",
+      "4xx Client Error Codes",
+      "5xx Server Error Codes",
+      "3xx Redirect Codes",
+      "2xx Success Codes",
     ],
     correctIndex: 0,
     explanation:
@@ -851,10 +851,10 @@ export const QUESTIONS_API_BASICS = [
     prompt:
       "A regular user tries to access the admin panel and gets a 403. They then log out and try again, getting a 401. What changed?",
     options: [
-      "Logged in: 403 (known user, insufficient permissions). Logged out: 401 (unknown identity, needs to authenticate).",
-      "403 and 401 mean the same thing — the server is inconsistent",
-      "The admin panel was deleted between the two requests",
-      "403 means the page doesn't exist; 401 means it does",
+      "Logged in: 403 (known user, insufficient permissions). Logged out: 401 (unknown identity, must authenticate).",
+      "403 and 401 both mean access denied — the server is returning inconsistent error codes for the same problem",
+      "The admin panel was taken offline between the two requests, causing different errors each time",
+      "403 means the page doesn't exist for that user; 401 means the session token format was invalid",
     ],
     correctIndex: 0,
     explanation:
@@ -868,10 +868,10 @@ export const QUESTIONS_API_BASICS = [
     prompt:
       "True or False: A 404 Not Found always means the page or resource doesn't exist.",
     options: [
-      "False — servers sometimes return 404 intentionally to hide that a resource exists (for security), even if it does",
-      "True — 404 always means the resource genuinely doesn't exist",
-      "True — if the resource existed, the server would return 200",
-      "False — 404 means the server is down",
+      "False — servers sometimes return 404 to hide that a resource exists, for security reasons",
+      "True — 404 always means the resource genuinely does not exist on the server anywhere",
+      "True — if the resource existed but was restricted, the server would return 200 instead",
+      "False — 404 actually indicates the server is temporarily down and cannot serve content",
     ],
     correctIndex: 0,
     explanation:
@@ -919,14 +919,14 @@ export const QUESTIONS_API_BASICS = [
     id: "q_status5xx_t2d_1",
     conceptId: "status5xx",
     module: 2,
-    type: "term_to_def",
+    type: "scenario",
     prompt:
-      "What do 5xx status codes indicate?",
+      "Your request was valid, but the server returns a 500 because of an unhandled exception in its code. A different request gets a 503 because the server is overloaded. What category are these codes?",
     options: [
-      "Server error — the server failed to fulfill a valid request due to an internal problem",
-      "Client error — the request was malformed",
-      "Success — the request completed normally",
-      "Redirection — the resource is at a different URL",
+      "5xx Server Error Codes",
+      "4xx Client Error Codes",
+      "3xx Redirect Codes",
+      "2xx Success Codes",
     ],
     correctIndex: 0,
     explanation:
@@ -965,9 +965,9 @@ export const QUESTIONS_API_BASICS = [
       "Your app returns 500 errors intermittently. Sometimes it works, sometimes it doesn't. What's the most likely cause?",
     options: [
       "An unhandled exception in your code that only triggers under certain conditions (specific data, race condition, or resource exhaustion)",
-      "The client is sending bad requests",
-      "DNS is resolving incorrectly",
-      "The API endpoint URL changed",
+      "The client is randomly sending malformed requests that the server cannot parse correctly",
+      "The load balancer is routing some requests to a server running an older version",
+      "The SSL certificate is intermittently expiring and causing connection resets",
     ],
     correctIndex: 0,
     explanation:
@@ -982,9 +982,9 @@ export const QUESTIONS_API_BASICS = [
       "True or False: If you get a 5xx error, it's always the server team's fault, never the client's.",
     options: [
       "True — 5xx means the server failed to handle a valid request; the client did nothing wrong",
-      "False — 5xx errors can be caused by the client sending too much data",
-      "False — 5xx is sometimes used when the client sends invalid data",
-      "True — but only for 500, not for 502 or 503",
+      "False — 5xx errors can be triggered by the client sending payloads that are too large",
+      "False — 5xx codes are sometimes returned when the client sends syntactically invalid data",
+      "True — but only for 500 Internal Server Error, not for 502 Bad Gateway or 503 codes",
     ],
     correctIndex: 0,
     explanation:
@@ -1008,14 +1008,14 @@ export const QUESTIONS_API_BASICS = [
     id: "q_headers_t2d_1",
     conceptId: "headers",
     module: 2,
-    type: "term_to_def",
+    type: "scenario",
     prompt:
-      "What are HTTP Headers?",
+      "You need to attach metadata to your API request — specifying the data format, including auth credentials, and setting cache directives — without putting any of it in the URL or body. What carries this metadata?",
     options: [
-      "Key-value metadata sent with requests and responses — like Content-Type, Authorization, and Cache-Control",
-      "The body of an HTTP request containing the main data",
-      "Verbs that specify what operation to perform on a resource",
-      "The numeric codes returned by a server indicating the result",
+      "HTTP Headers",
+      "Query Parameters",
+      "HTTP Methods",
+      "Status Codes",
     ],
     correctIndex: 0,
     explanation:
@@ -1065,10 +1065,10 @@ export const QUESTIONS_API_BASICS = [
     prompt:
       "Your API request sends JSON in the body but the server returns '415 Unsupported Media Type.' What did you forget?",
     options: [
-      "The Content-Type header — you need to set it to 'application/json' so the server knows the body format",
-      "The Accept header — the server doesn't know what to return",
-      "The Authorization header — you're not authenticated",
-      "The request body — it's empty",
+      "The Content-Type header — set it to 'application/json' so the server knows the body format",
+      "The Accept header — the server doesn't know what response format the client expects",
+      "The Authorization header — without valid credentials the server rejects the request",
+      "The request body encoding — the JSON needs to be base64 encoded before sending it",
     ],
     correctIndex: 0,
     explanation:
@@ -1094,10 +1094,10 @@ export const QUESTIONS_API_BASICS = [
     prompt:
       "True or False: Content-Type and Accept headers serve the same purpose.",
     options: [
-      "False — Content-Type describes the format of data being SENT; Accept describes the format the client wants to RECEIVE",
-      "True — they both specify JSON or XML",
-      "True — they're interchangeable names for the same header",
-      "False — Accept is not a real HTTP header",
+      "False — Content-Type describes the format being sent; Accept describes the format wanted back",
+      "True — both headers specify the data format and are interchangeable in HTTP requests",
+      "True — they are aliases for the same header, standardized under different HTTP versions",
+      "False — Accept is a deprecated header that was removed from the HTTP/2 specification",
     ],
     correctIndex: 0,
     explanation:
@@ -1109,14 +1109,14 @@ export const QUESTIONS_API_BASICS = [
     id: "q_webhook_t2d_1",
     conceptId: "webhook",
     module: 3,
-    type: "term_to_def",
+    type: "scenario",
     prompt:
-      "What is a Webhook?",
+      "Stripe needs to notify your server the instant a payment succeeds, so it sends an HTTP POST to a URL you registered. What is this push-based notification mechanism called?",
     options: [
-      "A callback mechanism where a service sends an HTTP POST to your URL when a specific event occurs",
-      "Repeatedly sending requests at intervals to check for new data",
-      "A query language where the client specifies which fields it needs",
-      "An architectural style using HTTP methods at predictable URLs",
+      "Webhook",
+      "API Polling",
+      "WebSocket",
+      "Server-Sent Events",
     ],
     correctIndex: 0,
     explanation:
@@ -1166,10 +1166,10 @@ export const QUESTIONS_API_BASICS = [
     prompt:
       "True or False: If your server is down when a webhook fires, the notification is permanently lost.",
     options: [
-      "False — most webhook providers have retry mechanisms, but your server must handle duplicate deliveries (idempotency)",
-      "True — webhooks are fire-and-forget with no retries",
-      "False — webhooks are stored in your browser cache until your server recovers",
-      "True — webhooks only work when both servers are online simultaneously",
+      "False — most providers retry failed deliveries, but your server must handle duplicates (idempotency)",
+      "True — webhooks are strictly fire-and-forget; the provider never retries a failed delivery",
+      "False — missed webhooks are queued in the browser cache and delivered when the server recovers",
+      "True — webhook delivery requires both the sender and receiver to be online at the same time",
     ],
     correctIndex: 0,
     explanation:
@@ -1184,9 +1184,9 @@ export const QUESTIONS_API_BASICS = [
       "A payment webhook fires but your server was down. What happens to that payment notification?",
     options: [
       "It's lost unless the webhook provider has a retry mechanism — which is why idempotency matters",
-      "It's automatically queued and delivered when your server comes back up",
-      "The payment is automatically reversed",
-      "The browser caches it and delivers it later",
+      "It's automatically queued by the provider and guaranteed to be delivered when your server recovers",
+      "The payment processor holds the transaction in a pending state until your webhook endpoint responds",
+      "The notification is stored in a dead-letter queue that your server automatically polls on startup",
     ],
     correctIndex: 0,
     explanation:
@@ -1203,9 +1203,9 @@ export const QUESTIONS_API_BASICS = [
       "You're building a Slack bot that responds when someone mentions your app. Should you use polling or webhooks?",
     options: [
       "Webhooks — Slack sends an HTTP POST to your server instantly when someone mentions your app",
-      "Polling — check Slack's API every second for new mentions",
-      "Neither — you need WebSockets for real-time chat",
-      "Polling — webhooks can't work with chat applications",
+      "Polling — check Slack's API every second for new mentions and respond when found",
+      "Neither — you need WebSockets for real-time chat features like mention notifications",
+      "Polling — webhooks can't work with chat applications that have high message volume",
     ],
     correctIndex: 0,
     explanation:
@@ -1217,14 +1217,14 @@ export const QUESTIONS_API_BASICS = [
     id: "q_polling_t2d_1",
     conceptId: "polling",
     module: 3,
-    type: "term_to_def",
+    type: "scenario",
     prompt:
-      "What is API Polling?",
+      "Your app checks an external API every 30 seconds to see if new data is available, even though most checks return nothing new. What is this pattern called?",
     options: [
-      "Repeatedly sending requests at set intervals to check for new data or state changes",
-      "A callback mechanism where a service sends data when an event occurs",
-      "A restriction on how many requests can be made within a time window",
-      "A credential included with requests to verify identity",
+      "API Polling",
+      "Webhook",
+      "WebSocket",
+      "Event Streaming",
     ],
     correctIndex: 0,
     explanation:
@@ -1274,10 +1274,10 @@ export const QUESTIONS_API_BASICS = [
     prompt:
       "True or False: Polling is always less efficient than webhooks.",
     options: [
-      "False — polling is simpler and useful when webhooks aren't available or when you need data at predictable intervals",
-      "True — polling always wastes resources compared to webhooks",
-      "True — polling was replaced by webhooks and is never used anymore",
-      "False — polling is actually more efficient because it uses less bandwidth",
+      "False — polling is simpler and useful when webhooks aren't available or you need predictable intervals",
+      "True — polling always wastes server resources compared to webhooks, regardless of the use case",
+      "True — polling was fully replaced by webhooks in modern architectures and is never used today",
+      "False — polling is actually more efficient than webhooks because it uses less total bandwidth",
     ],
     correctIndex: 0,
     explanation:
@@ -1292,9 +1292,9 @@ export const QUESTIONS_API_BASICS = [
       "Why would you use polling over a webhook?",
     options: [
       "When the external service doesn't support webhooks, or when you need data at predictable intervals",
-      "Polling is always more efficient than webhooks",
-      "Webhooks don't work with REST APIs",
-      "Polling is more secure because data never leaves the server",
+      "Polling is always more efficient than webhooks because it reduces total network requests",
+      "Webhooks require WebSocket support, which most REST APIs don't provide natively",
+      "Polling is more secure because your server never needs a publicly accessible endpoint",
     ],
     correctIndex: 0,
     explanation:
@@ -1308,14 +1308,14 @@ export const QUESTIONS_API_BASICS = [
     id: "q_gateway_t2d_1",
     conceptId: "gateway",
     module: 3,
-    type: "term_to_def",
+    type: "scenario",
     prompt:
-      "What is an API Gateway?",
+      "Your microservices architecture needs a single entry point that handles authentication, rate limiting, and routing requests to the correct backend service. What component provides this?",
     options: [
-      "A single entry point that manages, authenticates, and routes all incoming API requests to backend services",
-      "Software that intercepts and processes requests between client and handler",
-      "A callback mechanism triggered by specific events",
-      "A data structure that speeds up database lookups",
+      "API Gateway",
+      "Load Balancer",
+      "Reverse Proxy",
+      "DNS Server",
     ],
     correctIndex: 0,
     explanation:
@@ -1365,10 +1365,10 @@ export const QUESTIONS_API_BASICS = [
     prompt:
       "True or False: An API Gateway and a Load Balancer do the same thing.",
     options: [
-      "False — a gateway handles auth, routing, and rate limiting; a load balancer distributes traffic across identical servers",
-      "True — they both route traffic to backend servers",
-      "True — the terms are interchangeable",
-      "False — load balancers are hardware; gateways are software",
+      "False — a gateway handles auth, routing, and rate limiting; a load balancer distributes traffic evenly",
+      "True — both components route traffic to backend servers and are functionally interchangeable",
+      "True — the terms refer to the same component but evolved from different vendor naming conventions",
+      "False — load balancers are always physical hardware; gateways are always cloud-based software",
     ],
     correctIndex: 0,
     explanation:
@@ -1383,9 +1383,9 @@ export const QUESTIONS_API_BASICS = [
       "Your company has 15 microservices. Mobile developers complain about needing to know 15 different URLs. What's the solution?",
     options: [
       "An API Gateway — one URL that routes requests to the correct microservice internally",
-      "DNS — create 15 subdomains",
-      "A database — store all URLs in one place",
-      "GraphQL — it eliminates the need for URLs",
+      "A load balancer — distribute traffic evenly across all 15 microservices",
+      "A service registry — let each client discover service URLs dynamically at runtime",
+      "A reverse proxy — cache responses from all 15 services to reduce direct connections",
     ],
     correctIndex: 0,
     explanation:
@@ -1409,14 +1409,14 @@ export const QUESTIONS_API_BASICS = [
     id: "q_middleware_t2d_1",
     conceptId: "middleware",
     module: 3,
-    type: "term_to_def",
+    type: "scenario",
     prompt:
-      "What is Middleware?",
+      "In your Express app, every request needs to be logged, checked for authentication, and have its body parsed — all before reaching the route handler. What layer handles these cross-cutting concerns?",
     options: [
-      "Software that intercepts and processes requests/responses between client and handler, performing tasks like logging, auth, or transformation",
-      "A single entry point that routes all incoming API requests",
-      "A callback mechanism triggered by specific events",
-      "A buffer that holds tasks to be processed later",
+      "Middleware",
+      "API Gateway",
+      "Load Balancer",
+      "Service Worker",
     ],
     correctIndex: 0,
     explanation:
@@ -1466,10 +1466,10 @@ export const QUESTIONS_API_BASICS = [
     prompt:
       "True or False: Middleware can stop a request from reaching the route handler (e.g., by rejecting unauthenticated users).",
     options: [
-      "True — auth middleware can check credentials and return a 401 before the request ever reaches the handler",
-      "False — middleware can only add data; it can't block requests",
-      "False — only API gateways can block requests",
-      "True — but only if it throws an error",
+      "True — auth middleware can check credentials and return a 401 before the handler runs",
+      "False — middleware can only attach data to the request; it cannot block or reject it",
+      "False — only API gateways have the ability to block requests from reaching handlers",
+      "True — but only by throwing an unhandled error, which crashes the entire server process",
     ],
     correctIndex: 0,
     explanation:
@@ -1484,9 +1484,9 @@ export const QUESTIONS_API_BASICS = [
       "You need to log every API request, check authentication, and validate the request body — all before processing. Where does this logic go?",
     options: [
       "Middleware — each concern becomes a separate middleware that runs in sequence before the route handler",
-      "The database layer — validation should happen at the database level",
-      "The frontend — all validation should happen client-side",
-      "A separate microservice for each concern",
+      "The route handler — logging, auth, and validation should all be handled inside each route function",
+      "The API gateway — these concerns should be centralized at the infrastructure level, not in app code",
+      "A separate microservice for each concern — one for logging, one for auth, one for validation",
     ],
     correctIndex: 0,
     explanation:
@@ -1520,9 +1520,9 @@ X-RateLimit-Reset: 1700000060`,
     prompt: "Your API integration is receiving this response. What should your code do next?",
     options: [
       "Wait 60 seconds (per Retry-After header) before retrying the request",
-      "Immediately retry with a different API key",
-      "Switch from POST to GET to bypass the rate limit",
-      "Increase concurrency — make more requests simultaneously to compensate",
+      "Immediately retry the request with a different API key to reset the rate counter",
+      "Switch to a batch endpoint that combines multiple requests into a single call",
+      "Reduce the request payload size so the server processes it below the rate threshold",
     ],
     correctIndex: 0,
     explanation: "429 Too Many Requests means you've hit the rate limit. Retry-After tells you exactly how long to wait. Well-behaved API clients respect this and implement exponential backoff — retrying immediately or hammering with more requests will get you banned or blocked longer.",
@@ -1541,10 +1541,10 @@ Content-Type: application/json
 }`,
     prompt: "A logged-in user gets this response when accessing /admin/settings. Which statement best explains it?",
     options: [
-      "The server knows who the user is, but they lack the required 'admin' role to access this resource",
-      "The user's session expired — they need to log in again",
-      "The /admin/settings endpoint doesn't exist on this server",
-      "The server is temporarily unavailable — try again later",
+      "The server knows who the user is, but they lack the 'admin' role needed for this resource",
+      "The user's session has expired and they need to re-authenticate by logging in again",
+      "The /admin/settings endpoint doesn't exist on this server and needs to be created",
+      "The server is temporarily unavailable due to high load and the user should retry later",
     ],
     correctIndex: 0,
     explanation: "403 Forbidden = authenticated but not authorized. The server knows who you are but won't let you in. This differs from 401 Unauthorized, which means the server doesn't know who you are yet. 401 = 'who are you?', 403 = 'I know who you are, but no.'",
@@ -1564,7 +1564,7 @@ Content-Type: application/json`,
       "It tells the server what format the client wants the response in",
       "It specifies the format of the data the client is sending in the request body",
       "It verifies the client's identity with the server",
-      "It sets the maximum response size the client can receive",
+      "It enables CORS by telling the server to accept cross-origin requests",
     ],
     correctIndex: 0,
     explanation: "Accept tells the server what format you want back — 'please respond in JSON.' Content-Type describes what you're sending in the request body. Authorization handles identity. These are three separate headers doing three separate jobs.",

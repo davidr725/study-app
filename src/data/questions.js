@@ -7,12 +7,14 @@
 // To add questions: edit the relevant category file.
 // No app code changes needed.
 
+import { QUESTIONS_GETTING_STARTED } from "./questions-getting-started.js";
 import { QUESTIONS_API_BASICS } from "./questions-api-basics.js";
 import { QUESTIONS_DAILY_ENGINEERING } from "./questions-daily-engineering.js";
 import { QUESTIONS_ARCHITECTURE } from "./questions-architecture.js";
 import { QUESTIONS_WEB_FUNDAMENTALS } from "./questions-web-fundamentals.js";
 
 export const QUESTIONS = [
+  ...QUESTIONS_GETTING_STARTED,
   ...QUESTIONS_API_BASICS,
   ...QUESTIONS_DAILY_ENGINEERING,
   ...QUESTIONS_ARCHITECTURE,

@@ -9,14 +9,14 @@ export const QUESTIONS_WEB_FUNDAMENTALS = [
     id: "q_httpcycle_t2d_1",
     conceptId: "httpcycle",
     module: 1,
-    type: "term_to_def",
+    type: "scenario",
     prompt:
-      "What is the HTTP Request Lifecycle?",
+      "When you type a URL and press Enter, your browser performs a specific sequence: resolving the domain, establishing a connection, negotiating encryption, sending the request, and rendering the response. What is this complete sequence called?",
     options: [
-      "The full sequence: DNS lookup → TCP connection → TLS handshake → HTTP request → server processes → response → browser renders",
-      "A restriction on how many requests a client can make within a time window",
-      "The mechanism by which JavaScript handles async operations",
-      "A protocol that lets users grant limited access to their data on one service to another",
+      "HTTP Request Lifecycle",
+      "DNS Resolution",
+      "TCP Handshake",
+      "TLS Negotiation",
     ],
     correctIndex: 0,
     explanation:
@@ -66,10 +66,10 @@ export const QUESTIONS_WEB_FUNDAMENTALS = [
     prompt:
       "True or False: The TLS handshake happens before the TCP connection is established.",
     options: [
-      "False — TCP must be established first, then TLS encrypts that connection",
-      "True — TLS sets up encryption before any connection is made",
-      "True — TLS and TCP happen simultaneously",
-      "False — TLS is not part of the HTTP lifecycle",
+      "False — TCP must be established first to create a reliable channel, then TLS negotiates encryption on top of it",
+      "True — TLS sets up the encryption layer before any TCP connection is established between client and server",
+      "True — TLS and TCP run simultaneously as parallel handshakes to save time during the connection setup",
+      "False — TLS is not part of the HTTP lifecycle; encryption is handled entirely by the browser's rendering engine",
     ],
     correctIndex: 0,
     explanation:
@@ -83,10 +83,10 @@ export const QUESTIONS_WEB_FUNDAMENTALS = [
     prompt:
       "A frontend dev says the API endpoint returns a 200 but the page is blank. Which part of the HTTP lifecycle likely failed?",
     options: [
-      "The render/parsing step — the request succeeded but the client isn't handling the response correctly",
-      "The DNS lookup — the browser couldn't find the server",
-      "The TLS handshake — the connection wasn't secure",
-      "The TCP connection — packets were lost in transit",
+      "The render/parsing step — the request succeeded but the client isn't handling the response data correctly",
+      "The DNS lookup — the browser couldn't resolve the domain name to find the server's IP address",
+      "The TLS handshake — the encrypted connection wasn't established so the browser rejected the response",
+      "The TCP connection — packets were dropped in transit so the response arrived incomplete or corrupted",
     ],
     correctIndex: 0,
     explanation:
@@ -102,10 +102,10 @@ export const QUESTIONS_WEB_FUNDAMENTALS = [
     prompt:
       "A user reports that a website loads slowly on the first visit but fast on subsequent visits. Which lifecycle steps are likely being skipped?",
     options: [
-      "DNS lookup and TCP/TLS handshake — the browser caches the DNS result and reuses the connection",
-      "The server processing — the server remembers the user",
-      "The HTTP request — the browser doesn't send a request the second time",
-      "The rendering — the browser skips rendering on repeat visits",
+      "DNS lookup and TCP/TLS handshake — the browser caches the DNS result and reuses the existing connection",
+      "The server processing step — the server caches the user's session and skips re-computing the response",
+      "The HTTP request itself — the browser serves the page from memory without contacting the server again",
+      "The rendering and parsing step — the browser reuses the previously constructed DOM tree on repeat visits",
     ],
     correctIndex: 0,
     explanation:
@@ -117,14 +117,14 @@ export const QUESTIONS_WEB_FUNDAMENTALS = [
     id: "q_urlstructure_t2d_1",
     conceptId: "urlstructure",
     module: 1,
-    type: "term_to_def",
+    type: "scenario",
     prompt:
-      "What are the main parts of a URL?",
+      "A junior developer asks you to explain the different parts of 'https://shop.com/products?sort=price#reviews'. You explain that it contains a protocol, domain, path, query parameter, and fragment. What web concept are you describing?",
     options: [
-      "Protocol (https://), domain (example.com), path (/page), query parameters (?key=value), and fragment (#section)",
-      "Header, body, footer, and signature",
-      "Method, endpoint, status code, and response",
-      "DNS, TCP, TLS, and HTTP",
+      "URL Structure",
+      "HTTP Request Lifecycle",
+      "DNS Resolution",
+      "REST API Design",
     ],
     correctIndex: 0,
     explanation:
@@ -174,10 +174,10 @@ export const QUESTIONS_WEB_FUNDAMENTALS = [
     prompt:
       "You see this URL: https://shop.com/products?category=shoes&sort=price#reviews. What does '#reviews' do?",
     options: [
-      "It's a fragment — it tells the browser to scroll to the 'reviews' section of the page",
-      "It filters products to only show reviews",
-      "It sends 'reviews' as a query parameter to the server",
-      "It redirects to a different page called 'reviews'",
+      "It's a fragment identifier — it tells the browser to scroll to the 'reviews' section on the page",
+      "It's a server-side filter — it tells the backend to only return review-related product data",
+      "It's a query parameter — it sends 'reviews' to the server as an additional key-value pair",
+      "It's a route redirect — it navigates the browser to a separate page dedicated to reviews",
     ],
     correctIndex: 0,
     explanation:
@@ -191,10 +191,10 @@ export const QUESTIONS_WEB_FUNDAMENTALS = [
     prompt:
       "True or False: The fragment (#section) part of a URL is sent to the server with the request.",
     options: [
-      "False — fragments are client-side only; the browser uses them but never sends them to the server",
-      "True — the server needs the fragment to know which section to return",
-      "True — fragments are included in the HTTP request headers",
-      "False — fragments don't exist in URLs; they're only used in HTML",
+      "False — fragments are client-side only; the browser strips them before sending the request to the server",
+      "True — the server needs the fragment identifier to determine which section of content to return",
+      "True — fragments are included in the HTTP request headers so the server can log which section was viewed",
+      "False — fragments are not valid URL syntax; they are only used inside HTML anchor tags within a page",
     ],
     correctIndex: 0,
     explanation:
@@ -218,14 +218,14 @@ export const QUESTIONS_WEB_FUNDAMENTALS = [
     id: "q_state_t2d_1",
     conceptId: "state",
     module: 4,
-    type: "term_to_def",
+    type: "scenario",
     prompt:
-      "What is State Management?",
+      "Your e-commerce app needs to track the logged-in user, their cart contents, and which filters are active — and the UI must update instantly when any of these change. What category of problem is this?",
     options: [
-      "The practice of tracking, storing, and updating data that changes over time in an app, ensuring the UI reflects those changes",
-      "Configuration values stored outside the codebase",
-      "The process of determining when cached data is stale",
-      "A data structure that speeds up database lookups",
+      "State Management",
+      "Cache Invalidation",
+      "Session Handling",
+      "DOM Manipulation",
     ],
     correctIndex: 0,
     explanation:
@@ -275,10 +275,10 @@ export const QUESTIONS_WEB_FUNDAMENTALS = [
     prompt:
       "True or False: State management is only needed for large, complex applications.",
     options: [
-      "False — even small apps have state (form inputs, toggles, API data); it just gets harder to manage as apps grow",
-      "True — small apps don't need state management",
-      "True — state management libraries are only for enterprise apps",
-      "False — state management is only needed for databases, not frontend apps",
+      "False — even small apps have state like form inputs, toggles, and API data; it just gets harder to manage as apps grow",
+      "True — small apps can rely on direct DOM manipulation alone, so they have no need for any state management patterns",
+      "True — state management libraries like Redux were designed for enterprise-scale apps and add unnecessary overhead to small projects",
+      "False — state management only applies to server-side databases and backend services, not to frontend user interface components",
     ],
     correctIndex: 0,
     explanation:
@@ -292,10 +292,10 @@ export const QUESTIONS_WEB_FUNDAMENTALS = [
     prompt:
       "A user adds an item to their cart but the cart icon still shows '0'. What category of bug is this?",
     options: [
-      "State management — the cart count state wasn't updated or the UI wasn't re-rendered after the state change",
-      "DNS issue — the browser is looking at a cached version",
-      "API timeout — the server didn't respond",
-      "CORS error — the cart update was blocked",
+      "State management — the cart count state wasn't updated or the component didn't re-render after the change",
+      "DNS caching — the browser is serving a stale cached version of the page from a previous session",
+      "API timeout — the server took too long to respond so the cart update request was silently dropped",
+      "CORS error — the browser blocked the cart update request because the API is on a different origin",
     ],
     correctIndex: 0,
     explanation:
@@ -319,14 +319,14 @@ export const QUESTIONS_WEB_FUNDAMENTALS = [
     id: "q_dom_t2d_1",
     conceptId: "dom",
     module: 4,
-    type: "term_to_def",
+    type: "scenario",
     prompt:
-      "What is the DOM?",
+      "When your browser loads an HTML page, it creates a live, tree-structured representation in memory that JavaScript can read and modify to change what's displayed. What is this in-memory structure called?",
     options: [
-      "Document Object Model — the tree-structured representation of an HTML page that JavaScript interacts with",
-      "The mechanism by which JavaScript handles async operations",
-      "The practice of tracking data changes in an application",
-      "An automated pipeline that tests and deploys code",
+      "DOM",
+      "Virtual DOM",
+      "Shadow DOM",
+      "HTML Source",
     ],
     correctIndex: 0,
     explanation:
@@ -376,10 +376,10 @@ export const QUESTIONS_WEB_FUNDAMENTALS = [
     prompt:
       "True or False: Directly manipulating the DOM with JavaScript (e.g., document.getElementById) is always the best approach.",
     options: [
-      "False — direct DOM manipulation is expensive and error-prone at scale; frameworks like React abstract this with a Virtual DOM for better performance",
-      "True — direct DOM manipulation is the fastest approach",
-      "True — frameworks like React are slower because they add overhead",
-      "False — JavaScript can't manipulate the DOM directly",
+      "False — direct DOM manipulation is expensive at scale; frameworks batch updates via a Virtual DOM for better performance",
+      "True — direct DOM access is the fastest approach since it avoids the overhead of a Virtual DOM abstraction layer",
+      "True — frameworks add unnecessary abstraction that makes DOM operations slower than direct JavaScript manipulation",
+      "False — JavaScript cannot manipulate the DOM directly; all changes must go through a rendering engine API first",
     ],
     correctIndex: 0,
     explanation:
@@ -393,10 +393,10 @@ export const QUESTIONS_WEB_FUNDAMENTALS = [
     prompt:
       "Your JavaScript updates a list of 1000 items by removing and re-adding every DOM element. The page freezes briefly. What's the fix?",
     options: [
-      "Only update the elements that actually changed instead of rebuilding the entire list — this is what React's Virtual DOM does automatically",
-      "Use a faster computer",
-      "Switch from JavaScript to a different language",
-      "Add more CSS animations to distract users during the freeze",
+      "Only update the elements that actually changed instead of rebuilding the entire list — this is what Virtual DOM diffing does",
+      "Wrap the DOM updates in a Web Worker so they run on a background thread without blocking the main thread",
+      "Use requestAnimationFrame to batch all 1000 element removals and additions into a single repaint cycle",
+      "Move the list rendering to the server side so the browser only receives the final HTML without any DOM operations",
     ],
     correctIndex: 0,
     explanation:
@@ -420,14 +420,14 @@ export const QUESTIONS_WEB_FUNDAMENTALS = [
     id: "q_promises_t2d_1",
     conceptId: "promises",
     module: 5,
-    type: "term_to_def",
+    type: "scenario",
     prompt:
-      "What are Promises / Async-Await?",
+      "You need to fetch data from an API and process it when it arrives, but you don't want to freeze the UI while waiting. JavaScript provides an object representing a future value that will either succeed or fail. What is this mechanism?",
     options: [
-      "A Promise represents a future value that will resolve or reject; async-await is syntactic sugar for writing async code that reads like sync code",
-      "The mechanism by which JavaScript checks a queue of pending callbacks",
-      "Synchronous operations that block until they complete",
-      "A protocol that lets users grant limited access to their data",
+      "Promises / Async-Await",
+      "Event Loop",
+      "Web Workers",
+      "Callbacks",
     ],
     correctIndex: 0,
     explanation:
@@ -477,10 +477,10 @@ export const QUESTIONS_WEB_FUNDAMENTALS = [
     prompt:
       "True or False: async-await replaces Promises — they're a different mechanism.",
     options: [
-      "False — async-await IS Promises; it's syntactic sugar that makes Promise-based code look synchronous and easier to read",
-      "True — async-await is a completely separate system from Promises",
-      "True — async-await uses callbacks, not Promises",
-      "False — async-await predates Promises and was available first",
+      "False — async-await IS Promises under the hood; it's syntactic sugar that makes Promise-based code look synchronous",
+      "True — async-await is a completely separate concurrency system that replaced the older Promise-based approach",
+      "True — async-await uses callbacks internally rather than Promises, which is why it performs better in benchmarks",
+      "False — async-await actually predates Promises and was available in JavaScript before the Promise API was introduced",
     ],
     correctIndex: 0,
     explanation:
@@ -494,10 +494,10 @@ export const QUESTIONS_WEB_FUNDAMENTALS = [
     prompt:
       "Your code uses await but doesn't have a try/catch block. What happens if the API call fails?",
     options: [
-      "The Promise rejects and throws an unhandled error, potentially crashing the function or showing an uncaught error",
-      "The code silently continues with undefined",
-      "The browser automatically retries the request",
-      "Nothing — await handles errors automatically",
+      "The Promise rejects and throws an unhandled error, potentially crashing the function or surfacing an uncaught exception",
+      "The await expression silently resolves to undefined, and the rest of the function continues executing normally",
+      "The browser detects the unhandled rejection and automatically retries the request up to three times before failing",
+      "Nothing happens — await has built-in error handling that catches rejections and returns null by default",
     ],
     correctIndex: 0,
     explanation:
@@ -521,14 +521,14 @@ export const QUESTIONS_WEB_FUNDAMENTALS = [
     id: "q_eventloop_t2d_1",
     conceptId: "eventloop",
     module: 5,
-    type: "term_to_def",
+    type: "scenario",
     prompt:
-      "What is the Event Loop?",
+      "JavaScript is single-threaded but can handle timers, API calls, and user clicks without freezing. A mechanism continuously checks a queue of pending callbacks and runs them when the main thread is free. What is this mechanism?",
     options: [
-      "The mechanism by which JavaScript (single-threaded) handles async operations by checking a queue of pending callbacks",
-      "A Promise that represents a future value",
-      "A buffer between services that holds tasks for later",
-      "An automated pipeline that tests and deploys code",
+      "Event Loop",
+      "Promises",
+      "Thread Pool",
+      "Web Workers",
     ],
     correctIndex: 0,
     explanation:
@@ -578,10 +578,10 @@ export const QUESTIONS_WEB_FUNDAMENTALS = [
     prompt:
       "True or False: The Event Loop allows JavaScript to execute multiple pieces of code simultaneously (in parallel).",
     options: [
-      "False — JavaScript is single-threaded; the Event Loop just efficiently manages the ORDER of execution, creating the ILLUSION of parallelism",
-      "True — the Event Loop uses multiple threads under the hood",
-      "True — modern JavaScript engines are multi-threaded",
-      "False — JavaScript doesn't have an Event Loop",
+      "False — JavaScript is single-threaded; the Event Loop manages the order of execution, creating the illusion of parallelism",
+      "True — the Event Loop dispatches callbacks to multiple threads so several operations can run at the same time",
+      "True — modern JavaScript engines use multi-threading by default, and the Event Loop coordinates work across threads",
+      "False — JavaScript doesn't have an Event Loop; async behavior is handled entirely by the operating system's scheduler",
     ],
     correctIndex: 0,
     explanation:
@@ -596,9 +596,9 @@ export const QUESTIONS_WEB_FUNDAMENTALS = [
       "You run a while(true) loop in JavaScript. What happens to setTimeout callbacks queued during the loop?",
     options: [
       "They never execute — the infinite loop blocks the main thread, so the Event Loop can never process the callback queue",
-      "They execute in parallel on a separate thread",
-      "They execute inside the while loop",
-      "They execute immediately, interrupting the loop",
+      "They execute in parallel on a background thread, since setTimeout callbacks run outside the main thread",
+      "They execute inside the while loop at the next iteration, since the engine interleaves callbacks with loop cycles",
+      "They execute immediately by interrupting the loop, because timer callbacks have higher priority than running code",
     ],
     correctIndex: 0,
     explanation:
@@ -623,13 +623,13 @@ export const QUESTIONS_WEB_FUNDAMENTALS = [
     id: "q_tls_t2d_1",
     conceptId: "tls",
     module: 2,
-    type: "term_to_def",
-    prompt: "What does TLS do in an HTTPS connection?",
+    type: "scenario",
+    prompt: "When your browser connects to a bank's website, it first verifies the server's certificate is legitimate, then negotiates encryption keys so all data sent between you and the server is unreadable to anyone else on the network. What protocol handles this?",
     options: [
-      "Encrypts the connection and authenticates the server's identity so data can't be read or tampered with in transit",
-      "Compresses HTTP requests and responses to reduce bandwidth usage",
-      "Authenticates the user's identity so the server knows who is making the request",
-      "Speeds up the connection by caching the TCP handshake for future requests",
+      "TLS",
+      "TCP",
+      "DNS",
+      "SSH",
     ],
     correctIndex: 0,
     explanation: "TLS (Transport Layer Security) does two things: authenticates the server (via certificate signed by a trusted CA) and encrypts all data in transit. TLS authenticates the SERVER, not the user — user authentication is still handled by the application layer (passwords, tokens). Without it, HTTP traffic is readable by anyone on the same network.",
@@ -641,10 +641,10 @@ export const QUESTIONS_WEB_FUNDAMENTALS = [
     type: "scenario",
     prompt: "You're on public WiFi and notice the site is http:// (not https://). What is the specific risk?",
     options: [
-      "Anyone on the same WiFi network can read all data you send — passwords, session tokens, everything — in plaintext",
-      "The website will load slower because HTTP is not optimized for public networks",
-      "Your browser will block the site because HTTP is a deprecated protocol",
-      "The server cannot verify your identity without HTTPS",
+      "Anyone on the same WiFi network can intercept and read all data you send — passwords, tokens, everything — in plaintext",
+      "The website will load significantly slower because HTTP lacks the connection optimizations that HTTPS provides",
+      "Your browser will block the site entirely because HTTP is a deprecated protocol that modern browsers no longer support",
+      "The server cannot verify your identity without HTTPS, so it will reject your login attempts and form submissions",
     ],
     correctIndex: 0,
     explanation: "HTTP sends data in plaintext. On public WiFi, a malicious actor running a packet sniffer can read every byte you send — login credentials, session cookies, personal data. With HTTPS, all traffic is encrypted so even if intercepted, it's unreadable without the session key.",
@@ -664,10 +664,10 @@ Content-Type: application/json
 { "card_number": "4111111111111111", "cvv": "123" }`,
     prompt: "What is the critical security problem with this payment form?",
     options: [
-      "The request uses HTTP — credit card data is sent in plaintext and can be intercepted by anyone on the network",
-      "The Content-Type header should be text/plain for payment forms",
-      "POST requests don't support JSON bodies on payment endpoints",
-      "The card number should be stored server-side, not transmitted in requests",
+      "The request uses HTTP instead of HTTPS — credit card data is sent in plaintext and can be intercepted by anyone on the network",
+      "The Content-Type header should be text/plain instead of application/json when transmitting sensitive payment information",
+      "POST requests cannot carry JSON bodies to payment endpoints — payment data must be sent as URL-encoded form fields",
+      "The card number should be tokenized by the client before transmission so the raw number never leaves the browser",
     ],
     correctIndex: 0,
     explanation: "Sending payment data over HTTP is catastrophic — the card number and CVV are visible in plaintext to anyone sniffing network traffic. All sensitive data requires HTTPS (TLS). This is also a PCI-DSS compliance violation. Production payment flows additionally use tokenization so raw card numbers never touch your own server.",
@@ -700,10 +700,10 @@ Content-Type: application/json
   .then(data => console.log(data))`,
     prompt: "If the server returns a 500 error, what happens with this code?",
     options: [
-      "The .then() chain still executes — fetch() only rejects on network failure, not HTTP error status codes",
-      "fetch() throws an error and the .then() callbacks are skipped automatically",
-      "res.json() detects the 500 status and throws before the second .then() runs",
-      "fetch() returns null when the server responds with 5xx",
+      "The .then() chain still executes — fetch() only rejects on network failures, not on HTTP error status codes like 500",
+      "fetch() rejects the Promise and the .then() callbacks are skipped, falling through to any .catch() handler",
+      "res.json() detects the 500 status code internally and throws an error before the second .then() can run",
+      "fetch() resolves with null when the server responds with a 5xx status, so data logs as null in the console",
     ],
     correctIndex: 0,
     explanation: "fetch() only rejects on network-level failures (no internet, DNS failure, server unreachable). A 500 response is a 'successful' network response from fetch()'s perspective — the .then() chain runs with the error response object. You must check res.ok or res.status to detect HTTP errors and handle them explicitly.",
@@ -720,10 +720,10 @@ Content-Type: application/json
 }`,
     prompt: "What is the async/await version doing compared to .then() chaining?",
     options: [
-      "The same thing — async/await is syntactic sugar that makes async code read like synchronous code",
-      "async/await is faster because it skips the Promise overhead entirely",
-      "async/await runs fetch and json() in parallel; .then() runs them sequentially",
-      "async/await automatically retries failed requests; .then() does not",
+      "The same thing — async/await is syntactic sugar over Promises that makes async code read like synchronous code",
+      "async/await is faster because it bypasses the Promise queue and executes fetch calls with less runtime overhead",
+      "async/await runs fetch() and res.json() in parallel, while .then() chaining forces them to run sequentially",
+      "async/await automatically retries failed requests with exponential backoff, while .then() chaining does not",
     ],
     correctIndex: 0,
     explanation: "async/await is purely syntactic sugar over Promises — same execution model, same behavior, same performance. The advantage is readability: code reads top-to-bottom like synchronous code instead of nested .then() callbacks. Both versions have the same fetch() gotcha: you still need to check res.ok to catch HTTP errors.",

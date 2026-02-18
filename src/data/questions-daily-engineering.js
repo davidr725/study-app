@@ -9,14 +9,14 @@ export const QUESTIONS_DAILY_ENGINEERING = [
     id: "q_dns_t2d_1",
     conceptId: "dns",
     module: 1,
-    type: "term_to_def",
+    type: "scenario",
     prompt:
-      "What is DNS?",
+      "You type google.com into your browser. Before any connection can be made, your browser needs to find the IP address of the server. What system handles this translation?",
     options: [
-      "The internet's phone book that translates domain names into IP addresses",
-      "A browser security mechanism that blocks cross-origin requests",
-      "An automated pipeline that tests and deploys code",
-      "A query language where the client specifies exactly which fields it needs",
+      "DNS",
+      "CORS",
+      "HTTP",
+      "TLS",
     ],
     correctIndex: 0,
     explanation:
@@ -67,9 +67,9 @@ export const QUESTIONS_DAILY_ENGINEERING = [
       "True or False: DNS lookups happen every single time you visit a website, even if you just visited it seconds ago.",
     options: [
       "False — DNS results are cached by the browser and OS, so repeat visits skip the lookup",
-      "True — every page load requires a fresh DNS lookup",
-      "True — DNS caching is only done by ISPs, not browsers",
-      "False — DNS only happens once when you first install your browser",
+      "True — every page load requires a fresh DNS query to the root nameservers each time",
+      "True — DNS caching is only performed by ISPs, so browsers always re-query locally",
+      "False — DNS only resolves once per domain during the browser's entire install lifetime",
     ],
     correctIndex: 0,
     explanation:
@@ -84,9 +84,9 @@ export const QUESTIONS_DAILY_ENGINEERING = [
       "You type 'example.com' in your browser but get an 'ERR_NAME_NOT_RESOLVED' error. What failed?",
     options: [
       "DNS lookup — the domain name couldn't be translated to an IP address",
-      "The web server is down",
-      "Your internet connection is too slow",
-      "The SSL certificate expired",
+      "The web server is running but returned an HTTP 500 internal error",
+      "The browser's network stack timed out waiting for a response",
+      "The SSL/TLS certificate on the server has expired or is invalid",
     ],
     correctIndex: 0,
     explanation:
@@ -110,14 +110,14 @@ export const QUESTIONS_DAILY_ENGINEERING = [
     id: "q_rest_t2d_1",
     conceptId: "rest",
     module: 3,
-    type: "term_to_def",
+    type: "scenario",
     prompt:
-      "What is a REST API?",
+      "Your API uses standard HTTP methods at predictable URLs like GET /users and POST /orders, where each request is self-contained with no server-side session. What architectural style is this?",
     options: [
-      "An architectural style where resources are accessed via standard HTTP methods at predictable URLs, with each request containing all needed context",
-      "A query language where the client specifies exactly which fields it needs",
-      "A callback mechanism where a service sends an HTTP POST when an event occurs",
-      "A single entry point that manages and routes all incoming API requests",
+      "REST API",
+      "GraphQL",
+      "WebSocket",
+      "gRPC",
     ],
     correctIndex: 0,
     explanation:
@@ -167,10 +167,10 @@ export const QUESTIONS_DAILY_ENGINEERING = [
     prompt:
       "True or False: In REST, /users/5 typically represents a single user with ID 5, while /users represents all users.",
     options: [
-      "True — REST uses predictable URL patterns where resource collections and individual items have consistent URLs",
-      "False — REST doesn't have URL conventions",
-      "False — /users/5 would return 5 users",
-      "True — but only if using GraphQL on top of REST",
+      "True — REST uses predictable URL patterns where collections and individual items have consistent URLs",
+      "False — REST has no URL conventions; endpoint paths are completely arbitrary and framework-dependent",
+      "False — /users/5 returns 5 users from the collection, not one user identified by the number 5",
+      "True — but this convention only applies when using GraphQL layered on top of a REST backend",
     ],
     correctIndex: 0,
     explanation:
@@ -184,10 +184,10 @@ export const QUESTIONS_DAILY_ENGINEERING = [
     prompt:
       "A mobile app needs a user's name, avatar, and their 3 most recent orders. With REST, this typically requires multiple API calls. Why?",
     options: [
-      "REST endpoints return fixed resource shapes — you'd call /users/:id for profile data and /users/:id/orders for orders separately",
-      "REST can only return one field at a time",
-      "REST doesn't support mobile apps",
-      "REST requires a new endpoint for every combination of data",
+      "REST endpoints return fixed resource shapes — you'd call /users/:id and /users/:id/orders separately",
+      "REST requires each field to be requested through its own dedicated endpoint with a separate HTTP call",
+      "REST uses XML instead of JSON for mobile, which requires extra parsing and additional request overhead",
+      "REST servers enforce a one-resource-per-request limit to manage load, requiring sequential fetches",
     ],
     correctIndex: 0,
     explanation:
@@ -211,14 +211,14 @@ export const QUESTIONS_DAILY_ENGINEERING = [
     id: "q_graphql_t2d_1",
     conceptId: "graphql",
     module: 3,
-    type: "term_to_def",
+    type: "scenario",
     prompt:
-      "What is GraphQL?",
+      "Your mobile app makes 6 separate API calls to load one screen because each endpoint returns fixed data shapes. An engineer suggests a query language that lets the client specify exactly which fields it needs in a single request. What technology are they recommending?",
     options: [
-      "A query language where the client specifies exactly which fields it needs and gets only that data",
-      "An architectural style using standard HTTP methods at predictable URLs",
-      "A buffer that holds tasks to be processed later",
-      "A data structure that lets a database find rows quickly",
+      "GraphQL",
+      "REST API",
+      "WebSockets",
+      "gRPC",
     ],
     correctIndex: 0,
     explanation:
@@ -268,10 +268,10 @@ export const QUESTIONS_DAILY_ENGINEERING = [
     prompt:
       "True or False: GraphQL always uses a single endpoint (usually /graphql) for all queries.",
     options: [
-      "True — unlike REST which has many endpoints, GraphQL routes all requests through one endpoint and uses the query to determine what data to return",
-      "False — GraphQL requires a separate endpoint for each resource, like REST",
-      "False — GraphQL doesn't use HTTP endpoints at all",
-      "True — but only for read operations; writes use separate endpoints",
+      "True — unlike REST which has many endpoints, GraphQL routes all requests through one URL and uses the query body to determine what data to return",
+      "False — GraphQL requires a separate endpoint for each resource type, following the same pattern as REST APIs",
+      "False — GraphQL uses its own binary protocol instead of HTTP, so it doesn't have traditional endpoints",
+      "True — but only for read queries; mutations and subscriptions each require their own dedicated endpoints",
     ],
     correctIndex: 0,
     explanation:
@@ -286,9 +286,9 @@ export const QUESTIONS_DAILY_ENGINEERING = [
       "Your mobile app makes 6 API calls to load one screen. An engineer suggests switching to GraphQL. Why?",
     options: [
       "GraphQL lets the client request all needed data in a single query, eliminating multiple round trips",
-      "GraphQL is faster because it uses a binary protocol instead of JSON",
-      "GraphQL automatically caches all responses",
-      "GraphQL doesn't require authentication",
+      "GraphQL uses a binary protocol instead of JSON, making each individual request significantly faster",
+      "GraphQL automatically caches all responses at the CDN layer, reducing the need for multiple calls",
+      "GraphQL batches requests internally on the server, so 6 calls merge into one behind the scenes",
     ],
     correctIndex: 0,
     explanation:
@@ -319,14 +319,14 @@ export const QUESTIONS_DAILY_ENGINEERING = [
     id: "q_oauth_t2d_1",
     conceptId: "oauth",
     module: 3,
-    type: "term_to_def",
+    type: "scenario",
     prompt:
-      "What is OAuth / SSO?",
+      "When you click 'Sign in with Google' on a third-party site, a protocol lets Google verify your identity and grant that site limited access to your profile — without sharing your password. What protocol is this?",
     options: [
-      "OAuth lets users grant limited access to their data without sharing their password; SSO lets users log in once for multiple services",
-      "A credential included with requests to verify identity",
-      "A browser mechanism that blocks cross-origin requests",
-      "Software that intercepts requests between client and handler",
+      "OAuth / SSO",
+      "JWT Auth",
+      "API Key",
+      "SAML",
     ],
     correctIndex: 0,
     explanation:
@@ -376,10 +376,10 @@ export const QUESTIONS_DAILY_ENGINEERING = [
     prompt:
       "True or False: With OAuth, the third-party app receives and stores your password from the identity provider (Google, GitHub, etc.).",
     options: [
-      "False — the whole point of OAuth is that the third-party app NEVER sees your password; it receives a token instead",
-      "True — OAuth securely shares your password with trusted apps",
-      "True — OAuth encrypts your password before sharing it",
-      "False — OAuth doesn't involve passwords at all",
+      "False — OAuth grants a limited-access token instead; the third-party app never sees your password",
+      "True — OAuth encrypts and securely transmits your password to each authorized third-party app",
+      "True — OAuth stores an encrypted copy of your password that only trusted services can decrypt",
+      "False — OAuth doesn't handle passwords at all; it only manages API rate limits between services",
     ],
     correctIndex: 0,
     explanation:
@@ -394,9 +394,9 @@ export const QUESTIONS_DAILY_ENGINEERING = [
       "A user revokes your app's access from their Google account settings. What happens to your app's stored OAuth token?",
     options: [
       "The token becomes invalid — your app can no longer access the user's data and must re-request authorization",
-      "Nothing — tokens are permanent once issued",
-      "Your app automatically gets a new token",
-      "The token still works but with reduced permissions",
+      "Nothing changes — OAuth tokens are permanent once issued and cannot be revoked by the end user",
+      "Your app automatically receives a new token with the same permissions through the refresh token flow",
+      "The token still works for read-only access but write permissions are downgraded to read-only mode",
     ],
     correctIndex: 0,
     explanation:
@@ -420,14 +420,14 @@ export const QUESTIONS_DAILY_ENGINEERING = [
     id: "q_cors_t2d_1",
     conceptId: "cors",
     module: 3,
-    type: "term_to_def",
+    type: "scenario",
     prompt:
-      "What is CORS?",
+      "Your React app at localhost:3000 tries to fetch data from api.example.com, but the browser blocks the request because the server hasn't authorized that origin. What security mechanism caused the block?",
     options: [
-      "Cross-Origin Resource Sharing — a browser security mechanism that blocks requests to different domains unless explicitly allowed",
-      "A protocol that lets users grant limited access to their data",
-      "A single entry point that routes all API requests",
-      "Software that intercepts requests between client and handler",
+      "CORS",
+      "OAuth",
+      "SSL/TLS",
+      "Firewall",
     ],
     correctIndex: 0,
     explanation:
@@ -478,9 +478,9 @@ export const QUESTIONS_DAILY_ENGINEERING = [
       "True or False: CORS only applies to requests made from web browsers; server-to-server requests are not affected.",
     options: [
       "True — CORS is a browser security policy; backend services calling other APIs directly are not subject to CORS",
-      "False — CORS applies to all HTTP requests regardless of origin",
-      "False — CORS also blocks requests from mobile apps",
-      "True — but only for GET requests, not POST",
+      "False — CORS applies to all HTTP requests regardless of whether they come from browsers, servers, or scripts",
+      "False — CORS also blocks requests from native mobile apps and server-side scripts, not just browsers",
+      "True — but only for GET requests; POST, PUT, and DELETE bypass CORS restrictions entirely",
     ],
     correctIndex: 0,
     explanation:
@@ -494,10 +494,10 @@ export const QUESTIONS_DAILY_ENGINEERING = [
     prompt:
       "Frontend gets a CORS error when calling your API from localhost. Is this a bug?",
     options: [
-      "No — CORS is the browser enforcing that your server hasn't allowed requests from that origin. Fix it server-side.",
-      "Yes — CORS errors always indicate a bug in the frontend code",
-      "Yes — localhost should always be allowed by default",
-      "No — CORS errors only happen in production, not development",
+      "No — CORS is the browser enforcing that your server hasn't allowed requests from that origin; fix it server-side",
+      "Yes — CORS errors indicate a misconfigured fetch call in the frontend that needs different request headers",
+      "Yes — localhost origins should be automatically allowed by all servers; this suggests a browser bug",
+      "No — CORS errors only appear in development mode and will resolve automatically once deployed to production",
     ],
     correctIndex: 0,
     explanation:
@@ -513,10 +513,10 @@ export const QUESTIONS_DAILY_ENGINEERING = [
     prompt:
       "Your API works fine when called from Postman but gets CORS errors from your React app. Why?",
     options: [
-      "Postman is not a browser, so CORS doesn't apply. Browsers enforce CORS; tools like Postman, cURL, and backend services don't.",
-      "Postman automatically adds CORS headers",
-      "React has a built-in CORS bug",
-      "Postman uses a different protocol than browsers",
+      "Postman is not a browser, so CORS doesn't apply — browsers enforce CORS; tools like Postman and cURL don't",
+      "Postman automatically injects the required Access-Control-Allow-Origin header into every outgoing request",
+      "React's fetch implementation wraps requests in a proxy layer that triggers additional CORS preflight checks",
+      "Postman connects over a raw TCP socket rather than HTTP, bypassing the CORS handshake entirely",
     ],
     correctIndex: 0,
     explanation:
@@ -528,14 +528,14 @@ export const QUESTIONS_DAILY_ENGINEERING = [
     id: "q_jwt_t2d_1",
     conceptId: "jwt",
     module: 3,
-    type: "term_to_def",
+    type: "scenario",
     prompt:
-      "What is a JWT (JSON Web Token)?",
+      "Your authentication system needs to verify users on every request without hitting the database. You choose a token format that carries the user's ID, role, and expiration, plus a cryptographic signature the server can check locally. What token format is this?",
     options: [
-      "A compact, self-contained token that carries user info (claims) and a cryptographic signature, so the server can verify it without a database lookup",
-      "A cookie that stores the user's password in encrypted form",
-      "A session ID that the server looks up in a database",
-      "An API key that identifies the application, not the user",
+      "JWT",
+      "Session ID",
+      "API Key",
+      "OAuth Token",
     ],
     correctIndex: 0,
     explanation:
@@ -585,10 +585,10 @@ export const QUESTIONS_DAILY_ENGINEERING = [
     prompt:
       "True or False: The payload of a JWT is encrypted, so nobody can read its contents.",
     options: [
-      "False — JWT payloads are only Base64-encoded, not encrypted. Anyone can decode and read them. The signature only verifies they haven't been tampered with.",
-      "True — JWTs use strong encryption to hide the payload",
-      "True — only the server can decode the JWT payload",
-      "False — JWTs don't have a payload section",
+      "False — JWT payloads are only Base64-encoded, not encrypted; anyone can decode and read the claims inside them",
+      "True — JWTs use AES-256 encryption on the payload, so only the server with the key can read it",
+      "True — only the server holding the signing key can decode and read the contents of the JWT payload",
+      "False — JWT payloads are hashed with SHA-256, which makes the content unreadable but not technically encrypted",
     ],
     correctIndex: 0,
     explanation:
@@ -603,9 +603,9 @@ export const QUESTIONS_DAILY_ENGINEERING = [
       "A user's JWT expires while they're using your app. What should happen?",
     options: [
       "The app should use a refresh token to get a new JWT without requiring the user to log in again",
-      "The user must log in again — there's no way around an expired JWT",
-      "The app should modify the JWT's expiration date",
-      "Nothing — expired JWTs continue to work",
+      "The user must log in again immediately — there is no mechanism to renew an expired JWT automatically",
+      "The app should decode the JWT and update its expiration field to extend the session client-side",
+      "Nothing changes — expired JWTs continue to work normally until the server restarts and clears them",
     ],
     correctIndex: 0,
     explanation:
@@ -629,14 +629,14 @@ export const QUESTIONS_DAILY_ENGINEERING = [
     id: "q_websockets_t2d_1",
     conceptId: "websockets",
     module: 3,
-    type: "term_to_def",
+    type: "scenario",
     prompt:
-      "What are WebSockets?",
+      "You are building a multiplayer game where the server needs to push state updates to all players instantly, and players can send moves at any time without waiting for a response. What protocol provides this persistent, two-way communication?",
     options: [
-      "A protocol for full-duplex (two-way) communication over a single persistent connection, where either side can send messages at any time",
-      "A standard HTTP request-response cycle",
-      "A callback mechanism where a service sends data when an event occurs",
-      "Repeatedly sending requests at intervals to check for new data",
+      "WebSockets",
+      "REST API",
+      "Webhooks",
+      "HTTP Polling",
     ],
     correctIndex: 0,
     explanation:
@@ -686,10 +686,10 @@ export const QUESTIONS_DAILY_ENGINEERING = [
     prompt:
       "True or False: WebSockets should be used for all API communication because they're faster than HTTP.",
     options: [
-      "False — WebSockets are ideal for real-time features (chat, live updates) but overkill for simple request-response APIs where HTTP is simpler and more cacheable",
-      "True — WebSockets are always faster and should replace HTTP",
-      "True — WebSockets are the modern replacement for REST",
-      "False — WebSockets are slower than HTTP",
+      "False — WebSockets are ideal for real-time features like chat, but overkill for simple request-response APIs where HTTP is simpler",
+      "True — WebSockets have lower latency and higher throughput, making them superior to HTTP for every use case",
+      "True — WebSockets are the modern successor to REST and should be used for all new API development",
+      "False — WebSockets are actually slower than HTTP because maintaining a persistent connection adds significant overhead",
     ],
     correctIndex: 0,
     explanation:
@@ -703,10 +703,10 @@ export const QUESTIONS_DAILY_ENGINEERING = [
     prompt:
       "You're building a live chat feature. Should you use HTTP polling, webhooks, or WebSockets?",
     options: [
-      "WebSockets — they provide real-time, bidirectional communication ideal for chat",
-      "HTTP polling — check for new messages every second",
-      "Webhooks — have the server push each new message",
-      "REST API — make a GET request for each new message",
+      "WebSockets — they provide a persistent, bidirectional connection ideal for real-time chat",
+      "HTTP polling — send a request every second to check if new messages have arrived on the server",
+      "Webhooks — configure the server to POST each new message to a callback URL on the client",
+      "REST API — have the client make periodic GET requests to a /messages endpoint for updates",
     ],
     correctIndex: 0,
     explanation:
@@ -730,14 +730,14 @@ export const QUESTIONS_DAILY_ENGINEERING = [
     id: "q_caching_t2d_1",
     conceptId: "caching",
     module: 4,
-    type: "term_to_def",
+    type: "scenario",
     prompt:
-      "What is Caching?",
+      "Your homepage runs a database query that takes 2 seconds, but the result is the same for every user and rarely changes. Your team decides to store the result in Redis so subsequent requests return instantly. What technique is this?",
     options: [
-      "Storing a copy of frequently accessed data in a faster location to avoid repeating expensive operations",
-      "The process of determining when stored data is stale",
-      "A data structure that speeds up database lookups",
-      "A buffer between services that holds tasks for later processing",
+      "Caching",
+      "Indexing",
+      "Pagination",
+      "Load Balancing",
     ],
     correctIndex: 0,
     explanation:
@@ -787,10 +787,10 @@ export const QUESTIONS_DAILY_ENGINEERING = [
     prompt:
       "True or False: Caching always improves performance with no downsides.",
     options: [
-      "False — caching can serve stale data, uses memory, and adds the complexity of cache invalidation",
-      "True — caching only has benefits with no tradeoffs",
-      "True — modern caching systems have no downsides",
-      "False — caching always makes things slower",
+      "False — caching can serve stale data, uses extra memory, and adds the complexity of cache invalidation",
+      "True — caching only improves speed and has no tradeoffs as long as you have sufficient server memory",
+      "True — modern caching systems like Redis automatically handle staleness, so there are no downsides",
+      "False — caching actually makes things slower because checking the cache adds an extra lookup step every time",
     ],
     correctIndex: 0,
     explanation:
@@ -803,10 +803,10 @@ export const QUESTIONS_DAILY_ENGINEERING = [
     type: "which_is_not",
     prompt:
       "Which of the following is NOT a layer where caching typically happens?",
-    options: ["The user's keyboard","The browser","A CDN","The application server (Redis, Memcached)"],
+    options: ["The database schema definition","The browser","A CDN","The application server (Redis, Memcached)"],
     correctIndex: 0,
     explanation:
-      "Caching happens at the browser, CDN, application server, and database query level — not at the keyboard. Each layer reduces load on the layer behind it.",
+      "Caching happens at the browser, CDN, application server, and database query level — not in the schema definition. Each layer reduces load on the layer behind it.",
   },
   {
     id: "q_caching_scen_1",
@@ -816,10 +816,10 @@ export const QUESTIONS_DAILY_ENGINEERING = [
     prompt:
       "Your homepage makes a database query that takes 2 seconds. It's the same data for every user and only changes once a day. What's the fix?",
     options: [
-      "Cache the query result — serve it from cache for 24 hours, then refresh",
-      "Add more database indexes",
-      "Switch from SQL to NoSQL",
-      "Use WebSockets to stream the data",
+      "Cache the query result — serve it from memory for 24 hours, then refresh from the database",
+      "Add database indexes on the queried columns to reduce the 2-second query time directly",
+      "Switch from SQL to a NoSQL database that is optimized for fast reads on large datasets",
+      "Use WebSockets to stream the homepage data incrementally as rows are fetched from the DB",
     ],
     correctIndex: 0,
     explanation:
@@ -831,14 +831,14 @@ export const QUESTIONS_DAILY_ENGINEERING = [
     id: "q_cacheinvalidation_t2d_1",
     conceptId: "cacheinvalidation",
     module: 4,
-    type: "term_to_def",
+    type: "scenario",
     prompt:
-      "What is Cache Invalidation?",
+      "Users are seeing yesterday's product prices on your site even though the database was updated this morning. The old prices are stuck in your CDN and Redis layers. What problem does this illustrate?",
     options: [
-      "The process of determining when cached data is stale and needs to be refreshed from the source of truth",
-      "Storing a copy of data in a faster location",
-      "A restriction on how many requests can be made",
-      "A system that distributes traffic across multiple servers",
+      "Cache Invalidation",
+      "Rate Limiting",
+      "Load Balancing",
+      "Database Indexing",
     ],
     correctIndex: 0,
     explanation:
@@ -889,9 +889,9 @@ export const QUESTIONS_DAILY_ENGINEERING = [
       "True or False: \"There are only two hard things in Computer Science: cache invalidation and naming things.\"",
     options: [
       "True — this is a famous quote by Phil Karlton highlighting how difficult it is to know when cached data is stale",
-      "False — cache invalidation is simple with modern tools",
-      "False — this quote is about database design, not caching",
-      "True — but it only applies to distributed systems",
+      "False — cache invalidation is straightforward with modern tools like Redis, so this quote is outdated",
+      "False — this quote is actually about database schema design, not caching or naming conventions",
+      "True — but this difficulty only applies to distributed systems; single-server caching is trivial to invalidate",
     ],
     correctIndex: 0,
     explanation:
@@ -906,9 +906,9 @@ export const QUESTIONS_DAILY_ENGINEERING = [
       "Users see stale prices on the product page even after a price update. What's likely happening?",
     options: [
       "Caching — the old price is cached somewhere (CDN, browser, app cache) and hasn't been invalidated yet",
-      "The database hasn't been updated",
-      "The frontend has a hardcoded price",
-      "DNS is resolving to the wrong server",
+      "The database transaction hasn't fully committed yet, causing reads to return the previous row version",
+      "The frontend has a stale build deployed that still references the old price from its bundled data",
+      "DNS is resolving to an old server replica that hasn't received the latest database migration",
     ],
     correctIndex: 0,
     explanation:
@@ -924,10 +924,10 @@ export const QUESTIONS_DAILY_ENGINEERING = [
     prompt:
       "Your team debates between TTL-based and event-based cache invalidation. When is each approach better?",
     options: [
-      "TTL for data that changes predictably (weather, every 5 min). Event-based for data that changes unpredictably (user profile updates).",
-      "TTL is always better because it's simpler",
-      "Event-based is always better because it's more accurate",
-      "Neither — caches should never expire",
+      "TTL for data that changes predictably (weather, every 5 min); event-based for unpredictable changes (user profile updates)",
+      "TTL is always better because it's simpler to implement and requires no additional infrastructure or event system",
+      "Event-based is always better because it guarantees freshness and eliminates any window of stale data entirely",
+      "Neither approach is reliable — caches should use versioned keys instead, so old entries are never read again",
     ],
     correctIndex: 0,
     explanation:
@@ -939,14 +939,14 @@ export const QUESTIONS_DAILY_ENGINEERING = [
     id: "q_envvars_t2d_1",
     conceptId: "envvars",
     module: 4,
-    type: "term_to_def",
+    type: "scenario",
     prompt:
-      "What are Environment Variables?",
+      "Your app connects to a test database in development but a production database in production, and the switch happens without changing any code. The database URL is stored outside the codebase and read at runtime. What mechanism makes this possible?",
     options: [
-      "Configuration values (database URLs, API keys, feature flags) stored outside the codebase that change between environments",
-      "Standardized numeric codes returned by a server",
-      "The practice of tracking and updating data that changes over time in an app",
-      "A browser security mechanism that blocks cross-origin requests",
+      "Environment Variables",
+      "Feature Flags",
+      "API Versioning",
+      "DNS Routing",
     ],
     correctIndex: 0,
     explanation:
@@ -996,10 +996,10 @@ export const QUESTIONS_DAILY_ENGINEERING = [
     prompt:
       "True or False: It's safe to commit .env files to your Git repository as long as the repo is private.",
     options: [
-      "False — .env files contain secrets and should NEVER be committed; repos can be made public accidentally, and secrets persist in git history",
-      "True — private repos are secure enough for secrets",
-      "True — git encrypts committed files automatically",
-      "False — but only because .env files are too large for git",
+      "False — .env files contain secrets and should never be committed; repos can be made public, and secrets persist in history",
+      "True — private repos have access controls that make them sufficiently secure for storing secrets in .env files",
+      "True — Git automatically encrypts file contents at rest, so committed .env files are protected from exposure",
+      "False — .env files use a non-standard format that Git cannot track properly, causing merge conflicts and corruption",
     ],
     correctIndex: 0,
     explanation:
@@ -1013,10 +1013,10 @@ export const QUESTIONS_DAILY_ENGINEERING = [
     prompt:
       "QA reports that a feature works in staging but not production. What's the first thing to check?",
     options: [
-      "Environment variables — different API keys, database URLs, or feature flags between environments",
-      "The production server's CPU usage",
-      "Whether the DNS is configured correctly",
-      "The user's browser version",
+      "Environment variables — different API keys, database URLs, or feature flags between the two environments",
+      "The production server's CPU is under higher load, causing timeouts that don't occur in staging",
+      "DNS configuration differences are routing production traffic to an older version of the server",
+      "The production database has stricter permissions that reject queries the staging database allows",
     ],
     correctIndex: 0,
     explanation:
@@ -1042,14 +1042,14 @@ export const QUESTIONS_DAILY_ENGINEERING = [
     id: "q_pagination_t2d_1",
     conceptId: "pagination",
     module: 4,
-    type: "term_to_def",
+    type: "scenario",
     prompt:
-      "What is Pagination?",
+      "Your API has 50,000 products, but the mobile app only shows 20 at a time with a 'Load More' button. The API returns items in chunks using ?page=1&limit=20. What technique is this?",
     options: [
-      "Splitting large data sets into smaller chunks (pages) returned one at a time, instead of loading everything at once",
-      "Storing frequently accessed data in a faster location",
-      "A data structure that speeds up database lookups",
-      "The process of determining when cached data is stale",
+      "Pagination",
+      "Caching",
+      "Indexing",
+      "Batching",
     ],
     correctIndex: 0,
     explanation:
@@ -1099,10 +1099,10 @@ export const QUESTIONS_DAILY_ENGINEERING = [
     prompt:
       "True or False: Cursor-based pagination is generally more reliable than offset-based for data that changes frequently.",
     options: [
-      "True — cursors reference a specific item, so insertions/deletions don't cause skipped or duplicate results like offset-based can",
-      "False — offset-based is always more reliable",
-      "True — but cursor-based can only be used with NoSQL databases",
-      "False — both approaches handle changing data equally well",
+      "True — cursors reference a specific item, so insertions and deletions don't cause skipped or duplicate results",
+      "False — offset-based pagination is always more reliable because it uses simple numeric math for page boundaries",
+      "True — but cursor-based pagination can only be used with NoSQL databases, not relational databases like Postgres",
+      "False — both approaches handle frequently changing data equally well since they both re-query on each request",
     ],
     correctIndex: 0,
     explanation:
@@ -1117,9 +1117,9 @@ export const QUESTIONS_DAILY_ENGINEERING = [
       "Your API returns a list of 50,000 products. The mobile app freezes when loading them. What's the fix?",
     options: [
       "Add pagination — return 20-50 products per page and let the app load more as the user scrolls",
-      "Compress the JSON response",
-      "Switch from JSON to XML",
-      "Use a faster phone",
+      "Compress the JSON response with gzip to reduce the payload size sent over the network",
+      "Add a database index on the product table to speed up the query that fetches all rows",
+      "Switch to WebSockets so products stream to the client incrementally instead of all at once",
     ],
     correctIndex: 0,
     explanation:
@@ -1143,14 +1143,14 @@ export const QUESTIONS_DAILY_ENGINEERING = [
     id: "q_cicd_t2d_1",
     conceptId: "cicd",
     module: 5,
-    type: "term_to_def",
+    type: "scenario",
     prompt:
-      "What is CI/CD?",
+      "Every time a developer merges code to main, an automated pipeline runs the test suite, builds the application, and deploys it to production — no manual steps required. What practice is this?",
     options: [
-      "Continuous Integration / Continuous Deployment — automated pipelines that test code on merge and deploy without manual steps",
-      "A system that distributes incoming traffic across servers",
-      "A protocol that lets users grant limited access to their data",
-      "The tree-structured representation of an HTML page",
+      "CI/CD",
+      "Git Hooks",
+      "Code Review",
+      "Monitoring",
     ],
     correctIndex: 0,
     explanation:
@@ -1200,10 +1200,10 @@ export const QUESTIONS_DAILY_ENGINEERING = [
     prompt:
       "True or False: CI/CD eliminates the need for code reviews.",
     options: [
-      "False — CI/CD automates testing and deployment, but code reviews by humans are still essential for catching logic errors, design issues, and knowledge sharing",
-      "True — automated tests replace the need for human review",
-      "True — CI/CD includes AI-powered code review",
-      "False — but only because CI/CD doesn't run tests",
+      "False — CI/CD automates testing and deployment, but human code reviews are still essential for catching logic and design issues",
+      "True — automated tests in the CI pipeline are thorough enough to replace the need for any human code review",
+      "True — modern CI/CD platforms include built-in AI-powered code review that replaces manual peer review",
+      "False — CI/CD pipelines only handle deployment; they don't run tests, so code reviews fill that testing gap",
     ],
     correctIndex: 0,
     explanation:
@@ -1217,10 +1217,10 @@ export const QUESTIONS_DAILY_ENGINEERING = [
     prompt:
       "A deploy broke production on Friday at 5pm. What process failure allowed this?",
     options: [
-      "Missing CI/CD safeguards: no automated tests, no staged rollout, possibly no deploy freeze policy",
-      "The code was written in the wrong programming language",
-      "The server ran out of disk space",
-      "DNS propagation was slow",
+      "Missing CI/CD safeguards: no automated tests, no staged rollout, and possibly no deploy freeze policy",
+      "A database migration ran during the deploy and locked tables, causing cascading timeouts across the app",
+      "The production server's disk filled up because old deploy artifacts were never cleaned up automatically",
+      "DNS propagation was slow, so some users hit the new server while others still reached the old one",
     ],
     correctIndex: 0,
     explanation:
@@ -1246,14 +1246,14 @@ export const QUESTIONS_DAILY_ENGINEERING = [
     id: "q_gitbranching_t2d_1",
     conceptId: "gitbranching",
     module: 5,
-    type: "term_to_def",
+    type: "scenario",
     prompt:
-      "What is Git Branching?",
+      "Three developers on your team each need to work on separate features simultaneously without interfering with each other's code or the stable main codebase. What Git workflow enables this isolation?",
     options: [
-      "Creating a separate line of development from the main codebase so you can work on features or fixes without affecting the main code",
-      "Deleting old code that's no longer needed",
-      "Uploading code to a remote server",
-      "A system for distributing traffic across multiple servers",
+      "Git Branching",
+      "Git Stashing",
+      "Git Rebasing",
+      "Git Tagging",
     ],
     correctIndex: 0,
     explanation:
@@ -1303,10 +1303,10 @@ export const QUESTIONS_DAILY_ENGINEERING = [
     prompt:
       "True or False: You should commit and push directly to the main branch when working on a team.",
     options: [
-      "False — you should work on a feature branch and merge via a pull request so changes can be reviewed before affecting the main codebase",
-      "True — pushing to main is the fastest workflow",
-      "True — branches are only needed for large features",
-      "False — but only because main is a protected branch by default",
+      "False — you should work on a feature branch and merge via pull request so changes can be reviewed before affecting main",
+      "True — pushing directly to main is the fastest workflow and keeps the team aligned on the latest code at all times",
+      "True — feature branches are only needed for large features; small changes should go directly to main for speed",
+      "False — but only because main is a protected branch by default in Git, so direct pushes are technically impossible",
     ],
     correctIndex: 0,
     explanation:
@@ -1320,10 +1320,10 @@ export const QUESTIONS_DAILY_ENGINEERING = [
     prompt:
       "Two developers are working on different features. Developer A's changes break Developer B's code. How do branches prevent this?",
     options: [
-      "Each developer works on their own branch — changes are isolated until they're individually reviewed and merged into main",
-      "Branches automatically merge code so conflicts never happen",
-      "Branches lock files so only one developer can edit at a time",
-      "Branches create backup copies of every file",
+      "Each developer works on their own branch — changes are isolated until individually reviewed and merged into main",
+      "Branches automatically detect and resolve merge conflicts so that breaking changes never reach the codebase",
+      "Branches lock individual files so only one developer can edit a given file at a time, preventing conflicts",
+      "Branches create snapshot backups of every file, letting developers restore any version if something breaks",
     ],
     correctIndex: 0,
     explanation:
@@ -1347,14 +1347,14 @@ export const QUESTIONS_DAILY_ENGINEERING = [
     id: "q_rollback_t2d_1",
     conceptId: "rollback",
     module: 5,
-    type: "term_to_def",
+    type: "scenario",
     prompt:
-      "What is a Rollback / Revert?",
+      "Your latest deployment is causing 500 errors for 20% of users and the team cannot quickly identify the bug. The decision is made to switch production back to yesterday's stable version while the team investigates. What is this action called?",
     options: [
-      "Reverting a deployed application to a previous known-good version when a new deployment causes problems",
-      "Deleting a Git branch after it's been merged",
-      "Restarting the server to clear its memory",
-      "Removing a database index to speed up writes",
+      "Rollback / Revert",
+      "Hot Reload",
+      "Cache Purge",
+      "Load Shedding",
     ],
     correctIndex: 0,
     explanation:
@@ -1404,10 +1404,10 @@ export const QUESTIONS_DAILY_ENGINEERING = [
     prompt:
       "True or False: A canary release deploys new code to ALL users at once.",
     options: [
-      "False — a canary release deploys to a small percentage of users first (e.g., 5%), monitors for issues, then gradually rolls out to everyone",
-      "True — canary releases deploy to all users simultaneously",
-      "True — canary is another word for a full deployment",
-      "False — canary releases only deploy to test environments, never production",
+      "False — a canary release deploys to a small percentage of users first, monitors for issues, then gradually rolls out to everyone",
+      "True — canary releases deploy new code to all users simultaneously, but with extra monitoring compared to a normal deploy",
+      "True — a canary release is simply another term for a standard full production deployment with additional logging enabled",
+      "False — canary releases only deploy to internal test environments and staging, never to actual production user traffic",
     ],
     correctIndex: 0,
     explanation:
@@ -1421,10 +1421,10 @@ export const QUESTIONS_DAILY_ENGINEERING = [
     prompt:
       "A new deployment causes errors for 30% of users. Your team debates whether to fix forward or roll back. When should you roll back?",
     options: [
-      "When the issue is actively impacting users and you can't identify/fix the root cause quickly — restore service first, investigate second",
-      "Never — always fix forward",
-      "Only when 100% of users are affected",
-      "Only during business hours",
+      "When the issue is actively impacting users and you can't identify the root cause quickly — restore service first",
+      "Never roll back — always fix forward by pushing a new deploy, even under pressure, to maintain deploy momentum",
+      "Only when 100% of users are affected — a 30% error rate suggests a partial issue that will self-resolve",
+      "Only during business hours — rolling back outside hours risks making changes when fewer engineers are available",
     ],
     correctIndex: 0,
     explanation:
@@ -1449,13 +1449,13 @@ export const QUESTIONS_DAILY_ENGINEERING = [
     id: "q_featureflags_t2d_1",
     conceptId: "featureflags",
     module: 4,
-    type: "term_to_def",
-    prompt: "What are Feature Flags?",
+    type: "scenario",
+    prompt: "Your team deploys the new checkout code to production but keeps it invisible to users. When the team is ready, they flip a configuration switch in a dashboard to enable it — no new deploy needed. What technique makes this possible?",
     options: [
-      "Configuration switches that enable or disable features in production without deploying new code",
-      "Git branches used to isolate new feature development from the main codebase",
-      "A type of A/B test that changes the UI layout for different user segments",
-      "Security rules that restrict which users can access certain API endpoints",
+      "Feature Flags",
+      "A/B Testing",
+      "Blue-Green Deploy",
+      "Git Branching",
     ],
     correctIndex: 0,
     explanation: "Feature flags decouple deployment from release. Code ships to production but the feature is off — you flip the flag when ready. This enables gradual rollouts, instant kill switches, and experimentation without new deployments.",
@@ -1467,10 +1467,10 @@ export const QUESTIONS_DAILY_ENGINEERING = [
     type: "scenario",
     prompt: "You're launching a redesigned checkout flow. You want to release it to 5% of users first, monitor for errors, then expand to 100% over a week. What technique enables this?",
     options: [
-      "Feature flags with a percentage rollout — the flag is on for 5% of users, controllable without new deployments",
-      "A/B testing — show the new checkout to group A, old to group B, pick the winner",
-      "Blue-green deployment — run two production environments and split traffic at the load balancer",
-      "Git branching — maintain a separate branch for each rollout tier",
+      "Feature flags with a percentage rollout — the flag controls which users see the new checkout without redeploying",
+      "A/B testing — randomly assign users to the old or new checkout and measure which converts better statistically",
+      "Blue-green deployment — run two identical production environments and split traffic at the load balancer level",
+      "Canary release — deploy the new code to a small server cluster and route 5% of traffic to those servers",
     ],
     correctIndex: 0,
     explanation: "Feature flags let you control exactly which users see a feature, in real-time, without code changes. Blue-green is an infrastructure deployment pattern. A/B testing is for measuring outcomes. Git branches are for code isolation, not production rollouts.",
@@ -1488,9 +1488,9 @@ export const QUESTIONS_DAILY_ENGINEERING = [
     prompt: "What is the primary operational advantage of this pattern over a standard code deploy?",
     options: [
       "You can instantly disable the new checkout for all users by toggling the flag — no new deployment needed",
-      "The new checkout code only runs in staging and never reaches production",
-      "The feature is automatically enabled for admin users only",
-      "It lets you run two different server versions simultaneously",
+      "The new checkout code is isolated to staging and is automatically excluded from the production build",
+      "The feature is automatically restricted to admin users by checking their role before rendering the component",
+      "It enables running two separate server versions simultaneously so each serves a different checkout flow",
     ],
     correctIndex: 0,
     explanation: "The power of feature flags is the instant kill switch. If new_checkout causes errors at 2am, you flip the flag off — immediate, no deployment, no rollback pipeline. Both code paths are already in production; only the flag changes.",
@@ -1502,13 +1502,13 @@ export const QUESTIONS_DAILY_ENGINEERING = [
     id: "q_abtesting_t2d_1",
     conceptId: "abtesting",
     module: 4,
-    type: "term_to_def",
-    prompt: "What is A/B Testing?",
+    type: "scenario",
+    prompt: "Your team wants to know if a green 'Buy Now' button converts better than the current blue one. They show the green button to 50% of users and the blue one to the other 50%, then compare purchase rates with statistical analysis. What is this technique called?",
     options: [
-      "A controlled experiment showing two feature versions to different user segments to measure which performs better",
-      "Testing a feature in two environments — staging (A) and production (B) — before full launch",
-      "A deployment strategy that runs two server versions simultaneously to compare performance",
-      "A QA method where two engineers review the same code independently",
+      "A/B Testing",
+      "Feature Flags",
+      "Canary Release",
+      "Blue-Green Deploy",
     ],
     correctIndex: 0,
     explanation: "A/B testing is a randomized controlled experiment. Users split into groups — A sees the control, B sees the variant — and you measure a business metric (click rate, conversion, retention) to determine which performs better, with statistical rigor before declaring a winner.",
@@ -1520,10 +1520,10 @@ export const QUESTIONS_DAILY_ENGINEERING = [
     type: "scenario",
     prompt: "After 2 days, your A/B test shows the new button color converts 3% better (p=0.12). Should you ship it?",
     options: [
-      "No — p=0.12 means the result isn't statistically significant; the difference could be random noise",
-      "Yes — any positive conversion lift is worth shipping immediately",
-      "Yes — 2 days is enough time to make a decision on any A/B test",
-      "No — UI changes should never be decided by A/B test data alone",
+      "No — p=0.12 means the result isn't statistically significant; the observed difference could be random noise",
+      "Yes — any positive conversion lift should be shipped immediately to capture the revenue improvement sooner",
+      "Yes — 2 days is sufficient data collection time for any A/B test regardless of the traffic volume",
+      "No — UI changes like button color are too subjective to be decided by quantitative A/B test data",
     ],
     correctIndex: 0,
     explanation: "Statistical significance (typically p < 0.05) means the result is unlikely to be chance. p=0.12 means a 12% probability this result is random — too high to act on. Shipping on insignificant results leads to false confidence. You need more traffic or more time.",
@@ -1550,13 +1550,13 @@ export const QUESTIONS_DAILY_ENGINEERING = [
     id: "q_techdebt_t2d_1",
     conceptId: "techdebt",
     module: 5,
-    type: "term_to_def",
-    prompt: "What is Technical Debt?",
+    type: "scenario",
+    prompt: "Over the past year, your team shipped features quickly by skipping tests, copy-pasting code, and hardcoding values. Now every small change takes three times longer because the codebase is fragile and tangled. What concept describes this accumulated cost?",
     options: [
-      "The accumulated cost of shortcuts and deferred maintenance in a codebase that slows future development",
-      "The dollar cost of cloud infrastructure that builds up over time",
-      "Outstanding bug tickets the team hasn't addressed yet",
-      "Code written by a previous team that isn't documented",
+      "Technical Debt",
+      "Scope Creep",
+      "Feature Bloat",
+      "Code Entropy",
     ],
     correctIndex: 0,
     explanation: "Technical debt is a metaphor: you borrow against future development speed by taking shortcuts now. Like financial debt, small amounts are manageable. Left unpaid, the 'interest' — slower velocity, harder bug fixes, fragile code — eventually costs more than the original loan was worth.",
@@ -1568,10 +1568,10 @@ export const QUESTIONS_DAILY_ENGINEERING = [
     type: "scenario",
     prompt: "Engineers estimate every new feature takes twice as long as it should because the codebase is tangled and untested. What is the root cause?",
     options: [
-      "High technical debt — accumulated shortcuts are now slowing every change, compounding like interest",
-      "The team is understaffed and needs more engineers",
-      "The product requirements are too complex to implement efficiently",
-      "The CI/CD pipeline is too slow, adding time to every deployment",
+      "High technical debt — accumulated shortcuts are now slowing every change, compounding like interest on a loan",
+      "The team is understaffed — hiring more engineers would directly cut feature development time in half",
+      "The product requirements are inherently complex, making any implementation slow regardless of code quality",
+      "The CI/CD pipeline is the bottleneck — slow builds and deploys are adding overhead to every feature cycle",
     ],
     correctIndex: 0,
     explanation: "When velocity consistently feels slower than the complexity warrants, accumulated technical debt is the leading culprit. This 'interest payment' — navigating messy, untested code — is the cost of not paying down debt earlier. A targeted refactoring investment is often the solution.",
@@ -1598,13 +1598,13 @@ export const QUESTIONS_DAILY_ENGINEERING = [
     id: "q_apiversioning_t2d_1",
     conceptId: "apiversioning",
     module: 3,
-    type: "term_to_def",
-    prompt: "What is API Versioning?",
+    type: "scenario",
+    prompt: "You need to rename fields in your public API response, but 50 external clients depend on the current format. You create a /v2/ endpoint with the new structure while keeping /v1/ running for existing clients. What practice is this?",
     options: [
-      "Managing breaking changes by maintaining multiple API versions simultaneously so existing clients keep working",
-      "Incrementing a build number every time code is deployed to production",
-      "A Git strategy for managing multiple feature branches in parallel",
-      "Logging every API request with a timestamp and software version",
+      "API Versioning",
+      "API Gateway",
+      "Feature Flags",
+      "Blue-Green Deploy",
     ],
     correctIndex: 0,
     explanation: "API versioning (e.g., /v1/ vs /v2/) lets you evolve an API without breaking clients who depend on the old behavior. Without versioning, any breaking change instantly breaks all integrations.",
@@ -1621,10 +1621,10 @@ export const QUESTIONS_DAILY_ENGINEERING = [
 { "first_name": "Alice", "last_name": "Smith", "phone_number": "555-1234" }`,
     prompt: "A client built against v1 reads response.name. What happens when the API migrates everyone to v2?",
     options: [
-      "response.name returns undefined — the field was renamed, silently breaking the client",
-      "The client automatically adapts because JSON is self-describing",
-      "The server returns a 400 error to warn the client about the breaking change",
-      "Nothing changes — both field names work simultaneously in the same JSON response",
+      "response.name returns undefined — the field was renamed, so the client silently breaks with blank data",
+      "The client automatically adapts because JSON is self-describing and maps old field names to new ones",
+      "The server returns a 400 error with a message telling the client which fields were renamed in v2",
+      "Nothing changes — the server automatically includes both old and new field names for backward compatibility",
     ],
     correctIndex: 0,
     explanation: "Renaming a field is a breaking change. The client expects 'name' but v2 only sends 'first_name' and 'last_name' — so response.name is undefined and users see blank names. This is why /v1/ and /v2/ exist: clients on v1 keep getting the old format while new clients adopt v2.",
@@ -1636,10 +1636,10 @@ export const QUESTIONS_DAILY_ENGINEERING = [
     type: "scenario",
     prompt: "You need to rename a field in your public API response. You have 50 external customers integrated with the current version. What's the right approach?",
     options: [
-      "Introduce /v2/ with the new field name, deprecate /v1/ with advance notice, support both during a migration window",
-      "Change the field name immediately in /v1/ and send an email to customers",
-      "Use a feature flag to toggle between field names in the same endpoint",
-      "Only update the documentation — don't change the actual API response",
+      "Introduce /v2/ with the new field name, deprecate /v1/ with advance notice, and support both during a migration window",
+      "Rename the field directly in /v1/ and notify all 50 customers via email to update their integrations immediately",
+      "Use a feature flag per customer to toggle between the old and new field name within the same /v1/ endpoint",
+      "Add the new field name alongside the old one in /v1/ permanently, returning both fields in every response",
     ],
     correctIndex: 0,
     explanation: "Industry standard: version the API, maintain backward compatibility during a migration window (often 6–18 months), give customers advance deprecation notice. Changing v1 in place breaks all 50 customers simultaneously — catastrophic for a public API.",
@@ -1660,9 +1660,9 @@ export const QUESTIONS_DAILY_ENGINEERING = [
     prompt: "How do you fix this CORS error?",
     options: [
       "Configure the server at api.example.com to return the Access-Control-Allow-Origin response header",
-      "Change the fetch() call to use XMLHttpRequest instead",
-      "Switch the request from HTTPS to HTTP",
-      "Add a Content-Type header to the frontend request",
+      "Change the fetch() call to use XMLHttpRequest instead, which bypasses the browser's CORS checks",
+      "Add a mode: 'no-cors' option to the fetch() call so the browser skips the CORS verification",
+      "Set up a proxy on your own server to forward requests to api.example.com on the backend",
     ],
     correctIndex: 0,
     explanation: "CORS is enforced by the browser — the fix is always server-side. api.example.com must return 'Access-Control-Allow-Origin: https://myapp.com' (or *) in its response. No frontend change bypasses a missing CORS header.",
@@ -1677,10 +1677,10 @@ export const QUESTIONS_DAILY_ENGINEERING = [
 .SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c`,
     prompt: "This JWT has three dot-separated parts. The middle part decodes to: {\"userId\":\"123456\",\"role\":\"admin\",\"exp\":1700000000}. What is the middle section called?",
     options: [
-      "Payload — it contains the claims (user data, roles, expiration time)",
-      "Header — it describes the signing algorithm and token type",
-      "Signature — it proves the token hasn't been tampered with",
-      "Claim block — it's a standalone structure separate from the token format",
+      "Payload — it contains the claims such as user data, roles, and expiration time",
+      "Header — it describes the signing algorithm and the type of token being used",
+      "Signature — it is the cryptographic proof that the token hasn't been tampered with",
+      "Claim block — it is a standalone data structure separate from the JWT token format",
     ],
     correctIndex: 0,
     explanation: "A JWT is Header.Payload.Signature. The payload (middle) holds the claims — userId, role, expiration. The header (first) declares the signing algorithm. The signature (last) is cryptographic proof that nothing was modified. Anyone can decode the payload — it's base64, not encrypted — so never store secrets in it.",
@@ -1698,9 +1698,9 @@ ws.onerror = (err) => console.error('Error:', err);`,
     prompt: "Compared to polling this endpoint every second with fetch(), what is the key advantage of WebSocket here?",
     options: [
       "The server can push messages instantly without the client asking — no wasted requests when nothing is new",
-      "WebSocket uses UDP instead of TCP, making it faster for real-time data",
-      "WebSocket bypasses CORS, so no server configuration is needed",
-      "fetch() fundamentally cannot handle streaming data",
+      "WebSocket uses UDP instead of TCP, cutting latency in half for real-time bidirectional communication",
+      "WebSocket bypasses CORS entirely, so no server-side origin configuration is needed for cross-domain use",
+      "fetch() cannot handle streaming data at all, so polling is fundamentally unable to receive live updates",
     ],
     correctIndex: 0,
     explanation: "WebSockets maintain a persistent connection — the server pushes data the instant something happens. Polling sends N requests per minute regardless of whether anything changed: wasted bandwidth, extra latency, unnecessary server load. WebSocket still uses TCP, not UDP.",
@@ -1716,10 +1716,10 @@ ws.onerror = (err) => console.error('Error:', err);`,
 google.com.    171    IN    A    142.250.80.46`,
     prompt: "What does the 'A' record in this DNS response represent?",
     options: [
-      "An IPv4 address mapping for the domain (google.com → 142.250.80.46)",
-      "An authentication certificate proving this is the real google.com",
-      "An alias pointing google.com to another domain name",
-      "The mail server responsible for handling @google.com emails",
+      "An IPv4 address mapping for the domain (google.com resolves to 142.250.80.46)",
+      "An authentication certificate proving this is the legitimate google.com server",
+      "An alias record pointing google.com to a different canonical domain name",
+      "A mail exchange record identifying the server that handles @google.com email",
     ],
     correctIndex: 0,
     explanation: "An 'A' record maps a domain to an IPv4 address — the core function of DNS. Other record types: CNAME (alias to another domain), MX (mail server), AAAA (IPv6), TXT (verification/SPF). The '171' is the TTL in seconds — how long resolvers can cache this mapping before re-querying.",

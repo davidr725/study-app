@@ -9,14 +9,14 @@ export const QUESTIONS_ARCHITECTURE = [
     id: "q_idempotency_t2d_1",
     conceptId: "idempotency",
     module: 3,
-    type: "term_to_def",
+    type: "scenario",
     prompt:
-      "What is Idempotency?",
+      "You need an API where retrying a failed payment request doesn't accidentally charge the customer twice. Making the operation produce the same result whether called once or multiple times describes which property?",
     options: [
-      "An operation that produces the same result whether performed once or multiple times",
-      "The process of determining when cached data is stale",
-      "A restriction on how many requests can be made within a time window",
-      "A system that distributes traffic across multiple servers",
+      "Idempotency",
+      "Atomicity",
+      "Statelessness",
+      "Immutability",
     ],
     correctIndex: 0,
     explanation:
@@ -66,10 +66,10 @@ export const QUESTIONS_ARCHITECTURE = [
     prompt:
       "True or False: POST is an idempotent HTTP method.",
     options: [
-      "False — POST creates a new resource each time, so calling it twice creates two resources",
-      "True — all HTTP methods are idempotent by default",
-      "True — POST just sends data, so sending it again has no effect",
-      "False — POST is idempotent only when used with REST",
+      "False — POST creates a new resource each time, so calling it twice creates two separate resources",
+      "True — all standard HTTP methods are idempotent by default, including POST which just sends data",
+      "True — POST simply transmits data to the server, so resending the same data has no extra effect",
+      "False — POST is only idempotent when paired with REST conventions and a unique request identifier",
     ],
     correctIndex: 0,
     explanation:
@@ -84,9 +84,9 @@ export const QUESTIONS_ARCHITECTURE = [
       "A user's payment request times out. The client retries automatically. Without idempotency, what could happen?",
     options: [
       "The user gets charged twice — the first request may have succeeded before the timeout, and the retry creates a second charge",
-      "The payment is automatically refunded",
-      "The server rejects the retry because it remembers the first attempt",
-      "Nothing — payment APIs are always idempotent by default",
+      "The retry is rejected with a 409 Conflict because the server detects the duplicate transaction ID automatically",
+      "The server's built-in deduplication layer catches the retry and returns the original response without reprocessing",
+      "The payment gateway queues the retry and merges it with the original request, so only one charge goes through",
     ],
     correctIndex: 0,
     explanation:
@@ -110,14 +110,14 @@ export const QUESTIONS_ARCHITECTURE = [
     id: "q_dbindex_t2d_1",
     conceptId: "dbindex",
     module: 4,
-    type: "term_to_def",
+    type: "scenario",
     prompt:
-      "What is a Database Index?",
+      "Your search query scans every row in a 10-million-row table, taking 8 seconds. A colleague suggests adding a data structure that lets the database jump directly to matching rows — at the cost of slower writes. What are they recommending?",
     options: [
-      "A data structure that lets a database find rows quickly without scanning every row, but slows down writes",
-      "A buffer between services that holds tasks for later processing",
-      "The process of determining when cached data is stale",
-      "Storing data in a faster location for quick access",
+      "Database Index",
+      "Cache Layer",
+      "Query Optimizer",
+      "Table Partition",
     ],
     correctIndex: 0,
     explanation:
@@ -154,7 +154,7 @@ export const QUESTIONS_ARCHITECTURE = [
     type: "fill_in_blank",
     prompt:
       "Fill in the blank: Without an index, a database must perform a full ___ — checking every single row in the table.",
-    options: ["table scan","cache miss","DNS lookup","handshake"],
+    options: ["table scan","index rebuild","row lock","query parse"],
     correctIndex: 0,
     explanation:
       "A full table scan means reading every row to find what you need. Indexes prevent this by providing a shortcut, like a book index lets you jump to the right page.",
@@ -167,10 +167,10 @@ export const QUESTIONS_ARCHITECTURE = [
     prompt:
       "True or False: You should add indexes to every column in a database table for maximum performance.",
     options: [
-      "False — every index slows down writes (INSERT, UPDATE, DELETE) and uses disk space; only index columns you frequently search or sort by",
-      "True — more indexes always mean better performance",
-      "True — indexes have no downsides",
-      "False — databases only support one index per table",
+      "False — each index slows down writes (INSERT, UPDATE, DELETE) and uses disk space, so only index columns you query often",
+      "True — indexes speed up all operations including writes, so adding more always improves overall database performance",
+      "True — modern databases optimize indexes automatically, so more indexes means faster reads with no meaningful overhead",
+      "False — databases can only maintain one index per table, so you must choose the single most important column to index",
     ],
     correctIndex: 0,
     explanation:
@@ -185,13 +185,13 @@ export const QUESTIONS_ARCHITECTURE = [
       "An engineer says adding an index will speed up the search feature. What's the downside they might not mention?",
     options: [
       "Write operations slow down because the index must be updated on every insert/update/delete",
-      "Indexes use encryption which adds latency",
-      "Indexes can only be used with SQL databases",
-      "Indexes make the database read-only",
+      "Indexes consume additional disk space that grows with the size of the table",
+      "Indexes require periodic manual rebuilds to stay accurate and performant",
+      "Indexed columns become immutable and cannot be updated after creation",
     ],
     correctIndex: 0,
     explanation:
-      "Indexes speed up reads but slow down writes. Every insert, update, or delete requires updating the index too. For write-heavy tables, this tradeoff might not be worth it.",
+      "The main downside is slower writes. While indexes do use disk space and occasionally need maintenance, the primary cost is that every insert, update, or delete must also update the index. For write-heavy tables, this tradeoff might not be worth it.",
     whySection:
       "The textbook analogy works here: an index makes finding things fast, but every revision requires updating the index. In a database, this means writes are more expensive. The decision depends on your read/write ratio.",
   },
@@ -213,18 +213,18 @@ export const QUESTIONS_ARCHITECTURE = [
     id: "q_latency_t2d_1",
     conceptId: "latency",
     module: 4,
-    type: "term_to_def",
+    type: "scenario",
     prompt:
-      "What is the difference between Latency and Throughput?",
+      "Your team is debating two metrics: how fast a single API request completes vs. how many total requests the system handles per second. Which pair of concepts are they comparing?",
     options: [
-      "Latency is time for a single request (speed); Throughput is requests handled per period (volume). Optimizing one can hurt the other.",
-      "Latency is synchronous; Throughput is asynchronous",
-      "Latency is the request; Throughput is the response",
-      "Latency is client-side; Throughput is server-side",
+      "Latency vs Throughput",
+      "Sync vs Async",
+      "Bandwidth vs Bitrate",
+      "Caching vs Indexing",
     ],
     correctIndex: 0,
     explanation:
-      "Latency = speed of one request. Throughput = volume of requests. A sports car (low latency) vs a freight train (high throughput).",
+      "Latency = speed of one request. Throughput = volume of requests. A sports car (low latency) vs a freight train (high throughput). Optimizing one can hurt the other.",
   },
   {
     id: "q_latency_a2t_1",
@@ -270,10 +270,10 @@ export const QUESTIONS_ARCHITECTURE = [
     prompt:
       "True or False: Reducing latency always increases throughput.",
     options: [
-      "False — they can be inversely related. Batching increases throughput but adds latency; processing one-at-a-time reduces latency but limits throughput.",
-      "True — faster requests always mean more requests per second",
-      "True — latency and throughput are always proportional",
-      "False — latency and throughput are completely unrelated",
+      "False — they can be inversely related; batching requests increases throughput but adds latency to each individual item",
+      "True — faster individual requests always translate directly into more total requests handled per second by the system",
+      "True — latency and throughput are always proportional, so halving response time will always double your throughput",
+      "False — latency and throughput measure completely different things and never influence each other in any situation",
     ],
     correctIndex: 0,
     explanation:
@@ -288,9 +288,9 @@ export const QUESTIONS_ARCHITECTURE = [
       "Users in Europe complain your US-hosted API is slow. Latency is 200ms per request. How do you reduce it?",
     options: [
       "Deploy servers or a CDN closer to European users to reduce the physical distance data must travel",
-      "Add more database indexes",
-      "Switch from REST to GraphQL",
-      "Increase the server's CPU",
+      "Add database connection pooling to handle more concurrent European requests efficiently",
+      "Compress API response payloads with gzip to reduce the amount of data transferred",
+      "Increase the server's RAM and CPU to process European requests more quickly on arrival",
     ],
     correctIndex: 0,
     explanation:
@@ -314,18 +314,18 @@ export const QUESTIONS_ARCHITECTURE = [
     id: "q_syncasync_t2d_1",
     conceptId: "syncasync",
     module: 4,
-    type: "term_to_def",
+    type: "scenario",
     prompt:
-      "What is the difference between Sync and Async operations?",
+      "Your app makes four independent database queries one after another, each waiting for the previous to finish before starting. A colleague says you could run them all at once and cut load time from 8 seconds to 2 seconds. What programming model shift are they suggesting?",
     options: [
-      "Sync blocks execution until completion (caller waits); Async lets the caller continue and get notified when done",
-      "Sync uses HTTP; Async uses WebSockets",
-      "Sync is client-side; Async is server-side",
-      "Sync is for reads; Async is for writes",
+      "Sync to Async",
+      "Polling to Webhooks",
+      "REST to GraphQL",
+      "Monolith to Microservices",
     ],
     correctIndex: 0,
     explanation:
-      "Sync = stay on hold until they answer. Async = text them and they text back when ready.",
+      "Sync = stay on hold until they answer. Async = text them and they text back when ready. Running independent operations in parallel (async) instead of sequentially (sync) is one of the most common performance wins.",
   },
   {
     id: "q_syncasync_a2t_1",
@@ -371,10 +371,10 @@ export const QUESTIONS_ARCHITECTURE = [
     prompt:
       "True or False: Asynchronous code is always faster than synchronous code.",
     options: [
-      "False — async isn't faster per operation; it's more efficient because it doesn't block while waiting, freeing resources for other work",
-      "True — async operations always complete faster",
-      "True — async uses multiple threads, making it faster",
-      "False — synchronous code is always faster because it's simpler",
+      "False — async doesn't speed up individual operations; it improves efficiency by not blocking while waiting, freeing resources",
+      "True — async operations complete faster because the runtime optimizes them with dedicated background processing threads",
+      "True — async uses multiple CPU threads in parallel, so each individual operation finishes in significantly less time",
+      "False — synchronous code is always faster because it avoids the overhead of managing callbacks, promises, and event loops",
     ],
     correctIndex: 0,
     explanation:
@@ -389,9 +389,9 @@ export const QUESTIONS_ARCHITECTURE = [
       "Your dashboard loads in 8 seconds. The engineer says 'the queries are synchronous.' What does that mean and what's the fix?",
     options: [
       "Each query waits for the previous one to finish. Run independent queries in parallel (async) to reduce total time.",
-      "The queries are running too fast and need to be slowed down",
-      "Synchronous queries can't be cached",
-      "The queries are using GET instead of POST",
+      "The queries lack proper indexes, so adding indexes to the queried columns would fix the slow dashboard",
+      "Synchronous queries bypass the cache layer, so switching to async enables caching and speeds things up",
+      "The queries are fetching too much data; paginating the results would reduce the total load time",
     ],
     correctIndex: 0,
     explanation:
@@ -417,14 +417,14 @@ export const QUESTIONS_ARCHITECTURE = [
     id: "q_cdn_t2d_1",
     conceptId: "cdn",
     module: 4,
-    type: "term_to_def",
+    type: "scenario",
     prompt:
-      "What is a CDN?",
+      "Your website loads fast for US users but takes 4 seconds in Asia. You need geographically distributed servers to serve cached content from locations close to each user. What infrastructure solves this?",
     options: [
-      "A geographically distributed network of servers that caches and serves content from locations close to users",
-      "A single server that handles all traffic for a website",
-      "A database that stores user session data",
-      "A protocol for encrypting web traffic",
+      "CDN",
+      "Load Balancer",
+      "API Gateway",
+      "DNS",
     ],
     correctIndex: 0,
     explanation:
@@ -461,7 +461,7 @@ export const QUESTIONS_ARCHITECTURE = [
     type: "fill_in_blank",
     prompt:
       "Fill in the blank: A CDN reduces ___ by serving content from servers that are physically closer to the user.",
-    options: ["latency","security","storage","authentication"],
+    options: ["latency","bandwidth","throughput","downtime"],
     correctIndex: 0,
     explanation:
       "CDNs reduce latency (the time for data to travel) by shortening the physical distance between the user and the content. Less distance = faster delivery.",
@@ -475,9 +475,9 @@ export const QUESTIONS_ARCHITECTURE = [
       "True or False: CDNs are only useful for serving static files like images and CSS.",
     options: [
       "False — modern CDNs also cache API responses, run serverless functions at the edge, and accelerate dynamic content",
-      "True — CDNs can only serve static files",
-      "True — dynamic content can't be cached on CDNs",
-      "False — CDNs don't serve static files; they only accelerate API calls",
+      "True — CDNs are designed to serve static assets only, since dynamic content changes too often to benefit from caching",
+      "True — dynamic content requires server-side processing on every request, which makes it incompatible with CDN caching",
+      "False — CDNs actually focus on accelerating API calls and database queries, not on serving static files like images",
     ],
     correctIndex: 0,
     explanation:
@@ -492,9 +492,9 @@ export const QUESTIONS_ARCHITECTURE = [
       "Your website loads fast for users in New York (where your server is) but slowly for users in Tokyo. What infrastructure would fix this?",
     options: [
       "A CDN — it would serve cached content from a server in or near Tokyo, eliminating the cross-Pacific round trip",
-      "A bigger server in New York",
-      "A faster database",
-      "More API endpoints",
+      "A load balancer — distributing Tokyo requests across multiple New York servers to handle them faster",
+      "A caching layer like Redis — storing frequent responses in memory so the server responds more quickly",
+      "Response compression — reducing payload size so data transfers faster over the long-distance connection",
     ],
     correctIndex: 0,
     explanation:
@@ -507,10 +507,10 @@ export const QUESTIONS_ARCHITECTURE = [
     type: "which_is_not",
     prompt:
       "Which of the following is NOT a benefit of using a CDN?",
-    options: ["Replacing your database","Reducing latency for geographically distant users","Reducing load on your origin server","Protecting against DDoS attacks by absorbing traffic"],
+    options: ["Encrypting data stored in your database","Reducing latency for geographically distant users","Reducing load on your origin server","Protecting against DDoS attacks by absorbing traffic"],
     correctIndex: 0,
     explanation:
-      "CDNs don't replace databases — they cache and serve content. Their benefits are: reduced latency, lower origin server load, and DDoS protection.",
+      "CDNs don't handle database encryption — that's done by the database itself or disk-level encryption. CDN benefits are: reduced latency, lower origin server load, and DDoS protection.",
   },
 
   // ─── Load Balancer ────────────────────────────────────
@@ -518,14 +518,14 @@ export const QUESTIONS_ARCHITECTURE = [
     id: "q_loadbalancer_t2d_1",
     conceptId: "loadbalancer",
     module: 5,
-    type: "term_to_def",
+    type: "scenario",
     prompt:
-      "What is a Load Balancer?",
+      "Your single server can handle 1,000 requests per second but you're getting 5,000. You need to distribute traffic across multiple identical servers. What infrastructure component does this?",
     options: [
-      "A system that distributes incoming traffic across multiple servers so no single server is overwhelmed",
-      "An automated pipeline that tests and deploys code",
-      "A buffer between services holding tasks for later",
-      "A single entry point that routes all API requests",
+      "Load Balancer",
+      "API Gateway",
+      "CDN",
+      "Message Queue",
     ],
     correctIndex: 0,
     explanation:
@@ -575,10 +575,10 @@ export const QUESTIONS_ARCHITECTURE = [
     prompt:
       "True or False: A load balancer routes requests to different services based on the URL path (e.g., /users goes to one service, /orders to another).",
     options: [
-      "False — that's an API Gateway's job. A load balancer distributes traffic across copies of the SAME service for capacity.",
-      "True — load balancers route to different services based on the URL",
-      "True — load balancers and API gateways are the same thing",
-      "False — load balancers don't look at URLs at all; they use IP addresses only",
+      "False — that's an API Gateway's job; a load balancer distributes traffic across copies of the SAME service for capacity",
+      "True — load balancers inspect the URL path and route each request to the appropriate backend service accordingly",
+      "True — load balancers and API gateways perform the same function, just with different configuration options",
+      "False — load balancers work only at the TCP/IP layer and cannot inspect any part of the HTTP request at all",
     ],
     correctIndex: 0,
     explanation:
@@ -593,9 +593,9 @@ export const QUESTIONS_ARCHITECTURE = [
       "Traffic spikes 10x during a sale. What infrastructure component handles this without rewriting code?",
     options: [
       "Load balancer distributing traffic across multiple server instances, combined with auto-scaling",
-      "A bigger database index",
-      "Switching from REST to GraphQL",
-      "Adding more environment variables",
+      "A CDN caching static assets so the origin server handles fewer requests during the spike",
+      "Vertical scaling — upgrading the single server to one with more CPU, RAM, and faster storage",
+      "A message queue buffering incoming requests so the server processes them at a steady pace",
     ],
     correctIndex: 0,
     explanation:
@@ -626,18 +626,18 @@ export const QUESTIONS_ARCHITECTURE = [
     id: "q_microservices_t2d_1",
     conceptId: "microservices",
     module: 5,
-    type: "term_to_def",
+    type: "scenario",
     prompt:
-      "What is the difference between Microservices and a Monolith?",
+      "Your company's single codebase has grown to 2 million lines. Deploying a small change requires rebuilding and redeploying the entire application, and a bug in checkout crashes the whole site. The team wants to split it into independent, separately deployable services. What architecture are they moving to?",
     options: [
-      "Monolith: one codebase does everything. Microservices: each function is its own independent service communicating over the network.",
-      "Monolith: server-side only. Microservices: client-side and server-side.",
-      "Monolith: uses REST. Microservices: uses GraphQL.",
-      "Monolith: no database. Microservices: multiple databases.",
+      "Microservices",
+      "Serverless",
+      "Event-Driven",
+      "Service Mesh",
     ],
     correctIndex: 0,
     explanation:
-      "Monolith = one restaurant doing everything. Microservices = a food court where each stall specializes. Monolith is simpler to start; microservices scale better.",
+      "Monolith = one restaurant doing everything. Microservices = a food court where each stall specializes. Monolith is simpler to start; microservices scale better but add complexity.",
   },
   {
     id: "q_microservices_a2t_1",
@@ -683,10 +683,10 @@ export const QUESTIONS_ARCHITECTURE = [
     prompt:
       "True or False: Microservices are always better than monoliths.",
     options: [
-      "False — microservices add significant complexity (networking, data consistency, deployment); monoliths are often the right choice for small-to-medium apps",
-      "True — microservices are the modern standard and always preferable",
-      "True — monoliths can't scale at all",
-      "False — but only because microservices are more expensive",
+      "False — microservices add significant complexity in networking, data consistency, and deployment; monoliths are often better for small apps",
+      "True — microservices are the modern industry standard, and every new project should use them regardless of team size or scope",
+      "True — monoliths cannot scale beyond a single server, so any app expecting growth must start with microservices instead",
+      "False — microservices and monoliths are technically equivalent, but microservices cost more to run due to network overhead",
     ],
     correctIndex: 0,
     explanation:
@@ -700,10 +700,10 @@ export const QUESTIONS_ARCHITECTURE = [
     prompt:
       "The checkout service is down but the rest of the site works. Is this a monolith or microservices architecture?",
     options: [
-      "Microservices — in a monolith, if one part is down, everything is down",
-      "Monolith — only monoliths can have partial failures",
-      "Neither — this indicates a database problem",
-      "Both architectures would behave this way",
+      "Microservices — each service runs independently, so one can fail while others stay up",
+      "Monolith — a monolith isolates failures per module, keeping unrelated features running",
+      "Neither — partial failures like this are caused by database connection issues, not architecture",
+      "Both — any architecture can have partial failures depending on how error handling is configured",
     ],
     correctIndex: 0,
     explanation:
@@ -729,18 +729,18 @@ export const QUESTIONS_ARCHITECTURE = [
     id: "q_queue_t2d_1",
     conceptId: "queue",
     module: 5,
-    type: "term_to_def",
+    type: "scenario",
     prompt:
-      "What is a Message Queue?",
+      "Your order service calls the email service directly, but when the email service is slow, orders back up. You need a buffer between them so orders complete immediately and emails get sent when the service is ready. What component solves this?",
     options: [
-      "A buffer between services that holds tasks to be processed later, decoupling producers and consumers",
-      "A system that distributes traffic across multiple servers",
-      "An automated pipeline that tests and deploys code",
-      "The mechanism by which JavaScript handles async operations",
+      "Message Queue",
+      "Load Balancer",
+      "API Gateway",
+      "Cache",
     ],
     correctIndex: 0,
     explanation:
-      "A Message Queue is a take-a-number deli counter — customers drop off orders and the kitchen works through them at its own pace.",
+      "A Message Queue is a take-a-number deli counter — customers drop off orders and the kitchen works through them at its own pace. It decouples producers from consumers.",
   },
   {
     id: "q_queue_a2t_1",
@@ -786,10 +786,10 @@ export const QUESTIONS_ARCHITECTURE = [
     prompt:
       "True or False: If the consumer service crashes, messages in the queue are lost.",
     options: [
-      "False — durable message queues (like RabbitMQ, SQS) persist messages to disk, so they survive crashes and are processed when the consumer recovers",
-      "True — messages only exist in memory and are lost on crash",
-      "True — message queues don't have persistence",
-      "False — but only if you use a database-backed queue",
+      "False — durable queues like RabbitMQ and SQS persist messages to disk, so they survive crashes and get processed on recovery",
+      "True — message queues store messages in memory only, so a consumer crash causes all unprocessed messages to be permanently lost",
+      "True — message queues are designed for speed over durability, so they deliberately skip writing messages to persistent storage",
+      "False — messages survive only if you configure the queue to use a relational database as its backing store instead of memory",
     ],
     correctIndex: 0,
     explanation:
@@ -804,9 +804,9 @@ export const QUESTIONS_ARCHITECTURE = [
       "An engineer wants to add a message queue between the order service and the email service. Why not just call the email service directly?",
     options: [
       "Decoupling — if the email service is slow or down, it shouldn't block order processing. The queue absorbs the work.",
-      "Message queues are faster than direct API calls",
-      "Direct API calls can't send emails",
-      "Message queues provide encryption that direct calls don't",
+      "Throughput — message queues batch email requests together, which sends them faster than individual API calls",
+      "Reliability — direct HTTP calls between services can't be retried, but queued messages retry automatically",
+      "Security — message queues encrypt data in transit between services, which direct internal API calls skip",
     ],
     correctIndex: 0,
     explanation:
@@ -832,14 +832,14 @@ export const QUESTIONS_ARCHITECTURE = [
     id: "q_containers_t2d_1",
     conceptId: "containers",
     module: 5,
-    type: "term_to_def",
+    type: "scenario",
     prompt:
-      "What are Docker / Containers?",
+      "A developer's app works perfectly on their laptop but crashes in production due to different OS versions and missing libraries. They need a way to package the app with its exact dependencies so it runs identically everywhere. What technology solves this?",
     options: [
-      "A way to package an application with all its dependencies into a standardized unit that runs the same everywhere",
-      "Virtual machines that simulate entire operating systems",
-      "Cloud servers that automatically scale based on traffic",
-      "A version control system for tracking code changes",
+      "Docker / Containers",
+      "Virtual Machines",
+      "Package Managers",
+      "Environment Variables",
     ],
     correctIndex: 0,
     explanation:
@@ -889,10 +889,10 @@ export const QUESTIONS_ARCHITECTURE = [
     prompt:
       "True or False: Containers and Virtual Machines are the same thing.",
     options: [
-      "False — containers share the host OS kernel (lightweight, fast), while VMs include their own full OS (heavier, more isolated)",
-      "True — they're different names for the same technology",
-      "True — containers are just smaller virtual machines",
-      "False — virtual machines are faster than containers",
+      "False — containers share the host OS kernel and are lightweight, while VMs include their own full OS and are heavier but more isolated",
+      "True — containers and VMs are different names for the same virtualization technology, just from different vendors and eras",
+      "True — containers are simply smaller virtual machines that run a stripped-down OS, trading some isolation for less disk usage",
+      "False — virtual machines start faster and use fewer resources than containers, which is why VMs are preferred for microservices",
     ],
     correctIndex: 0,
     explanation:
@@ -907,9 +907,9 @@ export const QUESTIONS_ARCHITECTURE = [
       "A developer says 'it works on my machine' but the code fails in production. How do containers solve this?",
     options: [
       "Containers package the app with its exact dependencies and runtime, so the same container runs identically everywhere",
-      "Containers make the developer's machine run the same OS as production",
-      "Containers automatically fix dependency conflicts",
-      "Containers eliminate the need for testing",
+      "Containers enforce strict version pinning in package.json, preventing accidental dependency upgrades in production",
+      "Containers snapshot the developer's entire machine state and replicate it exactly on the production server",
+      "Containers run each dependency in its own isolated sandbox, automatically resolving version conflicts at runtime",
     ],
     correctIndex: 0,
     explanation:
@@ -934,13 +934,14 @@ export const QUESTIONS_ARCHITECTURE = [
     id: "q_slo_t2d_1",
     conceptId: "slo",
     module: 5,
-    type: "term_to_def",
-    prompt: "What is the difference between an SLI, SLO, and SLA?",
+    type: "scenario",
+    prompt:
+      "Your team tracks actual uptime percentage (a measurement), aims for 99.9% internally (a target), and the contract with customers guarantees 99.5% with refund penalties if breached (a promise). What are these three things called, in that order?",
     options: [
-      "SLI is the measured metric, SLO is the internal target, SLA is the customer-facing contract with consequences",
-      "SLA is the measured metric, SLI is the internal target, SLO is the customer contract",
-      "SLO and SLA are the same — both are customer contracts. SLI is just a metric",
-      "SLI is a tool, SLO is a process, SLA is a document",
+      "SLI, SLO, SLA",
+      "SLA, SLI, SLO",
+      "SLO, SLA, SLI",
+      "SLA, SLO, SLI",
     ],
     correctIndex: 0,
     explanation: "Think in order: SLI (what you measure) → SLO (what you aim for internally) → SLA (what you promise externally with consequences). Your SLA is typically more lenient than your SLO — if your SLO is 99.9%, your SLA might be 99.5%, giving you buffer before a contract breach.",
@@ -952,10 +953,10 @@ export const QUESTIONS_ARCHITECTURE = [
     type: "scenario",
     prompt: "Your team's SLO is 99.9% uptime per month. The service was down for 50 minutes this month. Did you breach your SLO?",
     options: [
-      "Yes — 99.9% uptime allows only ~43 minutes of downtime per month; 50 minutes exceeds that",
-      "No — 50 minutes is less than 1 hour, which is always within acceptable SLO bounds",
-      "It depends on whether customers noticed the outage",
-      "No — SLOs only apply to business-hours downtime",
+      "Yes — 99.9% uptime allows only ~43 minutes of downtime per month, and 50 minutes exceeds that",
+      "No — 99.9% uptime allows ~72 minutes of downtime per month, so 50 minutes is still within budget",
+      "It depends — SLOs only count unplanned downtime, and scheduled maintenance windows are excluded",
+      "No — SLOs measure availability over a rolling quarter, not a single month, so one bad month is fine",
     ],
     correctIndex: 0,
     explanation: "99.9% uptime = 0.1% downtime allowed. In a 30-day month (43,200 minutes), 0.1% = 43.2 minutes. 50 minutes exceeds that — SLO breached. 'Three nines' sounds reliable, but it's only 43 minutes of downtime per month. Four nines (99.99%) allows just 4 minutes.",
@@ -992,13 +993,14 @@ export const QUESTIONS_ARCHITECTURE = [
     id: "q_observability_t2d_1",
     conceptId: "observability",
     module: 5,
-    type: "term_to_def",
-    prompt: "What are the three pillars of Observability?",
+    type: "scenario",
+    prompt:
+      "Your production system is acting strangely. You need timestamped event records to see what happened, numeric measurements over time to spot trends, and end-to-end request paths to find bottlenecks across services. These three data types are known as the three pillars of which practice?",
     options: [
-      "Logs (event records), Metrics (numeric measurements over time), and Traces (request path through services)",
-      "Monitoring, Alerting, and Dashboards",
-      "CPU usage, Memory usage, and Network I/O",
-      "Unit tests, Integration tests, and End-to-end tests",
+      "Observability",
+      "Monitoring",
+      "Incident Response",
+      "Continuous Integration",
     ],
     correctIndex: 0,
     explanation: "Logs: timestamped event records (what happened). Metrics: numeric aggregates over time — CPU%, error rate, latency (how often/how much). Traces: the end-to-end journey of a single request through your microservices (where). Together they let you understand, measure, and debug a system without guessing.",
@@ -1010,10 +1012,10 @@ export const QUESTIONS_ARCHITECTURE = [
     type: "scenario",
     prompt: "An API request takes 3 seconds instead of 100ms. You have 8 microservices. Which observability tool do you reach for first to find the bottleneck?",
     options: [
-      "Distributed tracing — it shows the end-to-end path and how long each service took",
-      "Logs — grep through all 8 services' log files for the slow request",
-      "Metrics — check the CPU dashboard to see which service is overloaded",
-      "Alerts — wait for the on-call system to page the responsible team",
+      "Distributed tracing — it shows the request's path through all services with per-hop timing",
+      "Logs — search each service's log files for the request ID to find error messages or delays",
+      "Metrics — check CPU and memory dashboards for each service to find the overloaded one",
+      "Alerts — set up latency thresholds on each service so the monitoring system identifies it",
     ],
     correctIndex: 0,
     explanation: "Distributed tracing (Jaeger, Datadog APM) shows the full span of a request across all services with timing per hop — you instantly see which service is the bottleneck. Logs work but require manually searching 8 systems. Metrics show aggregate trends, not individual request paths.",
@@ -1048,13 +1050,14 @@ api_error_rate{service="user"} 0.034  // 3.4% errors in last 5 min
     id: "q_sqlvsnosql_t2d_1",
     conceptId: "sqlvsnosql",
     module: 4,
-    type: "term_to_def",
-    prompt: "What is the core tradeoff between SQL and NoSQL databases?",
+    type: "scenario",
+    prompt:
+      "Your team is choosing a database. One option enforces strict schemas with powerful JOIN queries and ACID transactions. The other offers flexible schemas and easy horizontal scaling but limited query power. What two database categories are they comparing?",
     options: [
-      "SQL enforces strict schemas and supports complex joins; NoSQL trades structure for flexibility and horizontal scale",
-      "SQL is faster than NoSQL for all use cases; NoSQL is only used for large file storage",
-      "NoSQL requires a fixed schema like SQL but stores data in files instead of tables",
-      "SQL is for backend services; NoSQL is specifically designed for frontend data",
+      "SQL vs NoSQL",
+      "OLTP vs OLAP",
+      "Graph vs Document",
+      "Cache vs Persistent Store",
     ],
     correctIndex: 0,
     explanation: "SQL (PostgreSQL, MySQL): rigid schema, powerful JOINs, ACID transactions, best for relational data with complex queries. NoSQL (MongoDB, DynamoDB, Redis): flexible schema, scales horizontally, best for high-volume simple-access patterns. Neither is universally better — the right choice depends on your data model.",
