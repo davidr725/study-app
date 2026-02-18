@@ -616,4 +616,116 @@ export const QUESTIONS_WEB_FUNDAMENTALS = [
     explanation:
       "The JavaScript engine (V8, SpiderMonkey) compiles code, not the Event Loop. The Event Loop manages the execution order of callbacks, promises, and event handlers.",
   },
+
+  // ─── HTTPS / TLS ───────────────────────────────────────
+
+  {
+    id: "q_tls_t2d_1",
+    conceptId: "tls",
+    module: 2,
+    type: "term_to_def",
+    prompt: "What does TLS do in an HTTPS connection?",
+    options: [
+      "Encrypts the connection and authenticates the server's identity so data can't be read or tampered with in transit",
+      "Compresses HTTP requests and responses to reduce bandwidth usage",
+      "Authenticates the user's identity so the server knows who is making the request",
+      "Speeds up the connection by caching the TCP handshake for future requests",
+    ],
+    correctIndex: 0,
+    explanation: "TLS (Transport Layer Security) does two things: authenticates the server (via certificate signed by a trusted CA) and encrypts all data in transit. TLS authenticates the SERVER, not the user — user authentication is still handled by the application layer (passwords, tokens). Without it, HTTP traffic is readable by anyone on the same network.",
+  },
+  {
+    id: "q_tls_scen_1",
+    conceptId: "tls",
+    module: 2,
+    type: "scenario",
+    prompt: "You're on public WiFi and notice the site is http:// (not https://). What is the specific risk?",
+    options: [
+      "Anyone on the same WiFi network can read all data you send — passwords, session tokens, everything — in plaintext",
+      "The website will load slower because HTTP is not optimized for public networks",
+      "Your browser will block the site because HTTP is a deprecated protocol",
+      "The server cannot verify your identity without HTTPS",
+    ],
+    correctIndex: 0,
+    explanation: "HTTP sends data in plaintext. On public WiFi, a malicious actor running a packet sniffer can read every byte you send — login credentials, session cookies, personal data. With HTTPS, all traffic is encrypted so even if intercepted, it's unreadable without the session key.",
+  },
+  {
+    id: "q_tls_code_1",
+    conceptId: "tls",
+    module: 2,
+    type: "code_snippet",
+    codeSnippet: `// Browser address bar:
+Not Secure | http://checkout.example.com/payment
+
+// The request being sent:
+POST /payment HTTP/1.1
+Content-Type: application/json
+
+{ "card_number": "4111111111111111", "cvv": "123" }`,
+    prompt: "What is the critical security problem with this payment form?",
+    options: [
+      "The request uses HTTP — credit card data is sent in plaintext and can be intercepted by anyone on the network",
+      "The Content-Type header should be text/plain for payment forms",
+      "POST requests don't support JSON bodies on payment endpoints",
+      "The card number should be stored server-side, not transmitted in requests",
+    ],
+    correctIndex: 0,
+    explanation: "Sending payment data over HTTP is catastrophic — the card number and CVV are visible in plaintext to anyone sniffing network traffic. All sensitive data requires HTTPS (TLS). This is also a PCI-DSS compliance violation. Production payment flows additionally use tokenization so raw card numbers never touch your own server.",
+  },
+  {
+    id: "q_tls_win_1",
+    conceptId: "tls",
+    module: 2,
+    type: "which_is_not",
+    prompt: "Which of the following does TLS NOT protect against?",
+    options: [
+      "SQL injection attacks on the server's database",
+      "Eavesdropping (reading data in transit)",
+      "Man-in-the-middle attacks (intercepting and modifying data)",
+      "Connecting to a fake server impersonating the real one",
+    ],
+    correctIndex: 0,
+    explanation: "TLS operates at the transport layer — it protects data in transit between client and server. SQL injection is a server-side vulnerability in how the application processes input. Once data reaches the server, TLS's job is done. SQL injection protection requires parameterized queries and input validation.",
+  },
+
+  // ─── Promises — Code Snippets ──────────────────────────
+
+  {
+    id: "q_promises_code_1",
+    conceptId: "promises",
+    module: 5,
+    type: "code_snippet",
+    codeSnippet: `fetch('/api/users')
+  .then(res => res.json())
+  .then(data => console.log(data))`,
+    prompt: "If the server returns a 500 error, what happens with this code?",
+    options: [
+      "The .then() chain still executes — fetch() only rejects on network failure, not HTTP error status codes",
+      "fetch() throws an error and the .then() callbacks are skipped automatically",
+      "res.json() detects the 500 status and throws before the second .then() runs",
+      "fetch() returns null when the server responds with 5xx",
+    ],
+    correctIndex: 0,
+    explanation: "fetch() only rejects on network-level failures (no internet, DNS failure, server unreachable). A 500 response is a 'successful' network response from fetch()'s perspective — the .then() chain runs with the error response object. You must check res.ok or res.status to detect HTTP errors and handle them explicitly.",
+  },
+  {
+    id: "q_promises_code_2",
+    conceptId: "promises",
+    module: 5,
+    type: "code_snippet",
+    codeSnippet: `async function getUser(id) {
+  const res = await fetch(\`/api/users/\${id}\`);
+  const data = await res.json();
+  return data;
+}`,
+    prompt: "What is the async/await version doing compared to .then() chaining?",
+    options: [
+      "The same thing — async/await is syntactic sugar that makes async code read like synchronous code",
+      "async/await is faster because it skips the Promise overhead entirely",
+      "async/await runs fetch and json() in parallel; .then() runs them sequentially",
+      "async/await automatically retries failed requests; .then() does not",
+    ],
+    correctIndex: 0,
+    explanation: "async/await is purely syntactic sugar over Promises — same execution model, same behavior, same performance. The advantage is readability: code reads top-to-bottom like synchronous code instead of nested .then() callbacks. Both versions have the same fetch() gotcha: you still need to check res.ok to catch HTTP errors.",
+  },
 ];

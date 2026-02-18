@@ -1442,4 +1442,286 @@ export const QUESTIONS_DAILY_ENGINEERING = [
     explanation:
       "Direct FTP upload has no rollback mechanism — you overwrote the old files. Blue-green, canary, and rolling deployments all have built-in rollback strategies.",
   },
+
+  // ─── Feature Flags ─────────────────────────────────────
+
+  {
+    id: "q_featureflags_t2d_1",
+    conceptId: "featureflags",
+    module: 4,
+    type: "term_to_def",
+    prompt: "What are Feature Flags?",
+    options: [
+      "Configuration switches that enable or disable features in production without deploying new code",
+      "Git branches used to isolate new feature development from the main codebase",
+      "A type of A/B test that changes the UI layout for different user segments",
+      "Security rules that restrict which users can access certain API endpoints",
+    ],
+    correctIndex: 0,
+    explanation: "Feature flags decouple deployment from release. Code ships to production but the feature is off — you flip the flag when ready. This enables gradual rollouts, instant kill switches, and experimentation without new deployments.",
+  },
+  {
+    id: "q_featureflags_scen_1",
+    conceptId: "featureflags",
+    module: 4,
+    type: "scenario",
+    prompt: "You're launching a redesigned checkout flow. You want to release it to 5% of users first, monitor for errors, then expand to 100% over a week. What technique enables this?",
+    options: [
+      "Feature flags with a percentage rollout — the flag is on for 5% of users, controllable without new deployments",
+      "A/B testing — show the new checkout to group A, old to group B, pick the winner",
+      "Blue-green deployment — run two production environments and split traffic at the load balancer",
+      "Git branching — maintain a separate branch for each rollout tier",
+    ],
+    correctIndex: 0,
+    explanation: "Feature flags let you control exactly which users see a feature, in real-time, without code changes. Blue-green is an infrastructure deployment pattern. A/B testing is for measuring outcomes. Git branches are for code isolation, not production rollouts.",
+  },
+  {
+    id: "q_featureflags_code_1",
+    conceptId: "featureflags",
+    module: 4,
+    type: "code_snippet",
+    codeSnippet: `if (featureFlags.isEnabled('new_checkout', userId)) {
+  return <NewCheckout />;
+} else {
+  return <OldCheckout />;
+}`,
+    prompt: "What is the primary operational advantage of this pattern over a standard code deploy?",
+    options: [
+      "You can instantly disable the new checkout for all users by toggling the flag — no new deployment needed",
+      "The new checkout code only runs in staging and never reaches production",
+      "The feature is automatically enabled for admin users only",
+      "It lets you run two different server versions simultaneously",
+    ],
+    correctIndex: 0,
+    explanation: "The power of feature flags is the instant kill switch. If new_checkout causes errors at 2am, you flip the flag off — immediate, no deployment, no rollback pipeline. Both code paths are already in production; only the flag changes.",
+  },
+
+  // ─── A/B Testing ───────────────────────────────────────
+
+  {
+    id: "q_abtesting_t2d_1",
+    conceptId: "abtesting",
+    module: 4,
+    type: "term_to_def",
+    prompt: "What is A/B Testing?",
+    options: [
+      "A controlled experiment showing two feature versions to different user segments to measure which performs better",
+      "Testing a feature in two environments — staging (A) and production (B) — before full launch",
+      "A deployment strategy that runs two server versions simultaneously to compare performance",
+      "A QA method where two engineers review the same code independently",
+    ],
+    correctIndex: 0,
+    explanation: "A/B testing is a randomized controlled experiment. Users split into groups — A sees the control, B sees the variant — and you measure a business metric (click rate, conversion, retention) to determine which performs better, with statistical rigor before declaring a winner.",
+  },
+  {
+    id: "q_abtesting_scen_1",
+    conceptId: "abtesting",
+    module: 4,
+    type: "scenario",
+    prompt: "After 2 days, your A/B test shows the new button color converts 3% better (p=0.12). Should you ship it?",
+    options: [
+      "No — p=0.12 means the result isn't statistically significant; the difference could be random noise",
+      "Yes — any positive conversion lift is worth shipping immediately",
+      "Yes — 2 days is enough time to make a decision on any A/B test",
+      "No — UI changes should never be decided by A/B test data alone",
+    ],
+    correctIndex: 0,
+    explanation: "Statistical significance (typically p < 0.05) means the result is unlikely to be chance. p=0.12 means a 12% probability this result is random — too high to act on. Shipping on insignificant results leads to false confidence. You need more traffic or more time.",
+  },
+  {
+    id: "q_abtesting_win_1",
+    conceptId: "abtesting",
+    module: 4,
+    type: "which_is_not",
+    prompt: "Which of the following is NOT a requirement for a valid A/B test?",
+    options: [
+      "The test must run for exactly 7 days regardless of traffic volume",
+      "Users should be randomly assigned to groups with no overlap",
+      "Only one variable should change between A and B at a time",
+      "You should define the success metric before starting the test",
+    ],
+    correctIndex: 0,
+    explanation: "Test duration depends on traffic volume and effect size, not a fixed calendar rule. A high-traffic site might reach significance in hours; a low-traffic one may need weeks. The real requirements are: random assignment, single variable change, and pre-defined success metric.",
+  },
+
+  // ─── Technical Debt ────────────────────────────────────
+
+  {
+    id: "q_techdebt_t2d_1",
+    conceptId: "techdebt",
+    module: 5,
+    type: "term_to_def",
+    prompt: "What is Technical Debt?",
+    options: [
+      "The accumulated cost of shortcuts and deferred maintenance in a codebase that slows future development",
+      "The dollar cost of cloud infrastructure that builds up over time",
+      "Outstanding bug tickets the team hasn't addressed yet",
+      "Code written by a previous team that isn't documented",
+    ],
+    correctIndex: 0,
+    explanation: "Technical debt is a metaphor: you borrow against future development speed by taking shortcuts now. Like financial debt, small amounts are manageable. Left unpaid, the 'interest' — slower velocity, harder bug fixes, fragile code — eventually costs more than the original loan was worth.",
+  },
+  {
+    id: "q_techdebt_scen_1",
+    conceptId: "techdebt",
+    module: 5,
+    type: "scenario",
+    prompt: "Engineers estimate every new feature takes twice as long as it should because the codebase is tangled and untested. What is the root cause?",
+    options: [
+      "High technical debt — accumulated shortcuts are now slowing every change, compounding like interest",
+      "The team is understaffed and needs more engineers",
+      "The product requirements are too complex to implement efficiently",
+      "The CI/CD pipeline is too slow, adding time to every deployment",
+    ],
+    correctIndex: 0,
+    explanation: "When velocity consistently feels slower than the complexity warrants, accumulated technical debt is the leading culprit. This 'interest payment' — navigating messy, untested code — is the cost of not paying down debt earlier. A targeted refactoring investment is often the solution.",
+  },
+  {
+    id: "q_techdebt_win_1",
+    conceptId: "techdebt",
+    module: 5,
+    type: "which_is_not",
+    prompt: "Which of the following is NOT an example of taking on technical debt?",
+    options: [
+      "Writing thorough unit tests before shipping a feature",
+      "Hardcoding a value to meet a deadline with a plan to fix it later",
+      "Copy-pasting code instead of extracting a reusable function",
+      "Skipping code review to ship a fix faster",
+    ],
+    correctIndex: 0,
+    explanation: "Writing tests is the opposite of debt — it's an investment that pays forward. Hardcoding values, copy-pasting instead of abstracting, and skipping review are classic debt: faster now, costlier later.",
+  },
+
+  // ─── API Versioning ────────────────────────────────────
+
+  {
+    id: "q_apiversioning_t2d_1",
+    conceptId: "apiversioning",
+    module: 3,
+    type: "term_to_def",
+    prompt: "What is API Versioning?",
+    options: [
+      "Managing breaking changes by maintaining multiple API versions simultaneously so existing clients keep working",
+      "Incrementing a build number every time code is deployed to production",
+      "A Git strategy for managing multiple feature branches in parallel",
+      "Logging every API request with a timestamp and software version",
+    ],
+    correctIndex: 0,
+    explanation: "API versioning (e.g., /v1/ vs /v2/) lets you evolve an API without breaking clients who depend on the old behavior. Without versioning, any breaking change instantly breaks all integrations.",
+  },
+  {
+    id: "q_apiversioning_code_1",
+    conceptId: "apiversioning",
+    module: 3,
+    type: "code_snippet",
+    codeSnippet: `// v1 response
+{ "name": "Alice Smith", "phone": "555-1234" }
+
+// v2 response (field renamed — breaking change)
+{ "first_name": "Alice", "last_name": "Smith", "phone_number": "555-1234" }`,
+    prompt: "A client built against v1 reads response.name. What happens when the API migrates everyone to v2?",
+    options: [
+      "response.name returns undefined — the field was renamed, silently breaking the client",
+      "The client automatically adapts because JSON is self-describing",
+      "The server returns a 400 error to warn the client about the breaking change",
+      "Nothing changes — both field names work simultaneously in the same JSON response",
+    ],
+    correctIndex: 0,
+    explanation: "Renaming a field is a breaking change. The client expects 'name' but v2 only sends 'first_name' and 'last_name' — so response.name is undefined and users see blank names. This is why /v1/ and /v2/ exist: clients on v1 keep getting the old format while new clients adopt v2.",
+  },
+  {
+    id: "q_apiversioning_scen_1",
+    conceptId: "apiversioning",
+    module: 3,
+    type: "scenario",
+    prompt: "You need to rename a field in your public API response. You have 50 external customers integrated with the current version. What's the right approach?",
+    options: [
+      "Introduce /v2/ with the new field name, deprecate /v1/ with advance notice, support both during a migration window",
+      "Change the field name immediately in /v1/ and send an email to customers",
+      "Use a feature flag to toggle between field names in the same endpoint",
+      "Only update the documentation — don't change the actual API response",
+    ],
+    correctIndex: 0,
+    explanation: "Industry standard: version the API, maintain backward compatibility during a migration window (often 6–18 months), give customers advance deprecation notice. Changing v1 in place breaks all 50 customers simultaneously — catastrophic for a public API.",
+  },
+
+  // ─── Code Snippets (existing concepts) ─────────────────
+
+  {
+    id: "q_cors_code_1",
+    conceptId: "cors",
+    module: 3,
+    type: "code_snippet",
+    codeSnippet: `// Browser console error:
+// Access to fetch at 'https://api.example.com/data'
+// from origin 'https://myapp.com' has been blocked
+// by CORS policy: No 'Access-Control-Allow-Origin'
+// header is present on the requested resource.`,
+    prompt: "How do you fix this CORS error?",
+    options: [
+      "Configure the server at api.example.com to return the Access-Control-Allow-Origin response header",
+      "Change the fetch() call to use XMLHttpRequest instead",
+      "Switch the request from HTTPS to HTTP",
+      "Add a Content-Type header to the frontend request",
+    ],
+    correctIndex: 0,
+    explanation: "CORS is enforced by the browser — the fix is always server-side. api.example.com must return 'Access-Control-Allow-Origin: https://myapp.com' (or *) in its response. No frontend change bypasses a missing CORS header.",
+  },
+  {
+    id: "q_jwt_code_1",
+    conceptId: "jwt",
+    module: 3,
+    type: "code_snippet",
+    codeSnippet: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+.eyJ1c2VySWQiOiIxMjM0NTYiLCJyb2xlIjoiYWRtaW4iLCJleHAiOjE3MDAwMDAwMDB9
+.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c`,
+    prompt: "This JWT has three dot-separated parts. The middle part decodes to: {\"userId\":\"123456\",\"role\":\"admin\",\"exp\":1700000000}. What is the middle section called?",
+    options: [
+      "Payload — it contains the claims (user data, roles, expiration time)",
+      "Header — it describes the signing algorithm and token type",
+      "Signature — it proves the token hasn't been tampered with",
+      "Claim block — it's a standalone structure separate from the token format",
+    ],
+    correctIndex: 0,
+    explanation: "A JWT is Header.Payload.Signature. The payload (middle) holds the claims — userId, role, expiration. The header (first) declares the signing algorithm. The signature (last) is cryptographic proof that nothing was modified. Anyone can decode the payload — it's base64, not encrypted — so never store secrets in it.",
+  },
+  {
+    id: "q_websockets_code_1",
+    conceptId: "websockets",
+    module: 3,
+    type: "code_snippet",
+    codeSnippet: `const ws = new WebSocket('wss://chat.example.com');
+
+ws.onopen = () => ws.send('Hello server!');
+ws.onmessage = (event) => console.log('Received:', event.data);
+ws.onerror = (err) => console.error('Error:', err);`,
+    prompt: "Compared to polling this endpoint every second with fetch(), what is the key advantage of WebSocket here?",
+    options: [
+      "The server can push messages instantly without the client asking — no wasted requests when nothing is new",
+      "WebSocket uses UDP instead of TCP, making it faster for real-time data",
+      "WebSocket bypasses CORS, so no server configuration is needed",
+      "fetch() fundamentally cannot handle streaming data",
+    ],
+    correctIndex: 0,
+    explanation: "WebSockets maintain a persistent connection — the server pushes data the instant something happens. Polling sends N requests per minute regardless of whether anything changed: wasted bandwidth, extra latency, unnecessary server load. WebSocket still uses TCP, not UDP.",
+  },
+  {
+    id: "q_dns_code_1",
+    conceptId: "dns",
+    module: 1,
+    type: "code_snippet",
+    codeSnippet: `$ dig google.com
+
+;; ANSWER SECTION:
+google.com.    171    IN    A    142.250.80.46`,
+    prompt: "What does the 'A' record in this DNS response represent?",
+    options: [
+      "An IPv4 address mapping for the domain (google.com → 142.250.80.46)",
+      "An authentication certificate proving this is the real google.com",
+      "An alias pointing google.com to another domain name",
+      "The mail server responsible for handling @google.com emails",
+    ],
+    correctIndex: 0,
+    explanation: "An 'A' record maps a domain to an IPv4 address — the core function of DNS. Other record types: CNAME (alias to another domain), MX (mail server), AAAA (IPv6), TXT (verification/SPF). The '171' is the TTL in seconds — how long resolvers can cache this mapping before re-querying.",
+  },
 ];

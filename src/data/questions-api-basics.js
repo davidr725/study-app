@@ -1504,4 +1504,69 @@ export const QUESTIONS_API_BASICS = [
     explanation:
       "Rendering templates is the route handler's job, not middleware. Common middleware tasks are: logging, auth checks, body parsing, CORS headers, and error handling.",
   },
+
+  // ─── Code Snippet Questions ────────────────────────────
+
+  {
+    id: "q_ratelimit_code_1",
+    conceptId: "ratelimit",
+    module: 2,
+    type: "code_snippet",
+    codeSnippet: `HTTP/1.1 429 Too Many Requests
+Retry-After: 60
+X-RateLimit-Limit: 100
+X-RateLimit-Remaining: 0
+X-RateLimit-Reset: 1700000060`,
+    prompt: "Your API integration is receiving this response. What should your code do next?",
+    options: [
+      "Wait 60 seconds (per Retry-After header) before retrying the request",
+      "Immediately retry with a different API key",
+      "Switch from POST to GET to bypass the rate limit",
+      "Increase concurrency — make more requests simultaneously to compensate",
+    ],
+    correctIndex: 0,
+    explanation: "429 Too Many Requests means you've hit the rate limit. Retry-After tells you exactly how long to wait. Well-behaved API clients respect this and implement exponential backoff — retrying immediately or hammering with more requests will get you banned or blocked longer.",
+  },
+  {
+    id: "q_status4xx_code_1",
+    conceptId: "status4xx",
+    module: 2,
+    type: "code_snippet",
+    codeSnippet: `HTTP/1.1 403 Forbidden
+Content-Type: application/json
+
+{
+  "error": "Insufficient permissions",
+  "required_role": "admin"
+}`,
+    prompt: "A logged-in user gets this response when accessing /admin/settings. Which statement best explains it?",
+    options: [
+      "The server knows who the user is, but they lack the required 'admin' role to access this resource",
+      "The user's session expired — they need to log in again",
+      "The /admin/settings endpoint doesn't exist on this server",
+      "The server is temporarily unavailable — try again later",
+    ],
+    correctIndex: 0,
+    explanation: "403 Forbidden = authenticated but not authorized. The server knows who you are but won't let you in. This differs from 401 Unauthorized, which means the server doesn't know who you are yet. 401 = 'who are you?', 403 = 'I know who you are, but no.'",
+  },
+  {
+    id: "q_headers_code_1",
+    conceptId: "headers",
+    module: 2,
+    type: "code_snippet",
+    codeSnippet: `GET /api/products HTTP/1.1
+Host: api.example.com
+Authorization: Bearer eyJhbGci...
+Accept: application/json
+Content-Type: application/json`,
+    prompt: "What is the purpose of the 'Accept: application/json' header in this request?",
+    options: [
+      "It tells the server what format the client wants the response in",
+      "It specifies the format of the data the client is sending in the request body",
+      "It verifies the client's identity with the server",
+      "It sets the maximum response size the client can receive",
+    ],
+    correctIndex: 0,
+    explanation: "Accept tells the server what format you want back — 'please respond in JSON.' Content-Type describes what you're sending in the request body. Authorization handles identity. These are three separate headers doing three separate jobs.",
+  },
 ];

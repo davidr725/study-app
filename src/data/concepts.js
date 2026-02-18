@@ -454,6 +454,96 @@ export const CONCEPTS = [
     category: "Daily Engineering",
     module: 5,
   },
+  // ═══ TPM-Specific Concepts ═══
+
+  // Module 2 (Foundations tier)
+  {
+    id: "tls",
+    term: "HTTPS / TLS",
+    definition:
+      "TLS (Transport Layer Security) encrypts HTTP traffic, making it HTTPS. The TLS handshake authenticates the server's identity via certificates and negotiates an encryption key before any data is sent. Prevents eavesdropping and man-in-the-middle attacks.",
+    analogy:
+      "Before you start talking business, you verify each other's badges, agree on a secret code word, and only then talk — and everything you say is in that code. Anyone listening hears gibberish.",
+    category: "Web Fundamentals",
+    module: 2,
+  },
+
+  // Module 3 (Intermediate tier)
+  {
+    id: "apiversioning",
+    term: "API Versioning",
+    definition:
+      "Managing breaking changes in an API by maintaining multiple versions simultaneously (e.g., /v1/, /v2/). A breaking change removes or renames a field/endpoint clients depend on. Versioning lets existing clients keep working while new clients adopt the new design.",
+    analogy:
+      "Keeping the old elevator buttons while installing a new panel. Tenants using the old system (v1) continue as normal. New tenants learn the new system (v2). Eventually you deprecate v1 after everyone has migrated.",
+    category: "Daily Engineering",
+    module: 3,
+  },
+
+  // Module 4 (Advanced tier, first half)
+  {
+    id: "featureflags",
+    term: "Feature Flags",
+    definition:
+      "Configuration switches that enable or disable features in production without deploying new code. Allow gradual rollouts (release to 5% of users first), A/B testing, and instant kill switches if a feature causes problems.",
+    analogy:
+      "Light switches in a building that's already wired. The wiring is in the walls (code is deployed) but you can flip each room on or off without rewiring anything.",
+    category: "Daily Engineering",
+    module: 4,
+  },
+  {
+    id: "abtesting",
+    term: "A/B Testing",
+    definition:
+      "A controlled experiment where two versions of a feature (A and B) are shown to different user segments simultaneously to measure which performs better on a defined metric. Results are statistically analyzed before declaring a winner.",
+    analogy:
+      "A restaurant secretly trying two menu versions on alternate tables. Half the customers get the old menu, half the new. They measure which tables order more or tip more. The winner becomes the standard.",
+    category: "Daily Engineering",
+    module: 4,
+  },
+  {
+    id: "sqlvsnosql",
+    term: "SQL vs NoSQL",
+    definition:
+      "SQL databases (PostgreSQL, MySQL) store data in structured tables with strict schemas and support complex joins. NoSQL databases (MongoDB, DynamoDB, Redis) trade strict structure for flexibility and horizontal scale. SQL is better for complex queries and relationships; NoSQL for high-scale, simple-access patterns.",
+    analogy:
+      "SQL is a spreadsheet with strict column headers — every row must follow the schema, but you can ask complex questions across sheets. NoSQL is a filing cabinet where each folder can look different — easy to add anything, harder to query across folders.",
+    category: "Architecture",
+    module: 4,
+  },
+
+  // Module 5 (Advanced tier, second half)
+  {
+    id: "slo",
+    term: "SLA / SLO / SLI",
+    definition:
+      "SLI (Service Level Indicator): a measured metric like uptime or latency. SLO (Service Level Objective): an internal target for that metric (e.g., 99.9% uptime). SLA (Service Level Agreement): a contractual commitment to a customer with consequences if the SLO is missed.",
+    analogy:
+      "SLI is your speedometer. SLO is your personal goal to drive under 70mph. SLA is the contract with your employer that says if you average over 75mph, you pay a fine.",
+    category: "Architecture",
+    module: 5,
+  },
+  {
+    id: "techdebt",
+    term: "Technical Debt",
+    definition:
+      "The accumulated cost of shortcuts, workarounds, and deferred maintenance in a codebase. Like financial debt, it accrues 'interest' — small debt is manageable, but unaddressed it slows every future change and increases the cost of everything.",
+    analogy:
+      "Taking out a loan to move faster now. A small loan is fine. But if you keep borrowing without paying any down, eventually the interest payments eat your whole paycheck and you can barely make progress.",
+    category: "Daily Engineering",
+    module: 5,
+  },
+  {
+    id: "observability",
+    term: "Observability",
+    definition:
+      "The ability to understand a system's internal state from its external outputs. The three pillars: Logs (timestamped event records), Metrics (numeric measurements over time like CPU%, error rate), and Traces (end-to-end path of a request through multiple services).",
+    analogy:
+      "A flight recorder, altimeter, and route tracker all working together. Logs capture every event. Metrics show continuous measurements. Traces show the plane's full path across systems. Lose one and you can't fully explain what happened.",
+    category: "Architecture",
+    module: 5,
+  },
+
   {
     id: "rollback",
     term: "Rollback / Revert",

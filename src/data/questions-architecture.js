@@ -927,4 +927,188 @@ export const QUESTIONS_ARCHITECTURE = [
     explanation:
       "Containers don't replace version control — you still need Git for code history and collaboration. Containers handle environment consistency, fast startup, and portability.",
   },
+
+  // ─── SLA / SLO / SLI ──────────────────────────────────
+
+  {
+    id: "q_slo_t2d_1",
+    conceptId: "slo",
+    module: 5,
+    type: "term_to_def",
+    prompt: "What is the difference between an SLI, SLO, and SLA?",
+    options: [
+      "SLI is the measured metric, SLO is the internal target, SLA is the customer-facing contract with consequences",
+      "SLA is the measured metric, SLI is the internal target, SLO is the customer contract",
+      "SLO and SLA are the same — both are customer contracts. SLI is just a metric",
+      "SLI is a tool, SLO is a process, SLA is a document",
+    ],
+    correctIndex: 0,
+    explanation: "Think in order: SLI (what you measure) → SLO (what you aim for internally) → SLA (what you promise externally with consequences). Your SLA is typically more lenient than your SLO — if your SLO is 99.9%, your SLA might be 99.5%, giving you buffer before a contract breach.",
+  },
+  {
+    id: "q_slo_scen_1",
+    conceptId: "slo",
+    module: 5,
+    type: "scenario",
+    prompt: "Your team's SLO is 99.9% uptime per month. The service was down for 50 minutes this month. Did you breach your SLO?",
+    options: [
+      "Yes — 99.9% uptime allows only ~43 minutes of downtime per month; 50 minutes exceeds that",
+      "No — 50 minutes is less than 1 hour, which is always within acceptable SLO bounds",
+      "It depends on whether customers noticed the outage",
+      "No — SLOs only apply to business-hours downtime",
+    ],
+    correctIndex: 0,
+    explanation: "99.9% uptime = 0.1% downtime allowed. In a 30-day month (43,200 minutes), 0.1% = 43.2 minutes. 50 minutes exceeds that — SLO breached. 'Three nines' sounds reliable, but it's only 43 minutes of downtime per month. Four nines (99.99%) allows just 4 minutes.",
+  },
+  {
+    id: "q_slo_fill_1",
+    conceptId: "slo",
+    module: 5,
+    type: "fill_in_blank",
+    prompt: "Fill in the blank: The amount of downtime or errors a team is 'allowed' before breaching their SLO is called their ___.",
+    options: ["error budget", "uptime quota", "incident allowance", "reliability margin"],
+    correctIndex: 0,
+    explanation: "Error budget = 100% − SLO. If your SLO is 99.9%, your error budget is 0.1%. Teams track budget spent. When it's depleted, they freeze risky releases and focus on reliability improvements.",
+  },
+  {
+    id: "q_slo_win_1",
+    conceptId: "slo",
+    module: 5,
+    type: "which_is_not",
+    prompt: "Which of the following is NOT an SLI (Service Level Indicator)?",
+    options: [
+      "The goal to achieve 99.9% uptime next quarter",
+      "The percentage of requests that return a 2xx status code",
+      "Average API response time in milliseconds",
+      "Error rate over the past 24 hours",
+    ],
+    correctIndex: 0,
+    explanation: "An SLI is a measurement — a number you observe. '99.9% uptime' is a goal, which makes it an SLO. Actual measured success rate, response time, and error rate are all SLIs — the raw data that tells you whether you're hitting your target.",
+  },
+
+  // ─── Observability ─────────────────────────────────────
+
+  {
+    id: "q_observability_t2d_1",
+    conceptId: "observability",
+    module: 5,
+    type: "term_to_def",
+    prompt: "What are the three pillars of Observability?",
+    options: [
+      "Logs (event records), Metrics (numeric measurements over time), and Traces (request path through services)",
+      "Monitoring, Alerting, and Dashboards",
+      "CPU usage, Memory usage, and Network I/O",
+      "Unit tests, Integration tests, and End-to-end tests",
+    ],
+    correctIndex: 0,
+    explanation: "Logs: timestamped event records (what happened). Metrics: numeric aggregates over time — CPU%, error rate, latency (how often/how much). Traces: the end-to-end journey of a single request through your microservices (where). Together they let you understand, measure, and debug a system without guessing.",
+  },
+  {
+    id: "q_observability_scen_1",
+    conceptId: "observability",
+    module: 5,
+    type: "scenario",
+    prompt: "An API request takes 3 seconds instead of 100ms. You have 8 microservices. Which observability tool do you reach for first to find the bottleneck?",
+    options: [
+      "Distributed tracing — it shows the end-to-end path and how long each service took",
+      "Logs — grep through all 8 services' log files for the slow request",
+      "Metrics — check the CPU dashboard to see which service is overloaded",
+      "Alerts — wait for the on-call system to page the responsible team",
+    ],
+    correctIndex: 0,
+    explanation: "Distributed tracing (Jaeger, Datadog APM) shows the full span of a request across all services with timing per hop — you instantly see which service is the bottleneck. Logs work but require manually searching 8 systems. Metrics show aggregate trends, not individual request paths.",
+  },
+  {
+    id: "q_observability_code_1",
+    conceptId: "observability",
+    module: 5,
+    type: "code_snippet",
+    codeSnippet: `// Tool A:
+2024-01-15 14:23:01 ERROR user-service: DB query failed for userId=789
+
+// Tool B:
+api_error_rate{service="user"} 0.034  // 3.4% errors in last 5 min
+
+// Tool C:
+[frontend 12ms] → [api-gateway 8ms] → [user-service 2847ms] → [postgres 2801ms]`,
+    prompt: "Match each output to the correct observability pillar.",
+    options: [
+      "A = Log, B = Metric, C = Trace",
+      "A = Trace, B = Log, C = Metric",
+      "A = Metric, B = Log, C = Trace",
+      "A = Log, B = Trace, C = Metric",
+    ],
+    correctIndex: 0,
+    explanation: "Logs are timestamped event records (Tool A — specific error with context). Metrics are numeric aggregates over time (Tool B — 3.4% error rate over 5 minutes). Traces show request flow across services with per-hop timing (Tool C — and it immediately reveals the culprit: postgres taking 2801ms).",
+  },
+
+  // ─── SQL vs NoSQL ──────────────────────────────────────
+
+  {
+    id: "q_sqlvsnosql_t2d_1",
+    conceptId: "sqlvsnosql",
+    module: 4,
+    type: "term_to_def",
+    prompt: "What is the core tradeoff between SQL and NoSQL databases?",
+    options: [
+      "SQL enforces strict schemas and supports complex joins; NoSQL trades structure for flexibility and horizontal scale",
+      "SQL is faster than NoSQL for all use cases; NoSQL is only used for large file storage",
+      "NoSQL requires a fixed schema like SQL but stores data in files instead of tables",
+      "SQL is for backend services; NoSQL is specifically designed for frontend data",
+    ],
+    correctIndex: 0,
+    explanation: "SQL (PostgreSQL, MySQL): rigid schema, powerful JOINs, ACID transactions, best for relational data with complex queries. NoSQL (MongoDB, DynamoDB, Redis): flexible schema, scales horizontally, best for high-volume simple-access patterns. Neither is universally better — the right choice depends on your data model.",
+  },
+  {
+    id: "q_sqlvsnosql_scen_1",
+    conceptId: "sqlvsnosql",
+    module: 4,
+    type: "scenario",
+    prompt: "You're building a product catalog where each product has completely different attributes (shoes: size/color, electronics: voltage/wattage). Which database fits better?",
+    options: [
+      "NoSQL — flexible document store handles variable schemas well; each document can have different fields",
+      "SQL — use separate tables per product type with proper foreign keys",
+      "SQL — add a 'properties' TEXT column to store attributes as a JSON string",
+      "Both are equally suited — database choice doesn't depend on schema flexibility",
+    ],
+    correctIndex: 0,
+    explanation: "Variable schemas are a classic NoSQL fit. In MongoDB, each product document can have different fields naturally. In SQL, you'd fight the schema — dozens of nullable columns, or JSON in a text column (at which point you've lost SQL's query advantages anyway).",
+  },
+  {
+    id: "q_sqlvsnosql_win_1",
+    conceptId: "sqlvsnosql",
+    module: 4,
+    type: "which_is_not",
+    prompt: "Which of the following is NOT typically a strength of SQL over NoSQL?",
+    options: [
+      "Easier to scale horizontally across thousands of servers",
+      "Support for complex JOIN queries across multiple tables",
+      "ACID transaction guarantees (all-or-nothing operations)",
+      "Strict schema enforcement that prevents malformed data",
+    ],
+    correctIndex: 0,
+    explanation: "Horizontal scaling (adding more servers) is NoSQL's strength — traditional SQL databases are hard to shard across many machines. SQL's advantages are: powerful JOINs, ACID transactions, and strict data integrity. NoSQL gives up some of these for flexibility and scale.",
+  },
+
+  // ─── Code Snippet: Caching ─────────────────────────────
+
+  {
+    id: "q_caching_code_1",
+    conceptId: "caching",
+    module: 4,
+    type: "code_snippet",
+    codeSnippet: `HTTP/1.1 200 OK
+Cache-Control: max-age=3600, public
+Content-Type: application/json
+ETag: "abc123"`,
+    prompt: "What does 'Cache-Control: max-age=3600, public' tell browsers and CDNs?",
+    options: [
+      "Cache this response for 1 hour; both browsers and CDN proxies are allowed to store it",
+      "Cache for 3,600 milliseconds; only the user's browser — not CDNs — can cache it",
+      "Never cache this response; always fetch fresh from the origin server",
+      "Cache forever since 3600 is a maximum — actual duration is up to the client",
+    ],
+    correctIndex: 0,
+    explanation: "max-age=3600 = cache for 3600 seconds (1 hour). 'public' means shared caches (CDNs, proxies) can store it too, not just the browser. 'private' would restrict it to the browser only. The ETag is a validator — when the cache expires, the client can send it back to ask if the content changed.",
+  },
 ];

@@ -521,7 +521,7 @@ function PracticeTest({ questions: testQuestions, progress, setProgress, flagged
       >
         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 10 }}>
           <span style={{ fontSize: 10, fontFamily: S.mono, textTransform: "uppercase", letterSpacing: "0.12em", color: S.dim }}>
-            {q.type === "scenario" ? "Scenario" : "Question"}
+            {q.type === "scenario" ? "Scenario" : q.codeSnippet ? "Read the Code" : "Question"}
           </span>
           {concept && (
             <span style={{ fontSize: 9, fontFamily: S.mono, color: catColor, opacity: 0.6 }}>
@@ -529,7 +529,29 @@ function PracticeTest({ questions: testQuestions, progress, setProgress, flagged
             </span>
           )}
         </div>
-        <p style={{ color: S.text, fontSize: q.type === "scenario" ? 14 : 16, fontFamily: S.serif, fontWeight: 400, lineHeight: 1.6, margin: 0 }}>
+
+        {/* Code snippet block — rendered when question has a codeSnippet field */}
+        {q.codeSnippet && (
+          <pre
+            style={{
+              fontFamily: S.mono,
+              fontSize: 12,
+              color: "#a0d8b0",
+              background: "rgba(0,0,0,0.35)",
+              border: "1px solid rgba(255,255,255,0.06)",
+              borderRadius: 8,
+              padding: "12px 14px",
+              overflowX: "auto",
+              whiteSpace: "pre",
+              margin: "0 0 16px 0",
+              lineHeight: 1.6,
+            }}
+          >
+            {q.codeSnippet}
+          </pre>
+        )}
+
+        <p style={{ color: S.text, fontSize: (q.type === "scenario" || q.codeSnippet) ? 14 : 16, fontFamily: S.serif, fontWeight: 400, lineHeight: 1.6, margin: 0 }}>
           {q.prompt}
         </p>
       </div>
