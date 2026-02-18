@@ -60,35 +60,18 @@ function getQuestionsForGroup(group) {
   return QUESTIONS.filter((q) => group.modules.includes(q.module));
 }
 
-// Build a test of N questions from a question pool, weighted by concept mastery
-function buildTest(questions, concepts, progress, count = 20) {
-  if (questions.length <= count) return shuffle(questions).map(shuffleOptions);
-
-  const weighted = questions.map((q) => ({
-    question: q,
-    weight: getWeightFromProgress(progress, q.conceptId),
-  }));
-
-  const selected = [];
-  const used = new Set();
-
-  while (selected.length < count && selected.length < questions.length) {
-    const remaining = weighted.filter((w) => !used.has(w.question.id));
-    if (remaining.length === 0) break;
-
-    const totalWeight = remaining.reduce((sum, w) => sum + w.weight, 0);
-    let r = Math.random() * totalWeight;
-    for (const w of remaining) {
-      r -= w.weight;
-      if (r <= 0) {
-        selected.push(w.question);
-        used.add(w.question.id);
-        break;
-      }
-    }
+// Split a module group's questions into fixed 20-question test sets
+function getTestSetsForGroup(group) {
+  const questions = getQuestionsForGroup(group);
+  const sorted = [...questions].sort((a, b) => {
+    if (a.conceptId !== b.conceptId) return a.conceptId.localeCompare(b.conceptId);
+    return a.id.localeCompare(b.id);
+  });
+  const sets = [];
+  for (let i = 0; i < sorted.length; i += 20) {
+    sets.push(sorted.slice(i, i + 20));
   }
-
-  return shuffle(selected).map(shuffleOptions);
+  return sets;
 }
 
 // ─── SHARED STYLES ───
@@ -203,7 +186,11 @@ function HomeScreen({ progress, bestScores, flaggedCount, onSelectModule, onStar
           const concepts = getConceptsForGroup(group);
           const questions = getQuestionsForGroup(group);
           const mastered = concepts.filter((c) => { const p = progress[c.id]; return p && p.seen && p.streak >= MASTERY_THRESHOLD; }).length;
-          const best = bestScores[group.id];
+          const testSets = getTestSetsForGroup(group);
+          const testsPassed = testSets.filter((_, i) => {
+            const b = bestScores[`${group.id}-test-${i}`];
+            return b && b.score / b.total >= 0.8;
+          }).length;
 
           return (
             <div
@@ -244,9 +231,9 @@ function HomeScreen({ progress, bestScores, flaggedCount, onSelectModule, onStar
                 <span style={{ fontFamily: S.mono, fontSize: 10, color: S.dim }}>
                   {mastered}/{concepts.length} mastered
                 </span>
-                {best && (
-                  <span style={{ fontFamily: S.mono, fontSize: 10, color: best.score / best.total >= 0.8 ? S.green : S.yellow }}>
-                    Best: {best.score}/{best.total}
+                {testSets.length > 0 && (
+                  <span style={{ fontFamily: S.mono, fontSize: 10, color: testsPassed > 0 ? S.green : S.dim }}>
+                    {testsPassed}/{testSets.length} tests passed
                   </span>
                 )}
               </div>
@@ -308,10 +295,10 @@ function HomeScreen({ progress, bestScores, flaggedCount, onSelectModule, onStar
 
 // ─── MODULE DETAIL ───
 
-function ModuleDetail({ group, progress, bestScores, onBack, onStartTest, onStartFlashcards }) {
+function ModuleDetail({ group, progress, bestScores, onBack, onStartFixedTest, onStartModuleMarathon, onStartFlashcards }) {
   const concepts = getConceptsForGroup(group);
   const questions = getQuestionsForGroup(group);
-  const best = bestScores[group.id];
+  const testSets = getTestSetsForGroup(group);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
@@ -328,44 +315,89 @@ function ModuleDetail({ group, progress, bestScores, onBack, onStartTest, onStar
 
       <ProgressBar progress={progress} concepts={concepts} />
 
-      {best && (
-        <div style={{ fontFamily: S.mono, fontSize: 12, color: S.dim }}>
-          Last best: <span style={{ color: best.score / best.total >= 0.8 ? S.green : S.yellow }}>{best.score}/{best.total} ({Math.round((best.score / best.total) * 100)}%)</span>
+      {/* Practice Tests */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        <div style={{ fontFamily: S.mono, fontSize: 10, color: S.dim, textTransform: "uppercase", letterSpacing: "0.08em" }}>
+          Practice Tests
         </div>
-      )}
+        {testSets.map((set, i) => {
+          const testKey = `${group.id}-test-${i}`;
+          const best = bestScores[testKey];
+          const passed = best && best.score / best.total >= 0.8;
+          return (
+            <button
+              key={i}
+              onClick={() => onStartFixedTest(set, `${group.name}: Test ${i + 1}`, testKey)}
+              style={{
+                padding: "14px 18px",
+                borderRadius: 10,
+                border: passed ? `1px solid ${S.green}40` : "1px solid rgba(255,255,255,0.06)",
+                background: passed ? `${S.green}08` : "rgba(26,26,46,0.5)",
+                color: S.text,
+                fontFamily: S.mono,
+                fontSize: 13,
+                fontWeight: 600,
+                cursor: "pointer",
+                userSelect: "none",
+                textAlign: "left",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <span>
+                Test {i + 1}
+                <span style={{ fontWeight: 400, color: S.dim, marginLeft: 8, fontSize: 11 }}>
+                  {set.length}q
+                </span>
+              </span>
+              {best ? (
+                <span style={{ fontSize: 11, color: passed ? S.green : S.yellow }}>
+                  {best.score}/{best.total} ({Math.round((best.score / best.total) * 100)}%)
+                </span>
+              ) : (
+                <span style={{ fontSize: 11, color: S.dimmer }}>—</span>
+              )}
+            </button>
+          );
+        })}
+      </div>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+      {/* Marathon + Flashcards */}
+      <div style={{ display: "flex", gap: 10 }}>
         <button
-          onClick={onStartTest}
+          onClick={onStartModuleMarathon}
           style={{
-            padding: "18px 20px",
-            borderRadius: 12,
-            border: `1px solid ${group.color}40`,
-            background: `${group.color}10`,
+            flex: 1,
+            padding: "14px 16px",
+            borderRadius: 10,
+            border: `1px solid ${group.color}30`,
+            background: `${group.color}08`,
             color: group.color,
             fontFamily: S.mono,
-            fontSize: 14,
-            fontWeight: 700,
+            fontSize: 12,
+            fontWeight: 600,
             cursor: "pointer",
             userSelect: "none",
             textAlign: "left",
           }}
         >
-          Practice Test
-          <span style={{ float: "right", fontWeight: 400, opacity: 0.6 }}>
-            {Math.min(20, questions.length)} questions
+          Marathon
+          <span style={{ float: "right", fontWeight: 400, opacity: 0.5, fontSize: 11 }}>
+            {questions.length}
           </span>
         </button>
         <button
           onClick={onStartFlashcards}
           style={{
-            padding: "18px 20px",
-            borderRadius: 12,
+            flex: 1,
+            padding: "14px 16px",
+            borderRadius: 10,
             border: "1px solid rgba(255,255,255,0.08)",
             background: "rgba(26,26,46,0.5)",
             color: S.text,
             fontFamily: S.mono,
-            fontSize: 14,
+            fontSize: 12,
             fontWeight: 600,
             cursor: "pointer",
             userSelect: "none",
@@ -373,8 +405,8 @@ function ModuleDetail({ group, progress, bestScores, onBack, onStartTest, onStar
           }}
         >
           Flashcards
-          <span style={{ float: "right", fontWeight: 400, opacity: 0.4 }}>
-            {concepts.length} concepts
+          <span style={{ float: "right", fontWeight: 400, opacity: 0.4, fontSize: 11 }}>
+            {concepts.length}
           </span>
         </button>
       </div>
@@ -1023,11 +1055,14 @@ export default function App() {
   }, [bestScores]);
 
   // Navigation helpers
+  const [activeTestKey, setActiveTestKey] = useState(null);
+
   const goHome = () => {
     setScreen("home");
     setActiveModule(null);
     setTestQuestions([]);
     setTestResult(null);
+    setActiveTestKey(null);
   };
 
   const selectModule = (group) => {
@@ -1035,23 +1070,30 @@ export default function App() {
     setScreen("module");
   };
 
-  const startTest = (questions, title, moduleId) => {
-    const test = buildTest(questions, CONCEPTS, progress, Math.min(20, questions.length));
-    setTestQuestions(test);
+  // Fixed test: all questions in the set, shuffled
+  const startFixedTest = (questions, title, testKey) => {
+    setTestQuestions(shuffle(questions).map(shuffleOptions));
     setTestTitle(title);
+    setActiveTestKey(testKey);
     setScreen("test");
   };
 
-  const startModuleTest = () => {
+  // Module marathon: all questions for the active module
+  const startModuleMarathon = () => {
     if (!activeModule) return;
     const questions = getQuestionsForGroup(activeModule);
-    startTest(questions, activeModule.name, activeModule.id);
+    setTestQuestions(shuffle(questions).map(shuffleOptions));
+    setTestTitle(`${activeModule.name}: Marathon`);
+    setActiveTestKey(`${activeModule.id}-marathon`);
+    setScreen("test");
   };
 
+  // Global marathon: all questions across all modules
   const startMarathon = () => {
     const test = shuffle([...QUESTIONS]).map(shuffleOptions);
     setTestQuestions(test);
     setTestTitle("Marathon");
+    setActiveTestKey(null);
     setScreen("test");
   };
 
@@ -1067,13 +1109,13 @@ export default function App() {
     setTestResult(result);
     setScreen("results");
 
-    // Update best score for module if applicable
-    if (activeModule) {
+    // Update best score for the specific test
+    if (activeTestKey) {
       setBestScores((prev) => {
-        const current = prev[activeModule.id];
+        const current = prev[activeTestKey];
         const pct = result.score / result.total;
         if (!current || pct > current.score / current.total) {
-          return { ...prev, [activeModule.id]: { score: result.score, total: result.total } };
+          return { ...prev, [activeTestKey]: { score: result.score, total: result.total } };
         }
         return prev;
       });
@@ -1121,7 +1163,8 @@ export default function App() {
             progress={progress}
             bestScores={bestScores}
             onBack={goHome}
-            onStartTest={startModuleTest}
+            onStartFixedTest={startFixedTest}
+            onStartModuleMarathon={startModuleMarathon}
             onStartFlashcards={startFlashcards}
           />
         )}
