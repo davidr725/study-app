@@ -1569,4 +1569,91 @@ Content-Type: application/json`,
     correctIndex: 0,
     explanation: "Accept tells the server what format you want back — 'please respond in JSON.' Content-Type describes what you're sending in the request body. Authorization handles identity. These are three separate headers doing three separate jobs.",
   },
+
+  // ─── Authentication vs Authorization ──────────────────
+  {
+    id: "q_authnvauthz_scen_1",
+    conceptId: "authnvauthz",
+    module: 2,
+    type: "scenario",
+    prompt:
+      "A user logs in with their email and password, then tries to access the admin dashboard but gets denied. Which two distinct security checks did the system perform?",
+    options: [
+      "First it verified the user's identity via credentials, then it checked whether that user had admin-level permissions",
+      "First it checked the user's permissions level, then it verified their identity against the stored credentials",
+      "First it encrypted the user's password for storage, then it compared the encrypted value against the database",
+      "First it validated the session token format, then it confirmed the token had not expired or been revoked",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Authentication (verifying identity via login) always comes first. Authorization (checking permissions) comes second. You can't check what someone is allowed to do until you know who they are.",
+  },
+  {
+    id: "q_authnvauthz_scen_2",
+    conceptId: "authnvauthz",
+    module: 2,
+    type: "scenario",
+    prompt:
+      "Two employees both log into the company portal. One can view salary reports while the other cannot. Both logged in successfully. What explains the difference in access?",
+    options: [
+      "Both passed identity verification, but they have different permission levels that control what resources they can view",
+      "The second employee used incorrect credentials so the system partially authenticated their login attempt",
+      "The salary reports endpoint has rate limiting enabled and the second employee exceeded the request quota",
+      "The first employee's browser cached the salary data locally while the second employee cleared their cache",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Both users authenticated successfully (proved who they are). The difference is in authorization — their roles grant different permissions. Authentication verifies identity; authorization determines access rights.",
+  },
+  {
+    id: "q_authnvauthz_tf_1",
+    conceptId: "authnvauthz",
+    module: 2,
+    type: "true_false",
+    prompt:
+      "True or False: Authorization can happen before authentication — a system can check your permissions before knowing who you are.",
+    options: [
+      "False — you must verify a user's identity first before you can look up what they are permitted to do",
+      "True — modern APIs check resource-level permissions before validating the caller's identity token",
+      "True — public endpoints perform authorization checks without requiring any form of authentication",
+      "False — authorization and authentication are the same process and always happen simultaneously",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Authentication always comes first. You cannot determine what someone is allowed to do (authorization) until you have confirmed who they are (authentication). Identity must precede permissions.",
+  },
+  {
+    id: "q_authnvauthz_d2t_1",
+    conceptId: "authnvauthz",
+    module: 2,
+    type: "def_to_term",
+    prompt:
+      "Verifying a user's identity comes first, then determining what resources and actions that verified user is permitted to access. What concept describes this two-step process?",
+    options: [
+      "Authentication vs Authorization",
+      "Encryption vs Hashing Tokens",
+      "Session Tokens vs Cookie Auth",
+      "API Key vs Auth Token Scopes",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Authentication (who are you?) followed by authorization (what can you do?) is the core two-step security model. Authentication verifies identity; authorization enforces permissions.",
+  },
+  {
+    id: "q_authnvauthz_fib_1",
+    conceptId: "authnvauthz",
+    module: 2,
+    type: "fill_in_blank",
+    prompt:
+      "Fill in the blank: Logging in with a username and password is ___, while checking if that user has admin privileges is ___.",
+    options: [
+      "authentication, authorization",
+      "authorization, authentication",
+      "encryption, then decryption",
+      "validation, then verification",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Logging in proves who you are (authentication). Checking admin privileges determines what you can do (authorization). Authentication always happens first — you can't check permissions without knowing who's asking.",
+  },
 ];

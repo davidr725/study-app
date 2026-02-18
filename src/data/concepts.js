@@ -199,6 +199,16 @@ export const CONCEPTS = [
 
   // ═══ Module 2: Requests & Responses ═══
   {
+    id: "authnvauthz",
+    term: "Authentication vs Authorization",
+    definition:
+      "Authentication verifies who you are (login with username/password). Authorization determines what you're allowed to do (admin vs regular user permissions). Authentication always comes first — you can't check permissions until you know who's asking.",
+    analogy:
+      "Authentication is showing your ID at the door to prove who you are. Authorization is the bouncer checking if your name is on the VIP list — knowing who you are doesn't automatically mean you get in.",
+    category: "API Basics",
+    module: 2,
+  },
+  {
     id: "status",
     term: "HTTP Status Codes",
     definition:
@@ -331,6 +341,58 @@ export const CONCEPTS = [
     module: 3,
   },
 
+  // Module 3 additions
+  {
+    id: "cookies",
+    term: "Cookies & Sessions",
+    definition:
+      "Cookies are small pieces of data a website stores in your browser to remember information between visits (login state, preferences). A session is server-side storage tied to a cookie ID, tracking your activity during a single visit.",
+    analogy:
+      "A wristband at an amusement park. The wristband (cookie) proves you paid, and the park's computer (session) tracks which rides you've been on. When you leave and come back, the wristband lets them look you up.",
+    category: "Web Fundamentals",
+    module: 3,
+  },
+  {
+    id: "frameworksvslibs",
+    term: "Frameworks vs Libraries",
+    definition:
+      "A library is a collection of pre-written code you call when you need it (you're in control). A framework provides the overall structure and calls your code at the right time (the framework is in control). This distinction is called 'inversion of control.'",
+    analogy:
+      "A library is a toolbox — you pick up the hammer when you need it. A framework is a factory assembly line — it moves the product along and tells you when to do your part.",
+    category: "Daily Engineering",
+    module: 3,
+  },
+  {
+    id: "agile",
+    term: "Agile / Scrum",
+    definition:
+      "Agile is an iterative approach to building software in small increments with frequent feedback. Scrum is a popular Agile framework with fixed-length sprints (usually 2 weeks), daily standups, sprint planning, and retrospectives.",
+    analogy:
+      "Instead of spending a year building an entire house before showing the buyer, you build one room at a time. After each room, the buyer walks through, gives feedback, and you adjust the next room's plan. Scrum is the specific schedule you follow: plan Monday, build all week, review Friday.",
+    category: "Daily Engineering",
+    module: 3,
+  },
+  {
+    id: "techspecs",
+    term: "Technical Specs / PRDs",
+    definition:
+      "A Product Requirements Document (PRD) defines what to build and why. A technical spec defines how to build it — architecture decisions, API contracts, data models, and edge cases. Together they align engineering and product before coding starts.",
+    analogy:
+      "The PRD is the architect's brief ('the client wants a 3-bedroom house with a pool'). The tech spec is the blueprint ('load-bearing walls here, plumbing runs through here, electrical panel in the garage').",
+    category: "Daily Engineering",
+    module: 3,
+  },
+  {
+    id: "deployenvs",
+    term: "Deployment Environments",
+    definition:
+      "Separate copies of your application for different purposes: Development (local coding), Staging (testing that mimics production), and Production (what real users see). Code flows dev → staging → production to catch bugs before users hit them.",
+    analogy:
+      "A restaurant testing a new dish: the chef's kitchen (dev), a private tasting event (staging), and the public menu (production). You don't serve untested food to paying customers.",
+    category: "Daily Engineering",
+    module: 3,
+  },
+
   // ═══ Module 4: Data & Performance ═══
   {
     id: "caching",
@@ -409,6 +471,58 @@ export const CONCEPTS = [
       "Document Object Model — the tree-structured representation of an HTML page that the browser builds in memory. JavaScript interacts with this tree to read and change what's displayed.",
     analogy:
       "The blueprint of a house that the construction crew (browser) uses. JavaScript is the renovation team — they don't change the architect's original drawing, they modify the built house through the blueprint.",
+    category: "Web Fundamentals",
+    module: 4,
+  },
+
+  // Module 4 additions
+  {
+    id: "runtimevsbuild",
+    term: "Runtime vs Build Time",
+    definition:
+      "Build time is when source code is compiled, bundled, and transformed into the final output before deployment. Runtime is when that code actually executes in production. Errors, configuration, and behavior can differ between the two — a build can succeed but the app can still crash at runtime.",
+    analogy:
+      "Build time is assembling furniture in the factory and checking it looks right. Runtime is when the customer sits on it at home. The factory inspection (build) might pass, but the chair could still break under real use (runtime).",
+    category: "Daily Engineering",
+    module: 4,
+  },
+  {
+    id: "packagemanagers",
+    term: "Package Managers",
+    definition:
+      "Tools (npm for JavaScript, pip for Python, Maven for Java) that automatically download, install, and manage the external libraries your project depends on. They track versions in a lock file to ensure everyone on the team uses the exact same dependencies.",
+    analogy:
+      "A grocery delivery service with a shopping list. You list what ingredients you need (dependencies), the service delivers exactly those items (installs packages), and the receipt (lock file) ensures you get the same brands and quantities every time you reorder.",
+    category: "Daily Engineering",
+    module: 4,
+  },
+  {
+    id: "logging",
+    term: "Logging",
+    definition:
+      "Recording timestamped messages about what your application is doing — requests received, errors encountered, actions taken. Log levels (DEBUG, INFO, WARN, ERROR) filter importance. Logs are essential for debugging production issues you can't reproduce locally.",
+    analogy:
+      "A security camera system for your app. You can't watch everything live, but when something goes wrong, you rewind the footage (logs) to see exactly what happened, when, and in what order.",
+    category: "Daily Engineering",
+    module: 4,
+  },
+  {
+    id: "responsive",
+    term: "Responsive Design",
+    definition:
+      "Building web pages that automatically adapt their layout to different screen sizes — from phones to tablets to desktops. Uses flexible grids, CSS media queries, and fluid images so one codebase serves all devices.",
+    analogy:
+      "Water taking the shape of its container. The same content (water) looks different in a glass (phone), a bowl (tablet), and a pitcher (desktop), but it's the same water — one website that reshapes itself.",
+    category: "Web Fundamentals",
+    module: 4,
+  },
+  {
+    id: "accessibility",
+    term: "Accessibility (a11y)",
+    definition:
+      "Designing software so people with disabilities can use it — screen readers for blind users, keyboard navigation for those who can't use a mouse, color contrast for low vision, captions for deaf users. The abbreviation 'a11y' means 'a' + 11 letters + 'y'.",
+    analogy:
+      "Building ramps alongside stairs. The building works fine for most people without ramps, but adding them ensures everyone can get in — and it often makes things easier for everyone (strollers, carts, etc.).",
     category: "Web Fundamentals",
     module: 4,
   },
@@ -596,6 +710,28 @@ export const CONCEPTS = [
     category: "Daily Engineering",
     module: 5,
   },
+  // Module 5 additions (new)
+  {
+    id: "testing",
+    term: "Testing (Unit/Integration/E2E)",
+    definition:
+      "Unit tests verify a single function works correctly in isolation. Integration tests verify that multiple components work together. End-to-end (E2E) tests simulate real user actions through the entire application. More unit tests (fast, cheap) and fewer E2E tests (slow, expensive) — this is called the testing pyramid.",
+    analogy:
+      "Unit test: checking that each ingredient tastes right. Integration test: checking that the ingredients combine well in a recipe. E2E test: having a real customer eat the full meal and rate the experience. You do lots of ingredient checks, some recipe checks, and a few full meals.",
+    category: "Daily Engineering",
+    module: 5,
+  },
+  {
+    id: "incidentmgmt",
+    term: "Incident Management",
+    definition:
+      "The process of responding to production outages or degraded service: detect the issue, assemble a response team, communicate status to stakeholders, fix the problem, and write a postmortem documenting what happened, why, and how to prevent it. Severity levels (SEV1-SEV4) prioritize response urgency.",
+    analogy:
+      "A hospital emergency room. Triage (severity levels) determines who gets treated first. The team stabilizes the patient (fix the outage), then writes up the medical report (postmortem) so future doctors learn what went wrong.",
+    category: "Architecture",
+    module: 5,
+  },
+
   // ═══ TPM-Specific Concepts ═══
 
   // Module 2 (Foundations tier)

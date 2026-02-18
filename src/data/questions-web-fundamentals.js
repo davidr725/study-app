@@ -1,6 +1,6 @@
 // ═══════════════════════════════════════════════════════
 // WEB FUNDAMENTALS
-// Concepts: httpcycle, urlstructure, state, dom, promises, eventloop
+// Concepts: httpcycle, urlstructure, state, dom, promises, eventloop, tls, cookies, responsive, accessibility
 // ═══════════════════════════════════════════════════════
 
 export const QUESTIONS_WEB_FUNDAMENTALS = [
@@ -727,5 +727,248 @@ Content-Type: application/json
     ],
     correctIndex: 0,
     explanation: "async/await is purely syntactic sugar over Promises — same execution model, same behavior, same performance. The advantage is readability: code reads top-to-bottom like synchronous code instead of nested .then() callbacks. Both versions have the same fetch() gotcha: you still need to check res.ok to catch HTTP errors.",
+  },
+
+  // ─── Cookies & Sessions ─────────────────────────────
+  {
+    id: "q_cookies_scen_1",
+    conceptId: "cookies",
+    module: 3,
+    type: "scenario",
+    prompt:
+      "A user logs into your site, closes the tab, and reopens it 10 minutes later. They're still logged in without re-entering credentials. What browser mechanism is keeping them authenticated?",
+    options: [
+      "A cookie storing a session identifier that the browser sends with every request so the server recognizes the user",
+      "The browser's localStorage caching the user's password and automatically replaying it when the page reloads",
+      "The server remembers the user's IP address and skips authentication for repeat connections from the same IP",
+      "The DNS cache retains the user's login token so subsequent requests to the same domain are pre-authenticated",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Cookies persist between browser sessions (unless they're session-only). When the user logs in, the server sets a cookie with a session ID. On every subsequent request, the browser sends that cookie back so the server can look up the user's session.",
+    whySection:
+      "Without cookies, HTTP would be stateless — every request would be from a stranger. Cookies bridge that gap by attaching a small identifier to each request.",
+  },
+  {
+    id: "q_cookies_scen_2",
+    conceptId: "cookies",
+    module: 3,
+    type: "scenario",
+    prompt:
+      "Your team notices that after deploying a new server instance, all users are suddenly logged out even though their browsers still have valid cookies. What is the most likely cause?",
+    options: [
+      "The new server instance has a fresh session store, so the session IDs in existing cookies no longer map to any stored sessions",
+      "The deployment changed the site's domain name, so browsers treat the existing cookies as belonging to a different website",
+      "The cookies expired at the exact moment the deployment completed, which is a coincidence caused by default timeout values",
+      "The new server uses a newer version of HTTP that is incompatible with cookies that were created by the previous server",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Sessions are stored server-side (in memory, a database, or a cache like Redis). When a new server spins up with an empty session store, existing session IDs from cookies can't be found, so users appear logged out. This is why production apps use shared session stores.",
+  },
+  {
+    id: "q_cookies_tf_1",
+    conceptId: "cookies",
+    module: 3,
+    type: "true_false",
+    prompt:
+      "True or False: Cookies are sent with every HTTP request to the domain that set them, including requests for images and stylesheets.",
+    options: [
+      "True — the browser automatically attaches matching cookies to every request to that domain, regardless of the resource type",
+      "False — cookies are only sent with API requests made via fetch or XMLHttpRequest, not with standard page resource requests",
+      "False — the browser only sends cookies when the user explicitly navigates to a page, not for background asset requests",
+      "True — but only if the developer specifically configures each resource request to include cookies using a special header",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Browsers attach cookies to every request matching the cookie's domain and path — HTML pages, images, CSS files, API calls, all of them. This is why cookies add overhead and why you should keep them small.",
+  },
+  {
+    id: "q_cookies_d2t_1",
+    conceptId: "cookies",
+    module: 3,
+    type: "def_to_term",
+    prompt:
+      "Small pieces of data a website stores in the browser to remember information between visits, such as login state and user preferences. What is this?",
+    options: ["Cookies","Local Storage","Session Storage","Cache Headers"],
+    correctIndex: 0,
+    explanation:
+      "Cookies are small key-value pairs stored in the browser and automatically sent with every request to the matching domain. They're the original mechanism for maintaining state in stateless HTTP.",
+  },
+  {
+    id: "q_cookies_fib_1",
+    conceptId: "cookies",
+    module: 3,
+    type: "fill_in_blank",
+    prompt:
+      "Fill in the blank: A cookie with the ___ flag cannot be accessed by JavaScript, which helps prevent cross-site scripting attacks from stealing session tokens.",
+    options: ["HttpOnly","Secure","SameSite","Domain"],
+    correctIndex: 0,
+    explanation:
+      "The HttpOnly flag tells the browser to block JavaScript (document.cookie) from reading the cookie. This prevents XSS attacks from stealing session tokens, since the cookie is only sent via HTTP headers.",
+  },
+
+  // ─── Responsive Design ──────────────────────────────
+  {
+    id: "q_responsive_scen_1",
+    conceptId: "responsive",
+    module: 4,
+    type: "scenario",
+    prompt:
+      "A client complains that their website looks great on desktop but the text is unreadably tiny and buttons are impossible to tap on mobile. What fundamental approach is the site missing?",
+    options: [
+      "Responsive design — using flexible grids, media queries, and fluid sizing so the layout adapts to any screen size",
+      "Server-side rendering — generating the HTML on the server so the browser doesn't have to compute the layout itself",
+      "Content delivery network — serving assets from a closer location so the page loads quickly on mobile connections",
+      "Progressive enhancement — building the JavaScript features incrementally so older mobile browsers can render them",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Responsive design ensures a single codebase works across all screen sizes. Without it, a desktop layout is simply shrunk to fit a phone screen, making text tiny and interactive elements unusable.",
+  },
+  {
+    id: "q_responsive_scen_2",
+    conceptId: "responsive",
+    module: 4,
+    type: "scenario",
+    prompt:
+      "Your site's three-column layout works perfectly on desktop but overlaps into an unreadable mess on tablets. A teammate suggests adding breakpoints. What will breakpoints accomplish?",
+    options: [
+      "They define screen-width thresholds where the CSS switches layouts — like collapsing three columns to two on tablets and one on phones",
+      "They set maximum file sizes for images at each resolution so the browser loads smaller assets on slower network connections",
+      "They add JavaScript event listeners that detect the device type and redirect the user to a mobile-specific version of the site",
+      "They insert performance checkpoints into the CSS parser so the browser prioritizes rendering above-the-fold content first",
+    ],
+    correctIndex: 0,
+    explanation:
+      "CSS breakpoints (via media queries) let you define different layouts at different screen widths. For example, @media (max-width: 768px) could switch from a three-column grid to a single column stack.",
+  },
+  {
+    id: "q_responsive_tf_1",
+    conceptId: "responsive",
+    module: 4,
+    type: "true_false",
+    prompt:
+      "True or False: Responsive design requires building a completely separate codebase for mobile and desktop versions of a website.",
+    options: [
+      "False — responsive design uses one codebase with CSS media queries and flexible layouts that adapt to different screen sizes",
+      "True — responsive design means maintaining two separate HTML files, one for mobile users and one for desktop browser users",
+      "True — responsive design requires a mobile-specific server that detects the device and serves a completely different website",
+      "False — responsive design only works for text content; images and videos require separate mobile codebases to display properly",
+    ],
+    correctIndex: 0,
+    explanation:
+      "The whole point of responsive design is one codebase for all devices. CSS media queries, flexible grids, and relative units let the same HTML adapt fluidly from phone to desktop without separate builds.",
+  },
+  {
+    id: "q_responsive_a2t_1",
+    conceptId: "responsive",
+    module: 4,
+    type: "analogy_to_term",
+    prompt:
+      "\"Water taking the shape of whatever container you pour it into — a narrow glass, a wide bowl, a tall vase — the same water adapts its form to fit.\" What web concept is this?",
+    options: ["Responsive Design","State Management","Progressive Enhancement","Server-Side Rendering"],
+    correctIndex: 0,
+    explanation:
+      "The water analogy describes responsive design — one set of content that fluidly adapts its layout to whatever screen size or container it's displayed in.",
+  },
+  {
+    id: "q_responsive_win_1",
+    conceptId: "responsive",
+    module: 4,
+    type: "which_is_not",
+    prompt:
+      "Which of the following is NOT a technique used in responsive web design?",
+    options: [
+      "Server-side database sharding to handle more mobile traffic",
+      "CSS media queries to apply styles based on screen width",
+      "Flexible grid layouts that use percentages instead of fixed pixels",
+      "Fluid images that scale down to fit their container width",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Database sharding is a backend scaling technique that splits data across multiple servers. It has nothing to do with how a page adapts its visual layout to different screen sizes.",
+  },
+
+  // ─── Accessibility (a11y) ───────────────────────────
+  {
+    id: "q_accessibility_scen_1",
+    conceptId: "accessibility",
+    module: 4,
+    type: "scenario",
+    prompt:
+      "A visually impaired user reports that your form is impossible to complete because their screen reader announces every input field as just 'edit text' with no context. What is the most likely fix?",
+    options: [
+      "Add proper label elements and ARIA attributes so the screen reader can announce the purpose of each input field",
+      "Increase the font size of all placeholder text to at least 18 pixels so the screen reader can detect it more easily",
+      "Change the form inputs from text fields to dropdown menus because screen readers handle select elements more reliably",
+      "Move all form instructions into a separate help page that the user can read before they navigate to the form itself",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Screen readers rely on HTML semantics — label elements, ARIA attributes, and proper heading structure — to describe the interface. Without labels, inputs are announced generically as 'edit text' with no indication of what information to enter.",
+  },
+  {
+    id: "q_accessibility_scen_2",
+    conceptId: "accessibility",
+    module: 4,
+    type: "scenario",
+    prompt:
+      "During a code review, you notice a teammate built the entire navigation menu using styled div elements with onClick handlers instead of native HTML elements. Why is this an accessibility problem?",
+    options: [
+      "Divs lack built-in keyboard focus, roles, and semantics — screen readers and keyboard users cannot navigate or activate them",
+      "Divs render slower than native elements because the browser has to apply additional styling calculations to each one",
+      "Divs are not supported on mobile browsers, so the navigation menu will be completely invisible on phones and tablets",
+      "Divs cannot have event listeners attached in modern JavaScript, so the click handlers will silently fail in production",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Native elements like <button> and <a> come with keyboard focus, screen reader roles, and activation behavior built in. A div has none of that — keyboard users can't tab to it, and screen readers don't announce it as interactive.",
+  },
+  {
+    id: "q_accessibility_tf_1",
+    conceptId: "accessibility",
+    module: 4,
+    type: "true_false",
+    prompt:
+      "True or False: Accessibility only benefits users who are blind and use screen readers.",
+    options: [
+      "False — accessibility helps many groups: motor-impaired users need keyboard navigation, deaf users need captions, low-vision users need contrast",
+      "True — accessibility standards like WCAG were designed specifically for screen reader users and do not address other types of disability",
+      "True — sighted users and users with hearing impairments already have full access to web content without any accessibility features",
+      "False — accessibility is primarily a search engine optimization technique that helps web crawlers index the content of your website",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Accessibility (a11y) serves a wide spectrum: blind users need screen readers, motor-impaired users need keyboard navigation, deaf users need captions, low-vision users need color contrast, and cognitive disabilities need clear layouts.",
+  },
+  {
+    id: "q_accessibility_d2t_1",
+    conceptId: "accessibility",
+    module: 4,
+    type: "def_to_term",
+    prompt:
+      "Designing software so people with disabilities can use it — through screen readers, keyboard navigation, color contrast, and captions. What is this practice called?",
+    options: ["Accessibility (a11y)","Responsive Design","Progressive Enhancement","User Experience (UX)"],
+    correctIndex: 0,
+    explanation:
+      "Accessibility (abbreviated a11y — 'a' + 11 letters + 'y') is the practice of making software usable by everyone, including people with visual, motor, auditory, and cognitive disabilities.",
+  },
+  {
+    id: "q_accessibility_win_1",
+    conceptId: "accessibility",
+    module: 4,
+    type: "which_is_not",
+    prompt:
+      "Which of the following is NOT an accessibility best practice?",
+    options: [
+      "Using only color to indicate error states without any text or icon alternatives for colorblind users",
+      "Providing alt text on images so screen readers can describe the visual content to blind users",
+      "Ensuring all interactive elements are reachable and operable using only a keyboard without a mouse",
+      "Using sufficient color contrast between text and background so low-vision users can read the content",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Relying on color alone violates accessibility guidelines. About 8% of men are colorblind. Errors must also use text labels, icons, or other non-color indicators so all users can perceive them.",
   },
 ];

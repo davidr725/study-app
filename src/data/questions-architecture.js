@@ -1,6 +1,6 @@
 // ═══════════════════════════════════════════════════════
 // ARCHITECTURE
-// Concepts: idempotency, dbindex, latency, syncasync, cdn, loadbalancer, microservices, queue, containers
+// Concepts: idempotency, dbindex, latency, syncasync, cdn, loadbalancer, microservices, queue, containers, slo, observability, sqlvsnosql, caching, incidentmgmt
 // ═══════════════════════════════════════════════════════
 
 export const QUESTIONS_ARCHITECTURE = [
@@ -1113,5 +1113,92 @@ ETag: "abc123"`,
     ],
     correctIndex: 0,
     explanation: "max-age=3600 = cache for 3600 seconds (1 hour). 'public' means shared caches (CDNs, proxies) can store it too, not just the browser. 'private' would restrict it to the browser only. The ETag is a validator — when the cache expires, the client can send it back to ask if the content changed.",
+  },
+
+  // ─── Incident Management ────────────────────────────
+  {
+    id: "q_incidentmgmt_scen_1",
+    conceptId: "incidentmgmt",
+    module: 5,
+    type: "scenario",
+    prompt:
+      "At 2 AM, your monitoring alerts fire: the checkout service is returning 500 errors for 40% of users. An engineer jumps on, posts updates in Slack every 15 minutes, rolls back the last deploy, and confirms the fix. The next day, the team writes a document analyzing the root cause and prevention steps. What process does this describe?",
+    options: [
+      "Incident management — detect, respond, communicate, fix, and write a postmortem to prevent recurrence",
+      "Change management — a structured approval process that reviews deployments before they reach production",
+      "Continuous deployment — automated pipelines that detect failures and roll back bad releases instantly",
+      "Chaos engineering — intentionally injecting failures into production to test the system's resilience",
+    ],
+    correctIndex: 0,
+    explanation:
+      "This is the incident management lifecycle: detection (monitoring alerts), response (engineer jumps on), communication (Slack updates), resolution (rollback), and postmortem (root cause analysis). Each phase is critical — skipping the postmortem means you'll likely repeat the same failure.",
+  },
+  {
+    id: "q_incidentmgmt_scen_2",
+    conceptId: "incidentmgmt",
+    module: 5,
+    type: "scenario",
+    prompt:
+      "Your payments service is completely down, affecting all customers and costing revenue every minute. Meanwhile, a minor dashboard UI bug makes one chart render incorrectly. How should your team prioritize these two issues using severity levels?",
+    options: [
+      "Payments outage is SEV1 (critical, all-hands response); the dashboard bug is SEV3 or SEV4 (low priority, fix next sprint)",
+      "Both issues get SEV2 because any production bug affecting users deserves the same level of urgency and attention",
+      "The dashboard bug is higher priority because it's user-facing, while payments can be retried by customers later",
+      "Neither needs a severity level — severity ratings only apply during scheduled maintenance windows, not live outages",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Severity levels prioritize response urgency. SEV1: total outage or critical revenue loss — immediate all-hands response. SEV2: major degradation affecting many users. SEV3/SEV4: minor issues with workarounds. The payments outage demands an instant, coordinated response; the dashboard bug can wait.",
+  },
+  {
+    id: "q_incidentmgmt_tf_1",
+    conceptId: "incidentmgmt",
+    module: 5,
+    type: "true_false",
+    prompt:
+      "True or False: The primary purpose of a postmortem is to assign blame to the engineer who caused the outage.",
+    options: [
+      "False — postmortems are blameless; they focus on what went wrong systemically and how to prevent recurrence, not individual fault",
+      "True — identifying who made the mistake ensures accountability and motivates engineers to be more careful in the future",
+      "True — postmortems document the responsible party so management can take corrective action against repeat offenders",
+      "False — postmortems skip the cause entirely and focus only on how quickly the team responded to the incident itself",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Blameless postmortems are an industry standard. The goal is to find systemic causes — missing tests, inadequate monitoring, unclear runbooks — not to punish individuals. Blame discourages honest reporting, which makes future incidents worse.",
+  },
+  {
+    id: "q_incidentmgmt_d2t_1",
+    conceptId: "incidentmgmt",
+    module: 5,
+    type: "def_to_term",
+    prompt:
+      "The process of detecting production outages, assembling a response team, communicating status to stakeholders, resolving the issue, and documenting findings in a postmortem. What is this called?",
+    options: [
+      "Incident Management",
+      "Change Management",
+      "Release Management",
+      "Problem Management",
+    ],
+    correctIndex: 0,
+    explanation:
+      "This describes Incident Management — the full lifecycle from detection through resolution and postmortem. It uses severity levels (SEV1-SEV4) to prioritize how urgently the team responds.",
+  },
+  {
+    id: "q_incidentmgmt_win_1",
+    conceptId: "incidentmgmt",
+    module: 5,
+    type: "which_is_not",
+    prompt:
+      "Which of the following is NOT a standard phase of incident management?",
+    options: [
+      "Rewriting the feature from scratch to prevent future bugs",
+      "Detecting the issue through monitoring and alerts",
+      "Communicating status updates to stakeholders",
+      "Writing a postmortem documenting root cause and prevention",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Incident management focuses on rapid detection, communication, resolution, and learning (postmortem). Rewriting a feature from scratch is not part of the process — the goal is to restore service quickly, then analyze and make targeted improvements.",
   },
 ];

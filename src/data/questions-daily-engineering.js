@@ -1724,4 +1724,683 @@ google.com.    171    IN    A    142.250.80.46`,
     correctIndex: 0,
     explanation: "An 'A' record maps a domain to an IPv4 address — the core function of DNS. Other record types: CNAME (alias to another domain), MX (mail server), AAAA (IPv6), TXT (verification/SPF). The '171' is the TTL in seconds — how long resolvers can cache this mapping before re-querying.",
   },
+  // ═══════════════════════════════════════════════════════
+  // ─── New Concepts ───────────────────────────────────────
+  // ═══════════════════════════════════════════════════════
+
+  // ─── Frameworks vs Libraries ────────────────────────────
+  {
+    id: "q_frameworksvslibs_scen_1",
+    conceptId: "frameworksvslibs",
+    module: 3,
+    type: "scenario",
+    prompt:
+      "You're evaluating two tools for your project. Tool A lets you call its functions whenever you need them — you control the flow. Tool B provides the overall structure and calls your code at specific lifecycle points. What distinguishes these two approaches?",
+    options: [
+      "Tool A is a library (you call it); Tool B is a framework (it calls you) — this is inversion of control",
+      "Tool A is a framework (you call it); Tool B is a library (it calls you) — frameworks are always simpler",
+      "Tool A is a package (you install it); Tool B is a plugin (it installs itself) — they differ by method",
+      "Tool A is an SDK (you import it); Tool B is an API (it exports data) — they differ by direction",
+    ],
+    correctIndex: 0,
+    explanation:
+      "The key distinction is inversion of control. With a library, you call its code when you need it. With a framework, the framework calls your code at the right time — it controls the application flow.",
+  },
+  {
+    id: "q_frameworksvslibs_scen_2",
+    conceptId: "frameworksvslibs",
+    module: 3,
+    type: "scenario",
+    prompt:
+      "A junior developer asks why React is sometimes called a library while Next.js is called a framework, even though Next.js is built on React. What's the best explanation?",
+    options: [
+      "React lets you call its rendering functions; Next.js controls your app structure, routing, and build — it calls your components",
+      "React has fewer features than Next.js; any tool with enough features is automatically classified as a framework",
+      "React runs in the browser while Next.js runs on the server; the execution environment determines the category",
+      "React is open-source while Next.js is commercially maintained; licensing model determines the classification",
+    ],
+    correctIndex: 0,
+    explanation:
+      "React is a library — you import it and call its functions to render UI. Next.js is a framework — it provides file-based routing, build pipelines, and server-side rendering, calling your React components at the right time.",
+  },
+  {
+    id: "q_frameworksvslibs_tf_1",
+    conceptId: "frameworksvslibs",
+    module: 3,
+    type: "true_false",
+    prompt:
+      "True or False: The main difference between a framework and a library is the size of the codebase — frameworks are larger.",
+    options: [
+      "False — the real difference is inversion of control: a library is code you call, a framework is code that calls you",
+      "True — frameworks always contain more code than libraries, which is the defining technical distinction",
+      "True — a library becomes a framework once it exceeds a certain number of modules and exported functions",
+      "False — the difference is that frameworks require installation while libraries can be used via a CDN link",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Size is irrelevant to the distinction. The defining difference is inversion of control: you call a library's code, but a framework calls your code. A tiny framework is still a framework.",
+  },
+  {
+    id: "q_frameworksvslibs_d2t_1",
+    conceptId: "frameworksvslibs",
+    module: 3,
+    type: "def_to_term",
+    prompt:
+      "The principle where the framework controls the application flow and calls your code at the right time, rather than you calling framework functions directly. What is this called?",
+    options: [
+      "Inversion of control",
+      "Dependency injection",
+      "Event delegation",
+      "Callback chaining",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Inversion of control is the defining characteristic that separates frameworks from libraries. With a library, you're in the driver's seat. With a framework, it drives and calls your code when needed.",
+  },
+  {
+    id: "q_frameworksvslibs_win_1",
+    conceptId: "frameworksvslibs",
+    module: 3,
+    type: "which_is_not",
+    prompt:
+      "Which of the following is NOT a characteristic of a framework?",
+    options: [
+      "You call its functions only when you choose to, keeping full control over application flow",
+      "It provides the overall structure and architecture for your application",
+      "It calls your code at specific lifecycle points determined by the framework",
+      "It enforces conventions like file organization, naming patterns, or routing rules",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Calling functions only when you choose to describes a library, not a framework. Frameworks control the flow and call your code — that's inversion of control.",
+  },
+
+  // ─── Agile / Scrum ─────────────────────────────────────
+  {
+    id: "q_agile_scen_1",
+    conceptId: "agile",
+    module: 3,
+    type: "scenario",
+    prompt:
+      "Your team ships a large feature after 6 months of development, but users hate it. A colleague suggests building in 2-week cycles, shipping small increments, and gathering feedback after each one. What methodology are they describing?",
+    options: [
+      "Agile — iterative development with frequent feedback loops to adapt quickly to user needs",
+      "Waterfall — a sequential process where each phase must be completed before the next one begins",
+      "Kanban — a continuous flow system where work items move through columns on a visual board",
+      "DevOps — a practice focused on automating infrastructure and bridging development and operations",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Agile is an iterative approach: build small increments, ship frequently, gather feedback, and adapt. The 6-month big-bang release is the Waterfall approach Agile was designed to replace.",
+  },
+  {
+    id: "q_agile_scen_2",
+    conceptId: "agile",
+    module: 3,
+    type: "scenario",
+    prompt:
+      "Every morning at 9am, your team has a 15-minute meeting where each person answers: What did I do yesterday? What am I doing today? Any blockers? What is this meeting called?",
+    options: [
+      "A daily standup — a core Scrum ceremony for quick status updates and identifying blockers",
+      "A sprint retrospective — a meeting at the end of a sprint to reflect on process improvements",
+      "A sprint planning session — a meeting to decide which backlog items to work on next sprint",
+      "A backlog grooming session — a meeting to estimate, prioritize, and refine upcoming work items",
+    ],
+    correctIndex: 0,
+    explanation:
+      "The daily standup (or daily scrum) is a brief meeting where the team shares progress and surfaces blockers. It's time-boxed to 15 minutes to keep it focused and efficient.",
+  },
+  {
+    id: "q_agile_tf_1",
+    conceptId: "agile",
+    module: 3,
+    type: "true_false",
+    prompt:
+      "True or False: In Scrum, a sprint is a fixed-length iteration (usually 2 weeks) where the team commits to delivering a set of features.",
+    options: [
+      "True — sprints are time-boxed iterations where the team plans, builds, and delivers a committed set of work items",
+      "False — sprint length varies based on the complexity of the features being built during that particular cycle",
+      "False — sprints are only used in Kanban methodology; Scrum uses continuous flow without fixed time boundaries",
+      "True — but sprints can be extended by the product owner if the team hasn't completed all committed work items",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Sprints are fixed-length (typically 2 weeks). The team commits to a scope during sprint planning and delivers by sprint end. If work isn't finished, it rolls to the next sprint — the sprint length doesn't change.",
+  },
+  {
+    id: "q_agile_d2t_1",
+    conceptId: "agile",
+    module: 3,
+    type: "def_to_term",
+    prompt:
+      "A meeting held at the end of each sprint where the team reflects on what went well, what didn't, and what to improve next time. What is this called?",
+    options: [
+      "Sprint retrospective",
+      "Sprint planning",
+      "Daily standup",
+      "Backlog refinement",
+    ],
+    correctIndex: 0,
+    explanation:
+      "The retrospective is where the team reflects on their process — not the product. It's about continuous improvement: what worked, what didn't, and what to change for the next sprint.",
+  },
+  {
+    id: "q_agile_fib_1",
+    conceptId: "agile",
+    module: 3,
+    type: "fill_in_blank",
+    prompt:
+      "Fill in the blank: In Scrum, the ___ is the prioritized list of features, bugs, and tasks that the team pulls work from during sprint planning.",
+    options: ["product backlog", "sprint timeline", "release schedule", "project roadmap"],
+    correctIndex: 0,
+    explanation:
+      "The product backlog is a prioritized list of everything the team might work on. During sprint planning, the team selects items from the top of the backlog to commit to for the upcoming sprint.",
+  },
+
+  // ─── Technical Specs / PRDs ────────────────────────────
+  {
+    id: "q_techspecs_scen_1",
+    conceptId: "techspecs",
+    module: 3,
+    type: "scenario",
+    prompt:
+      "The product manager writes a document explaining what feature to build and the user problem it solves. Then an engineer writes a separate document detailing the database schema, API endpoints, and edge cases. What are these two documents called?",
+    options: [
+      "A PRD (what and why) and a technical spec (how) — they align product and engineering before coding starts",
+      "A user story (what and why) and a test plan (how) — they ensure requirements match the implementation",
+      "A project brief (what and why) and a sprint plan (how) — they organize work for the upcoming sprint",
+      "A feature request (what and why) and a code review (how) — they document work before and after building",
+    ],
+    correctIndex: 0,
+    explanation:
+      "A PRD (Product Requirements Document) defines what to build and why. A technical spec defines how — architecture, APIs, data models, and edge cases. Together they prevent miscommunication between product and engineering.",
+  },
+  {
+    id: "q_techspecs_scen_2",
+    conceptId: "techspecs",
+    module: 3,
+    type: "scenario",
+    prompt:
+      "An engineer starts coding a feature immediately after a brief Slack conversation with the PM. Two weeks later, the delivered feature doesn't match what the PM envisioned. What process step was skipped?",
+    options: [
+      "Writing a PRD and technical spec — documenting requirements and architecture before coding prevents misalignment",
+      "Setting up a CI/CD pipeline — automated testing would have caught the mismatched feature implementation early",
+      "Conducting a sprint retrospective — reflecting on past mistakes would have prevented this communication gap",
+      "Creating a Git branch — working on an isolated branch would have given the PM a chance to review changes",
+    ],
+    correctIndex: 0,
+    explanation:
+      "PRDs and technical specs exist to prevent exactly this: miscommunication between product vision and engineering implementation. Writing things down forces clarity and creates a shared reference point.",
+  },
+  {
+    id: "q_techspecs_tf_1",
+    conceptId: "techspecs",
+    module: 3,
+    type: "true_false",
+    prompt:
+      "True or False: A technical spec should include architecture decisions, API contracts, data models, and edge cases.",
+    options: [
+      "True — a tech spec documents how the system will be built, including these implementation details for team alignment",
+      "False — technical specs only describe the user-facing behavior and should avoid internal implementation details",
+      "False — architecture decisions belong in a separate architecture decision record, not inside the technical spec",
+      "True — but only for large features; small features should skip the spec and go straight to implementation",
+    ],
+    correctIndex: 0,
+    explanation:
+      "A technical spec is the engineering blueprint. It should cover architecture choices, API contracts, data models, edge cases, and tradeoffs — everything the team needs to build it correctly.",
+  },
+  {
+    id: "q_techspecs_d2t_1",
+    conceptId: "techspecs",
+    module: 3,
+    type: "def_to_term",
+    prompt:
+      "A document that defines what to build and why, including the user problem, success metrics, and scope — written by or with the product manager. What is this?",
+    options: [
+      "Product Requirements Document (PRD)",
+      "Technical specification",
+      "Sprint planning document",
+      "Architecture decision record",
+    ],
+    correctIndex: 0,
+    explanation:
+      "A PRD (Product Requirements Document) defines the what and why: user problem, goals, success metrics, and scope. The technical spec then covers the how: architecture, APIs, and implementation details.",
+  },
+  {
+    id: "q_techspecs_win_1",
+    conceptId: "techspecs",
+    module: 3,
+    type: "which_is_not",
+    prompt:
+      "Which of the following is NOT typically included in a technical spec?",
+    options: [
+      "Marketing launch plan and press release timeline",
+      "API contracts and endpoint definitions",
+      "Database schema and data model design",
+      "Edge cases and error handling strategies",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Marketing and launch plans belong in a product or go-to-market document, not a technical spec. Tech specs focus on how to build: APIs, data models, architecture, and edge cases.",
+  },
+
+  // ─── Deployment Environments ───────────────────────────
+  {
+    id: "q_deployenvs_scen_1",
+    conceptId: "deployenvs",
+    module: 3,
+    type: "scenario",
+    prompt:
+      "A developer pushes code that works on their laptop but crashes when released to users. The team realizes they have no intermediate step between local development and the live site. What's missing?",
+    options: [
+      "A staging environment — a production-like copy where code is tested before it reaches real users",
+      "A load balancer — distributing traffic across servers would prevent the crash under real user load",
+      "A CDN layer — caching static assets closer to users would reduce the server load causing crashes",
+      "A monitoring dashboard — real-time alerts would have caught the crash before users noticed it",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Staging is a production-like environment where code is tested before reaching real users. Without it, bugs that only appear in production-like conditions (different OS, real data, network config) slip through.",
+  },
+  {
+    id: "q_deployenvs_scen_2",
+    conceptId: "deployenvs",
+    module: 3,
+    type: "scenario",
+    prompt:
+      "Your QA team needs to test a feature with production-like data and configuration, but without affecting real users. Which environment should they use?",
+    options: [
+      "Staging — it mirrors production configuration and data but is isolated from real user traffic",
+      "Development — it has the latest code and is the best place for all testing before release to users",
+      "Production — testing with real data requires the production environment to get accurate results",
+      "Local — each QA engineer should clone the repo and test on their own machine for full isolation",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Staging exists for exactly this purpose: it mimics production (similar infra, realistic data) but is isolated from real users. Testing in production risks breaking things for users; local doesn't match prod config.",
+  },
+  {
+    id: "q_deployenvs_tf_1",
+    conceptId: "deployenvs",
+    module: 3,
+    type: "true_false",
+    prompt:
+      "True or False: Code should flow from development to production directly, skipping staging to ship features faster.",
+    options: [
+      "False — skipping staging means bugs only found in production-like conditions reach real users; staging catches them first",
+      "True — staging slows down the release cycle, and modern CI/CD testing makes a staging environment unnecessary",
+      "True — staging is only needed for enterprise applications; startups should deploy directly to move faster",
+      "False — but only because most hosting providers require a staging step before allowing production deployments",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Skipping staging is risky. Many bugs only surface in production-like conditions — different environment variables, real data volumes, network configurations. Staging catches these before users are affected.",
+  },
+  {
+    id: "q_deployenvs_d2t_1",
+    conceptId: "deployenvs",
+    module: 3,
+    type: "def_to_term",
+    prompt:
+      "Separate copies of your application — one for local coding, one that mimics production for testing, and one serving real users — through which code flows sequentially. What is this setup called?",
+    options: [
+      "Deployment environments (dev, staging, production)",
+      "Blue-green deployment architecture",
+      "Microservices with service mesh routing",
+      "Multi-region failover configuration",
+    ],
+    correctIndex: 0,
+    explanation:
+      "This describes deployment environments: development (local coding), staging (production-like testing), and production (real users). Code flows dev → staging → production to catch bugs early.",
+  },
+  {
+    id: "q_deployenvs_fib_1",
+    conceptId: "deployenvs",
+    module: 3,
+    type: "fill_in_blank",
+    prompt:
+      "Fill in the blank: The correct order for code promotion through environments is development → ___ → production.",
+    options: ["staging", "testing", "canary", "preview"],
+    correctIndex: 0,
+    explanation:
+      "Code flows dev → staging → production. Staging is the critical middle step where code is validated in a production-like environment before reaching real users.",
+  },
+
+  // ─── Runtime vs Build Time ─────────────────────────────
+  {
+    id: "q_runtimevsbuild_scen_1",
+    conceptId: "runtimevsbuild",
+    module: 4,
+    type: "scenario",
+    prompt:
+      "A developer's code compiles and bundles successfully, but when users visit the site, the app crashes because an API key environment variable is undefined. When did the error occur?",
+    options: [
+      "At runtime — the build succeeded, but the app failed when it actually executed and tried to read the missing variable",
+      "At build time — the bundler should have caught the missing variable during the compilation step",
+      "At deploy time — the CI/CD pipeline failed to inject the variable during the deployment process",
+      "At test time — the missing variable should have been caught by the automated test suite beforehand",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Build time transforms code into output files. Runtime is when that code executes in production. A build can succeed perfectly while the app crashes at runtime due to missing configs, network issues, or bad data.",
+  },
+  {
+    id: "q_runtimevsbuild_scen_2",
+    conceptId: "runtimevsbuild",
+    module: 4,
+    type: "scenario",
+    prompt:
+      "Your TypeScript project has a type error that the compiler catches before any output is generated. Is this a build-time or runtime error?",
+    options: [
+      "Build-time — the compiler caught the error during compilation, before the code ever ran in a browser",
+      "Runtime — TypeScript errors only surface when the code executes because types are checked dynamically",
+      "Neither — TypeScript type errors are linting warnings and don't affect the build or runtime behavior",
+      "Both — TypeScript checks types at build time and again at runtime for complete type safety",
+    ],
+    correctIndex: 0,
+    explanation:
+      "TypeScript's compiler runs at build time, catching type errors before the code is ever executed. This is a key advantage: bugs caught at build time are cheaper to fix than bugs discovered at runtime in production.",
+  },
+  {
+    id: "q_runtimevsbuild_tf_1",
+    conceptId: "runtimevsbuild",
+    module: 4,
+    type: "true_false",
+    prompt:
+      "True or False: If your code builds successfully, it is guaranteed to work correctly at runtime.",
+    options: [
+      "False — a successful build only means the code compiled; runtime errors from bad data, missing configs, or network failures can still occur",
+      "True — modern build tools validate all code paths during compilation, ensuring correct runtime behavior",
+      "True — build systems run the application internally to verify it works before producing the final output",
+      "False — but only for interpreted languages; compiled languages like Go guarantee runtime correctness after building",
+    ],
+    correctIndex: 0,
+    explanation:
+      "A successful build means your code transformed correctly — syntax is valid, imports resolve, types check out. But runtime brings new variables: user input, network failures, missing environment variables, and race conditions.",
+  },
+  {
+    id: "q_runtimevsbuild_d2t_1",
+    conceptId: "runtimevsbuild",
+    module: 4,
+    type: "def_to_term",
+    prompt:
+      "The phase when source code is compiled, bundled, minified, and transformed into the final output files before deployment. What is this called?",
+    options: [
+      "Build time",
+      "Runtime",
+      "Deploy time",
+      "Compile phase",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Build time is when your source code is processed into deployable output — compilation, bundling, minification, and tree-shaking all happen at build time, before the code ever runs in production.",
+  },
+  {
+    id: "q_runtimevsbuild_fib_1",
+    conceptId: "runtimevsbuild",
+    module: 4,
+    type: "fill_in_blank",
+    prompt:
+      "Fill in the blank: Tree-shaking (removing unused code) happens at ___ time, while reading user input happens at ___ time.",
+    options: ["build, runtime", "runtime, build", "deploy, compile", "compile, deploy"],
+    correctIndex: 0,
+    explanation:
+      "Tree-shaking is a build-time optimization — the bundler analyzes your code and removes unused exports. Reading user input can only happen at runtime, when the application is actually running and users are interacting with it.",
+  },
+
+  // ─── Package Managers ──────────────────────────────────
+  {
+    id: "q_packagemanagers_scen_1",
+    conceptId: "packagemanagers",
+    module: 4,
+    type: "scenario",
+    prompt:
+      "A new developer joins your team and clones the repo. They run a single command that reads a manifest file and installs every dependency the project needs, matching the exact versions everyone else uses. What tool handles this?",
+    options: [
+      "A package manager — it reads the lock file and installs the exact dependency versions used by the team",
+      "A build tool — it compiles the project and downloads any missing source files during the build step",
+      "A version control system — Git stores dependency files alongside source code for easy team sharing",
+      "A container runtime — Docker packages all dependencies inside an image so nothing needs installing",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Package managers (npm, pip, Maven) read a manifest (package.json, requirements.txt) and a lock file to install the exact dependency versions the team uses, ensuring consistency across all machines.",
+  },
+  {
+    id: "q_packagemanagers_scen_2",
+    conceptId: "packagemanagers",
+    module: 4,
+    type: "scenario",
+    prompt:
+      "Two developers run the install command on the same project but end up with different versions of a library, causing a bug that only appears on one machine. What file would prevent this?",
+    options: [
+      "A lock file — it pins exact dependency versions so every install produces identical results across machines",
+      "A .gitignore file — it ensures both developers exclude the same files from version control tracking",
+      "A configuration file — it standardizes editor settings so both developers write compatible code styles",
+      "A Dockerfile — it specifies the exact OS and runtime, eliminating machine-level differences entirely",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Lock files (package-lock.json, yarn.lock, Pipfile.lock) pin the exact version of every dependency and sub-dependency. Without a lock file, version ranges like ^1.2.0 can resolve to different versions on different machines.",
+  },
+  {
+    id: "q_packagemanagers_tf_1",
+    conceptId: "packagemanagers",
+    module: 4,
+    type: "true_false",
+    prompt:
+      "True or False: You should commit your lock file (package-lock.json, yarn.lock) to version control.",
+    options: [
+      "True — the lock file ensures every developer and CI server installs the exact same dependency versions",
+      "False — lock files are auto-generated and committing them causes frequent unnecessary merge conflicts",
+      "False — lock files contain system-specific paths that break when shared across different operating systems",
+      "True — but only for production projects; open-source libraries should not commit their lock files",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Always commit your lock file. It's the only way to guarantee every developer, CI server, and production deploy uses the exact same dependency versions. Without it, 'works on my machine' bugs are inevitable.",
+  },
+  {
+    id: "q_packagemanagers_a2t_1",
+    conceptId: "packagemanagers",
+    module: 4,
+    type: "analogy_to_term",
+    prompt:
+      "\"A shopping list manager for your project: you list the ingredients you need, it finds the exact brands and quantities, and it gives every chef the same receipt so they all buy identical items.\" What concept is this?",
+    options: [
+      "Package manager",
+      "Build tool",
+      "Version control",
+      "Container runtime",
+    ],
+    correctIndex: 0,
+    explanation:
+      "This describes a package manager — it reads your dependency list (manifest), downloads the right versions, and uses a lock file (receipt) to ensure everyone gets identical dependencies.",
+  },
+  {
+    id: "q_packagemanagers_win_1",
+    conceptId: "packagemanagers",
+    module: 4,
+    type: "which_is_not",
+    prompt:
+      "Which of the following is NOT a package manager?",
+    options: [
+      "Webpack",
+      "npm",
+      "pip",
+      "Maven",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Webpack is a module bundler, not a package manager. npm (JavaScript), pip (Python), and Maven (Java) are all package managers that download and manage external dependencies.",
+  },
+
+  // ─── Logging ───────────────────────────────────────────
+  {
+    id: "q_logging_scen_1",
+    conceptId: "logging",
+    module: 4,
+    type: "scenario",
+    prompt:
+      "Users report intermittent errors on your production app, but the bug doesn't reproduce locally. Your team checks timestamped records of requests, errors, and actions your server recorded. What practice generated these records?",
+    options: [
+      "Logging — the application recorded timestamped messages about its activity for post-incident debugging",
+      "Caching — the server stored recent request data in memory, which can be inspected after an error occurs",
+      "Monitoring — dashboards and alerts detected the error pattern and generated detailed reports automatically",
+      "Testing — the CI pipeline saved test run output from the last build, showing which assertions failed",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Logging records what your application does: requests received, errors encountered, and actions taken. These timestamped records are essential for debugging production issues you can't reproduce locally.",
+  },
+  {
+    id: "q_logging_scen_2",
+    conceptId: "logging",
+    module: 4,
+    type: "scenario",
+    prompt:
+      "Your production logs are flooded with thousands of verbose messages per second, making it impossible to find actual errors. What should you adjust?",
+    options: [
+      "Log levels — set production to WARN or ERROR so only important messages are recorded, filtering out DEBUG and INFO",
+      "Log format — switch from JSON to plain text so messages take up less space and are easier to read visually",
+      "Log destination — write logs to a database instead of files so you can query them with SQL for faster search",
+      "Log frequency — add a rate limiter that only records one message per second regardless of server activity",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Log levels (DEBUG, INFO, WARN, ERROR) filter by importance. Production should typically log WARN and above. Development uses DEBUG for verbose output. Adjusting log levels is the standard solution for noisy logs.",
+  },
+  {
+    id: "q_logging_tf_1",
+    conceptId: "logging",
+    module: 4,
+    type: "true_false",
+    prompt:
+      "True or False: console.log() statements left in production code are an acceptable logging strategy.",
+    options: [
+      "False — production apps should use structured logging with levels (DEBUG, INFO, WARN, ERROR) and proper log aggregation",
+      "True — console.log() is the standard logging approach used in production across all major web applications",
+      "True — browsers capture console.log output automatically, so no additional logging infrastructure is required",
+      "False — console.log() is disabled in production environments by default, so the messages never actually appear",
+    ],
+    correctIndex: 0,
+    explanation:
+      "console.log() has no log levels, no timestamps, no structure, and no aggregation. Production logging needs levels (to filter noise), structured format (for searching), and centralized storage (for analysis).",
+  },
+  {
+    id: "q_logging_d2t_1",
+    conceptId: "logging",
+    module: 4,
+    type: "def_to_term",
+    prompt:
+      "Recording timestamped, leveled messages (DEBUG, INFO, WARN, ERROR) about application activity — requests, errors, and actions — for debugging and monitoring. What is this practice?",
+    options: [
+      "Logging",
+      "Monitoring",
+      "Profiling",
+      "Tracing",
+    ],
+    correctIndex: 0,
+    explanation:
+      "This describes logging — the practice of recording structured, timestamped messages about what your application is doing. Monitoring consumes logs but also includes metrics and alerting.",
+  },
+  {
+    id: "q_logging_fib_1",
+    conceptId: "logging",
+    module: 4,
+    type: "fill_in_blank",
+    prompt:
+      "Fill in the blank: The four standard log levels from least to most severe are DEBUG, INFO, ___, and ERROR.",
+    options: ["WARN", "ALERT", "FATAL", "TRACE"],
+    correctIndex: 0,
+    explanation:
+      "The standard log levels are DEBUG (verbose detail), INFO (normal operations), WARN (potential issues), and ERROR (failures). Each level is more severe than the last, and production typically filters to WARN and above.",
+  },
+
+  // ─── Testing (Unit / Integration / E2E) ────────────────
+  {
+    id: "q_testing_scen_1",
+    conceptId: "testing",
+    module: 5,
+    type: "scenario",
+    prompt:
+      "Your team writes tests that verify individual functions return correct values, tests that check if the API and database work together, and tests that simulate a user clicking through the signup flow. What testing strategy combines all three levels?",
+    options: [
+      "The testing pyramid — many unit tests (fast, isolated), fewer integration tests, and fewest E2E tests (slow, expensive)",
+      "Test-driven development — writing all three types of tests before writing any application code at all",
+      "Regression testing — re-running the full test suite after every code change to catch newly introduced bugs",
+      "Acceptance testing — verifying the application meets business requirements before releasing to end users",
+    ],
+    correctIndex: 0,
+    explanation:
+      "The testing pyramid recommends many unit tests (fast, cheap), fewer integration tests (moderate), and few E2E tests (slow, expensive). This balance maximizes coverage while keeping the test suite fast.",
+  },
+  {
+    id: "q_testing_scen_2",
+    conceptId: "testing",
+    module: 5,
+    type: "scenario",
+    prompt:
+      "A function that calculates sales tax passes all its unit tests, but when connected to the checkout API, the total is always wrong. What type of test would have caught this?",
+    options: [
+      "An integration test — it verifies that the tax function and checkout API work correctly together as a system",
+      "A more thorough unit test — testing additional edge cases in isolation would have revealed the calculation bug",
+      "An end-to-end test — simulating the full user checkout flow would catch UI-level rendering issues only",
+      "A load test — running the tax calculation under high traffic would expose the incorrect total under stress",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Unit tests verify functions in isolation. Integration tests verify that components work together. The tax function is correct alone but fails when integrated — a classic integration test gap.",
+  },
+  {
+    id: "q_testing_tf_1",
+    conceptId: "testing",
+    module: 5,
+    type: "true_false",
+    prompt:
+      "True or False: End-to-end tests should make up the majority of your test suite because they test the full user experience.",
+    options: [
+      "False — E2E tests are slow and expensive; the testing pyramid recommends many unit tests and few E2E tests",
+      "True — E2E tests provide the most realistic coverage, so having more of them gives the highest confidence",
+      "True — unit and integration tests are redundant if you have comprehensive E2E tests covering every user flow",
+      "False — E2E tests are deprecated in favor of AI-powered testing tools that automatically verify user flows",
+    ],
+    correctIndex: 0,
+    explanation:
+      "E2E tests are the most realistic but also the slowest, most fragile, and most expensive to maintain. The testing pyramid recommends many fast unit tests, moderate integration tests, and few targeted E2E tests.",
+  },
+  {
+    id: "q_testing_d2t_1",
+    conceptId: "testing",
+    module: 5,
+    type: "def_to_term",
+    prompt:
+      "Tests that verify a single function or method works correctly in isolation, without depending on databases, APIs, or other components. What are these called?",
+    options: [
+      "Unit tests",
+      "Integration tests",
+      "End-to-end tests",
+      "Smoke tests",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Unit tests verify the smallest testable units (functions, methods) in isolation. They're fast, cheap, and should form the largest portion of your test suite — the base of the testing pyramid.",
+  },
+  {
+    id: "q_testing_win_1",
+    conceptId: "testing",
+    module: 5,
+    type: "which_is_not",
+    prompt:
+      "Which of the following is NOT a level of the testing pyramid?",
+    options: [
+      "Deployment tests",
+      "Unit tests",
+      "Integration tests",
+      "End-to-end tests",
+    ],
+    correctIndex: 0,
+    explanation:
+      "Deployment tests aren't a standard level of the testing pyramid. The three levels are: unit tests (base — many, fast), integration tests (middle — moderate), and end-to-end tests (top — few, slow).",
+  },
 ];
