@@ -23,6 +23,16 @@ function pickRandom(arr, n) {
   return shuffle(arr).slice(0, n);
 }
 
+// Randomize option order so the correct answer isn't always first
+function shuffleOptions(question) {
+  const indices = shuffle([...Array(question.options.length).keys()]);
+  return {
+    ...question,
+    options: indices.map((i) => question.options[i]),
+    correctIndex: indices.indexOf(question.correctIndex),
+  };
+}
+
 function getWeightFromProgress(progress, conceptId) {
   const p = progress[conceptId];
   if (!p || !p.seen) return 3.0;
@@ -52,7 +62,7 @@ function getQuestionsForGroup(group) {
 
 // Build a test of N questions from a question pool, weighted by concept mastery
 function buildTest(questions, concepts, progress, count = 20) {
-  if (questions.length <= count) return shuffle(questions);
+  if (questions.length <= count) return shuffle(questions).map(shuffleOptions);
 
   const weighted = questions.map((q) => ({
     question: q,
@@ -78,7 +88,7 @@ function buildTest(questions, concepts, progress, count = 20) {
     }
   }
 
-  return shuffle(selected);
+  return shuffle(selected).map(shuffleOptions);
 }
 
 // ─── SHARED STYLES ───
@@ -1039,7 +1049,7 @@ export default function App() {
   };
 
   const startMarathon = () => {
-    const test = shuffle([...QUESTIONS]);
+    const test = shuffle([...QUESTIONS]).map(shuffleOptions);
     setTestQuestions(test);
     setTestTitle("Marathon");
     setScreen("test");
@@ -1048,7 +1058,7 @@ export default function App() {
   const startMissed = () => {
     const missedQuestions = QUESTIONS.filter((q) => flagged.has(q.id));
     if (missedQuestions.length === 0) return;
-    setTestQuestions(shuffle(missedQuestions));
+    setTestQuestions(shuffle(missedQuestions).map(shuffleOptions));
     setTestTitle("Flagged Questions");
     setScreen("test");
   };
@@ -1071,7 +1081,7 @@ export default function App() {
   };
 
   const retryMissed = (missedQuestions) => {
-    setTestQuestions(shuffle(missedQuestions));
+    setTestQuestions(shuffle(missedQuestions).map(shuffleOptions));
     setTestResult(null);
     setScreen("test");
   };
